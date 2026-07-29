@@ -359,7 +359,7 @@
                 <!-- Left Sidebar -->
                 <aside class="cv-sidebar">
                     <div class="cv-photo-frame" id="secPhoto">
-                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300" id="cvPhoto" class="cv-photo-img" alt="User Photo">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300" id="cvPhoto" class="cv-photo-img" crossorigin="anonymous" alt="User Photo">
                     </div>
 
                     <div class="cv-side-block" id="secContact">
@@ -612,25 +612,49 @@
         }
 
         async function executeDownload(type) {
+            // 1. Create a Loading Screen Overlay so user gets immediate visual feedback
+            const loadingOverlay = document.createElement('div');
+            loadingOverlay.style.position = 'fixed';
+            loadingOverlay.style.top = '0';
+            loadingOverlay.style.left = '0';
+            loadingOverlay.style.width = '100vw';
+            loadingOverlay.style.height = '100vh';
+            loadingOverlay.style.background = 'rgba(0, 0, 0, 0.88)';
+            loadingOverlay.style.color = '#38bdf8';
+            loadingOverlay.style.display = 'flex';
+            loadingOverlay.style.flexDirection = 'column';
+            loadingOverlay.style.justifyContent = 'center';
+            loadingOverlay.style.alignItems = 'center';
+            loadingOverlay.style.zIndex = '999999';
+            loadingOverlay.style.fontFamily = 'Inter, sans-serif';
+            loadingOverlay.style.fontSize = '16px';
+            loadingOverlay.style.fontWeight = 'bold';
+            loadingOverlay.innerHTML = '<i class="fa-solid fa-spinner fa-spin" style="font-size:36px; margin-bottom:12px; color:#10b981;"></i> Creating High Quality Document...';
+            document.body.appendChild(loadingOverlay);
+
             const originalElement = document.getElementById('cvContent');
 
-            // Wait for all external Google fonts to render properly
+            // Wait for fonts to be ready
             await document.fonts.ready;
 
-            // Clone container to isolate from mobile zoom or CSS transform scaling
+            // Clone container
             const clone = originalElement.cloneNode(true);
             
-            // FIX FOR BLANK PDF: Position element properly on screen background layer instead of far offscreen
+            // FIX: Set element completely VISIBLE on screen behind loading overlay for 100% canvas accuracy
             clone.style.position = 'fixed';
             clone.style.left = '0px';
             clone.style.top = '0px';
-            clone.style.zIndex = '-9999';
+            clone.style.zIndex = '999998'; // Just under the loading screen
             clone.style.zoom = '1';
             clone.style.transform = 'none';
             clone.style.width = '794px'; /* Exact A4 width in px */
             clone.style.minHeight = '1123px';
+            clone.style.background = '#ffffff';
 
             document.body.appendChild(clone);
+
+            // Give browser 400ms to render the DOM clone clearly
+            await new Promise(resolve => setTimeout(resolve, 400));
 
             try {
                 if (type === 'pdf') {
@@ -642,7 +666,7 @@
                             scale: 2, 
                             useCORS: true, 
                             logging: false,
-                            letterRendering: false, /* Fix font overlapping */
+                            letterRendering: false,
                             allowTaint: true,
                             scrollY: 0,
                             scrollX: 0,
@@ -670,7 +694,9 @@
                 console.error("Export Error:", err);
                 alert("An error occurred during download. Please try again.");
             } finally {
-                document.body.removeChild(clone);
+                // Clean up elements from DOM
+                if (document.body.contains(clone)) document.body.removeChild(clone);
+                if (document.body.contains(loadingOverlay)) document.body.removeChild(loadingOverlay);
             }
         }
 
