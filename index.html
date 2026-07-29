@@ -9,9 +9,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Montserrat:wght@400;600;700;800&family=Poppins:wght@300;400;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Export Libraries -->
+    <!-- Export Libraries (html2canvas + jsPDF Direct) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <style>
         :root {
@@ -103,24 +103,22 @@
         .preview-area { flex: 1; background: #030712; overflow-y: auto; padding: 30px; display: flex; justify-content: center; }
 
         .cv-paper {
-            width: 210mm;
-            min-height: 297mm;
+            width: 794px; /* A4 Width in px at 96DPI */
+            min-height: 1123px; /* A4 Height in px at 96DPI */
             background: var(--main-bg);
             box-shadow: 0 20px 40px rgba(0,0,0,0.8);
             display: grid;
             grid-template-columns: 260px 1fr;
             color: var(--text-main);
             position: relative;
-            transition: all 0.3s ease;
+            transition: background 0.3s ease;
         }
 
-        /* Strict CSS Rules to Prevent Overlapping Fonts */
         .cv-paper, .cv-paper * {
             letter-spacing: 0px !important;
             word-spacing: normal !important;
             text-rendering: optimizeLegibility !important;
             -webkit-font-smoothing: antialiased !important;
-            font-variant-ligatures: none !important;
         }
 
         /* Sidebar Styling */
@@ -154,7 +152,6 @@
         .cv-card-sub { font-size: 11px; font-weight: 600; color: var(--primary); margin-bottom: 5px; line-height: 1.4 !important; }
         .cv-card-desc { font-size: 11px; color: var(--text-muted); line-height: 1.5 !important; white-space: pre-line; }
 
-        /* Timeline Cards */
         .timeline-card { border-left: 2px solid var(--primary); padding-left: 15px; border-radius: 0; border-top: none; border-right: none; border-bottom: none; background: transparent; }
 
         /* Declaration Footer */
@@ -162,7 +159,7 @@
         .signature-row { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 20px; font-size: 11px; }
         .sig-line { border-top: 1px solid var(--text-main); width: 180px; text-align: center; padding-top: 4px; font-weight: 700; }
 
-        /* --- ALL 15 TEMPLATE STYLES --- */
+        /* --- 15 TEMPLATES --- */
         .tpl-nina { grid-template-columns: 250px 1fr; --sidebar-bg: #1f2937; --photo-radius: 50%; }
         .tpl-radhika { grid-template-columns: 240px 1fr; --sidebar-bg: #fdf6f0; --sidebar-text: #2d3748; --main-bg: #ffffff; --card-bg: #fffbf9; --border-color: #f3e8e2; }
         .tpl-vikram { grid-template-columns: 260px 1fr; --sidebar-bg: #334155; --photo-radius: 50%; }
@@ -194,7 +191,7 @@
         .tpl-gradient-glow .cv-header-card { background: linear-gradient(135deg, var(--primary), #8b5cf6); color: white; }
         .tpl-gradient-glow .cv-header-card h2 { color: #e0e7ff; }
 
-        /* Modals for Email Capture & Admin Dashboard */
+        /* Modals */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; z-index: 100; opacity: 0; pointer-events: none; transition: 0.3s; }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
         .modal-card { background: #1f2937; border: 1px solid #374151; padding: 25px; border-radius: 12px; width: 440px; color: white; }
@@ -208,23 +205,23 @@
 
         .is-hidden { display: none !important; }
 
-        /* Dynamic Responsive Styles */
+        /* Responsive Preview Scale via transform (Safe for html2canvas) */
         @media (max-width: 1024px) {
             body { height: auto; overflow-x: hidden; overflow-y: auto; }
             .app-container { flex-direction: column; height: auto; }
             .dashboard { width: 100%; height: auto; border-right: none; border-bottom: 1px solid #1f2937; }
             .preview-area { width: 100%; padding: 20px 10px; overflow-x: auto; min-height: 100vh; }
-            .cv-paper { zoom: 0.8; margin: 0 auto; transform-origin: top center; }
+            .cv-paper { transform: scale(0.8); transform-origin: top center; margin: 0 auto; }
         }
 
         @media (max-width: 768px) {
             .dashboard-body { max-height: 400px; }
-            .cv-paper { zoom: 0.6; }
+            .cv-paper { transform: scale(0.6); transform-origin: top center; }
             .modal-card { width: 92% !important; margin: 15px; }
         }
 
         @media (max-width: 480px) {
-            .cv-paper { zoom: 0.42; }
+            .cv-paper { transform: scale(0.42); transform-origin: top center; }
             .action-bar { flex-direction: row; gap: 8px; }
             .dashboard-header h2 { font-size: 13px; }
         }
@@ -281,7 +278,7 @@
                     </div>
                 </div>
 
-                <!-- HD Photo Upload -->
+                <!-- Profile Photo Upload -->
                 <div class="form-group">
                     <label><i class="fa-solid fa-image"></i> Profile Photo Upload</label>
                     <div class="photo-upload-btn" onclick="document.getElementById('photoInput').click()">
@@ -291,7 +288,7 @@
                     <input type="file" id="photoInput" accept="image/*" style="display:none;" onchange="uploadPhoto(event)">
                 </div>
 
-                <!-- Data Form Fields -->
+                <!-- Input Fields -->
                 <div class="form-group">
                     <label>Full Name</label>
                     <input type="text" class="form-control" id="inName" value="KAVINDA PERERA" oninput="syncData()">
@@ -352,11 +349,10 @@
             </div>
         </div>
 
-        <!-- Live Preview Canvas Area -->
+        <!-- Canvas CV Preview Area -->
         <div class="preview-area">
             <div class="cv-paper tpl-nina" id="cvContent">
                 
-                <!-- Left Sidebar -->
                 <aside class="cv-sidebar">
                     <div class="cv-photo-frame" id="secPhoto">
                         <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300" id="cvPhoto" class="cv-photo-img" crossorigin="anonymous" alt="User Photo">
@@ -390,7 +386,6 @@
                     </div>
                 </aside>
 
-                <!-- Right Main Content -->
                 <main class="cv-main">
                     <div>
                         <div class="cv-header-card" id="secHeader">
@@ -457,7 +452,6 @@
                         </div>
                     </div>
 
-                    <!-- Dynamic Date & Signature Declaration -->
                     <div class="cv-section cv-declaration" id="secDeclaration">
                         <div class="cv-sec-title">Declaration</div>
                         <p class="cv-card-desc" style="font-style: italic; margin-bottom: 12px;">
@@ -480,7 +474,7 @@
 
     </div>
 
-    <!-- User Email Capture Modal -->
+    <!-- Modal Form -->
     <div class="modal-overlay" id="userEmailModal">
         <div class="modal-card">
             <h3><i class="fa-solid fa-download"></i> Enter Email to Download</h3>
@@ -491,7 +485,7 @@
         </div>
     </div>
 
-    <!-- Owner Admin Panel Modal -->
+    <!-- Admin Panel -->
     <div class="modal-overlay" id="adminModal">
         <div class="modal-card" style="width: 580px;">
             <h3><i class="fa-solid fa-user-shield"></i> Site Owner Analytics Panel</h3>
@@ -512,9 +506,7 @@
                                 <th>Download Timestamp</th>
                             </tr>
                         </thead>
-                        <tbody id="adminLogsTable">
-                            <!-- Populated via JS -->
-                        </tbody>
+                        <tbody id="adminLogsTable"></tbody>
                     </table>
                 </div>
                 <button class="modal-btn" style="background:#ef4444; color:white; margin-top:10px;" onclick="closeModal('adminModal')">Close Panel</button>
@@ -528,8 +520,7 @@
 
         document.addEventListener("DOMContentLoaded", function() {
             const today = new Date();
-            const dateStr = today.toISOString().split('T')[0];
-            document.getElementById('cvDateDisplay').innerText = dateStr;
+            document.getElementById('cvDateDisplay').innerText = today.toISOString().split('T')[0];
         });
 
         function applyCustomColor(hexColor) {
@@ -576,8 +567,7 @@
         }
 
         function changeTemplateLayout(tplClass) {
-            const cv = document.getElementById('cvContent');
-            cv.className = 'cv-paper ' + tplClass;
+            document.getElementById('cvContent').className = 'cv-paper ' + tplClass;
         }
 
         function runAiEnhancer() {
@@ -602,7 +592,6 @@
                 return;
             }
 
-            // Record download log in browser storage
             let logs = JSON.parse(localStorage.getItem('cv_download_logs') || '[]');
             logs.push({ email: email, timestamp: new Date().toLocaleString() });
             localStorage.setItem('cv_download_logs', JSON.stringify(logs));
@@ -611,80 +600,43 @@
             executeDownload(currentDownloadType);
         }
 
+        /* DIRECT CANVAS TO PDF DOWNLOAD (Guarantees non-blank PDF) */
         async function executeDownload(type) {
-            // 1. Create a Loading Screen Overlay so user gets immediate visual feedback
             const loadingOverlay = document.createElement('div');
-            loadingOverlay.style.position = 'fixed';
-            loadingOverlay.style.top = '0';
-            loadingOverlay.style.left = '0';
-            loadingOverlay.style.width = '100vw';
-            loadingOverlay.style.height = '100vh';
-            loadingOverlay.style.background = 'rgba(0, 0, 0, 0.88)';
-            loadingOverlay.style.color = '#38bdf8';
-            loadingOverlay.style.display = 'flex';
-            loadingOverlay.style.flexDirection = 'column';
-            loadingOverlay.style.justifyContent = 'center';
-            loadingOverlay.style.alignItems = 'center';
-            loadingOverlay.style.zIndex = '999999';
-            loadingOverlay.style.fontFamily = 'Inter, sans-serif';
-            loadingOverlay.style.fontSize = '16px';
-            loadingOverlay.style.fontWeight = 'bold';
-            loadingOverlay.innerHTML = '<i class="fa-solid fa-spinner fa-spin" style="font-size:36px; margin-bottom:12px; color:#10b981;"></i> Creating High Quality Document...';
+            loadingOverlay.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.85);color:#38bdf8;display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:999999;font-family:sans-serif;font-weight:bold;';
+            loadingOverlay.innerHTML = '<i class="fa-solid fa-spinner fa-spin" style="font-size:36px;margin-bottom:12px;color:#10b981;"></i> Generating Document...';
             document.body.appendChild(loadingOverlay);
 
-            const originalElement = document.getElementById('cvContent');
+            const cvElement = document.getElementById('cvContent');
 
-            // Wait for fonts to be ready
+            // Temporarily store & clear CSS transform (prevents scale bugs in canvas)
+            const savedTransform = cvElement.style.transform;
+            cvElement.style.transform = 'none';
+
             await document.fonts.ready;
-
-            // Clone container
-            const clone = originalElement.cloneNode(true);
-            
-            // FIX: Set element completely VISIBLE on screen behind loading overlay for 100% canvas accuracy
-            clone.style.position = 'fixed';
-            clone.style.left = '0px';
-            clone.style.top = '0px';
-            clone.style.zIndex = '999998'; // Just under the loading screen
-            clone.style.zoom = '1';
-            clone.style.transform = 'none';
-            clone.style.width = '794px'; /* Exact A4 width in px */
-            clone.style.minHeight = '1123px';
-            clone.style.background = '#ffffff';
-
-            document.body.appendChild(clone);
-
-            // Give browser 400ms to render the DOM clone clearly
-            await new Promise(resolve => setTimeout(resolve, 400));
+            await new Promise(resolve => setTimeout(resolve, 200));
 
             try {
+                // Capture element directly
+                const canvas = await html2canvas(cvElement, {
+                    scale: 2,
+                    useCORS: true,
+                    allowTaint: true,
+                    backgroundColor: '#ffffff',
+                    logging: false
+                });
+
                 if (type === 'pdf') {
-                    const opt = {
-                        margin: 0,
-                        filename: 'Professional_CV.pdf',
-                        image: { type: 'jpeg', quality: 0.98 },
-                        html2canvas: { 
-                            scale: 2, 
-                            useCORS: true, 
-                            logging: false,
-                            letterRendering: false,
-                            allowTaint: true,
-                            scrollY: 0,
-                            scrollX: 0,
-                            windowWidth: 794
-                        },
-                        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-                    };
-                    await html2pdf().set(opt).from(clone).save();
+                    const imgData = canvas.toDataURL('image/jpeg', 0.98);
+                    const { jsPDF } = window.jspdf;
+                    const pdf = new jsPDF('portrait', 'mm', 'a4');
+                    
+                    const pdfWidth = pdf.internal.pageSize.getWidth();
+                    const pdfHeight = pdf.internal.pageSize.getHeight();
+                    
+                    pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+                    pdf.save('Professional_CV.pdf');
                 } else if (type === 'jpg') {
-                    const canvas = await html2canvas(clone, { 
-                        scale: 2, 
-                        useCORS: true,
-                        letterRendering: false,
-                        allowTaint: true,
-                        scrollY: 0,
-                        scrollX: 0,
-                        windowWidth: 794
-                    });
                     const link = document.createElement('a');
                     link.download = 'Professional_CV.jpg';
                     link.href = canvas.toDataURL('image/jpeg', 0.98);
@@ -692,11 +644,12 @@
                 }
             } catch (err) {
                 console.error("Export Error:", err);
-                alert("An error occurred during download. Please try again.");
+                alert("Failed to export document. Please try again.");
             } finally {
-                // Clean up elements from DOM
-                if (document.body.contains(clone)) document.body.removeChild(clone);
-                if (document.body.contains(loadingOverlay)) document.body.removeChild(loadingOverlay);
+                cvElement.style.transform = savedTransform;
+                if (document.body.contains(loadingOverlay)) {
+                    document.body.removeChild(loadingOverlay);
+                }
             }
         }
 
@@ -727,12 +680,11 @@
             }
 
             logs.forEach((log, index) => {
-                const row = `<tr>
+                tbody.innerHTML += `<tr>
                     <td>${index + 1}</td>
                     <td>${log.email}</td>
                     <td>${log.timestamp}</td>
                 </tr>`;
-                tbody.innerHTML += row;
             });
         }
     </script>
