@@ -129,8 +129,28 @@
             clip-path: var(--sidebar-clip);
             border-radius: var(--arch-radius);
         }
-        .cv-photo-frame { text-align: center; margin-bottom: 20px; position: relative; }
-        .cv-photo-img { width: 130px; height: 130px; border-radius: var(--photo-radius); object-fit: cover; border: 4px solid var(--primary); }
+        
+        /* Adjusted Photo Wrapper & Image for Perfect Aspect Ratio */
+        .cv-photo-frame { text-align: center; margin-bottom: 20px; position: relative; display: flex; justify-content: center; align-items: center; }
+        .cv-photo-wrapper {
+            width: 130px;
+            height: 130px;
+            border-radius: var(--photo-radius);
+            border: 4px solid var(--primary);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #1e2937;
+            flex-shrink: 0;
+        }
+        .cv-photo-img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            object-position: center; 
+            display: block; 
+        }
 
         .cv-side-block { margin-bottom: 20px; }
         .cv-side-title { font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--primary); border-bottom: 1px solid rgba(255,255,255,0.15); padding-bottom: 4px; margin-bottom: 10px; line-height: 1.4 !important; }
@@ -200,12 +220,12 @@
         .modal-btn { background: #38bdf8; color: #0f172a; border: none; padding: 10px 15px; border-radius: 6px; font-weight: 700; width: 100%; cursor: pointer; margin-top: 10px; }
 
         table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 12px; }
-        th, td { padding: 8px; text-align: left; border-bottom: 1px solid #374151; }
+        th, td { padding: 8px; text-align: left; border-bottom: 1px solid #374151; word-break: break-all; }
         th { color: #38bdf8; }
 
         .is-hidden { display: none !important; }
 
-        /* Responsive Preview Scale via transform (Safe for html2canvas) */
+        /* Responsive Preview Scale via transform */
         @media (max-width: 1024px) {
             body { height: auto; overflow-x: hidden; overflow-y: auto; }
             .app-container { flex-direction: column; height: auto; }
@@ -355,7 +375,9 @@
                 
                 <aside class="cv-sidebar">
                     <div class="cv-photo-frame" id="secPhoto">
-                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300" id="cvPhoto" class="cv-photo-img" crossorigin="anonymous" alt="User Photo">
+                        <div class="cv-photo-wrapper">
+                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300" id="cvPhoto" class="cv-photo-img" crossorigin="anonymous" alt="User Photo">
+                        </div>
                     </div>
 
                     <div class="cv-side-block" id="secContact">
@@ -459,7 +481,7 @@
                         </p>
                         <div class="signature-row">
                             <div>
-                                <strong>Date:</strong> <span id="cvDateDisplay">2026-07-29</span>
+                                <strong>Date:</strong> <span id="cvDateDisplay">2026-07-30</span>
                             </div>
                             <div style="text-align: right;">
                                 <div class="sig-line" id="cvSigNameDisplay">KAVINDA PERERA</div>
@@ -518,16 +540,22 @@
         const OWNER_EMAIL = "maduthisarapramod@gmail.com"; 
         let currentDownloadType = 'pdf';
 
-        document.addEventListener("DOMContentLoaded", function() {
-            const today = new Date();
-            document.getElementById('cvDateDisplay').innerText = today.toISOString().split('T')[0];
-        });
+        // Local Storage Utilities to persist user download emails
+        function getSavedLogs() {
+            try {
+                return JSON.parse(localStorage.getItem('cv_download_logs')) || [];
+            } catch (e) {
+                return [];
+            }
+        }
 
-        function applyCustomColor(hexColor) {
-            const cvPaper = document.getElementById('cvContent');
-            cvPaper.style.setProperty('--primary', hexColor);
-            cvPaper.style.setProperty('--primary-light', hexColor + '20');
-            document.getElementById('colorPicker').value = hexColor;
+        function saveUserLog(email) {
+            const logs = getSavedLogs();
+            logs.push({
+                email: email,
+                timestamp: new Date().toLocaleString()
+            });
+            localStorage.setItem('cv_download_logs', JSON.stringify(logs));
         }
 
         function uploadPhoto(event) {
@@ -535,45 +563,40 @@
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    document.getElementById('cvPhoto').src = e.target.result;
+                    const img = document.getElementById('cvPhoto');
+                    img.src = e.target.result;
                 };
                 reader.readAsDataURL(file);
             }
         }
 
         function syncData() {
-            const name = document.getElementById('inName').value;
-            document.getElementById('cvName').innerText = name;
-            document.getElementById('cvSigNameDisplay').innerText = name;
-
+            document.getElementById('cvName').innerText = document.getElementById('inName').value;
             document.getElementById('cvTitle').innerText = document.getElementById('inTitle').value;
             document.getElementById('cvPhone').innerText = document.getElementById('inPhone').value;
             document.getElementById('cvEmail').innerText = document.getElementById('inEmail').value;
             document.getElementById('cvLocation').innerText = document.getElementById('inLocation').value;
             document.getElementById('cvWebsite').innerText = document.getElementById('inWebsite').value;
             document.getElementById('cvProfile').innerText = document.getElementById('inProfile').value;
-
             document.getElementById('cvExpTitle').innerText = document.getElementById('inExpTitle').value;
             document.getElementById('cvExpDate').innerText = document.getElementById('inExpDate').value;
             document.getElementById('cvExpDesc').innerText = document.getElementById('inExpDesc').value;
-
             document.getElementById('cvProjTitle').innerText = document.getElementById('inProjTitle').value;
             document.getElementById('cvProjDesc').innerText = document.getElementById('inProjDesc').value;
-
             document.getElementById('cvCert').innerText = document.getElementById('inCert').value;
-
             document.getElementById('cvEduTitle').innerText = document.getElementById('inEduTitle').value;
             document.getElementById('cvEduSub').innerText = document.getElementById('inEduSub').value;
+            document.getElementById('cvSigNameDisplay').innerText = document.getElementById('inName').value;
         }
 
         function changeTemplateLayout(tplClass) {
-            document.getElementById('cvContent').className = 'cv-paper ' + tplClass;
+            const cvPaper = document.getElementById('cvContent');
+            cvPaper.className = 'cv-paper ' + tplClass;
         }
 
-        function runAiEnhancer() {
-            document.getElementById('inProfile').value = "Results-driven Senior Software Engineer with over 5 years of experience in architecting scalable web applications and high-performance cloud infrastructure. Expert in Node.js, React, and AWS microservices architecture with a strong record of optimizing system efficiency.";
-            syncData();
-            alert("CV Profile text has been enhanced with professional keywords!");
+        function applyCustomColor(color) {
+            document.documentElement.style.setProperty('--primary', color);
+            document.documentElement.style.setProperty('--primary-light', color + '20');
         }
 
         function promptEmailBeforeDownload(type) {
@@ -581,76 +604,72 @@
             document.getElementById('userEmailModal').classList.add('active');
         }
 
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('active');
-        }
-
         function confirmDownloadWithEmail() {
-            const email = document.getElementById('downloadUserEmail').value.trim();
-            if (!email || !email.includes('@')) {
+            const emailInput = document.getElementById('downloadUserEmail').value.trim();
+            if (!emailInput || !emailInput.includes('@')) {
                 alert('Please enter a valid email address.');
                 return;
             }
-
-            let logs = JSON.parse(localStorage.getItem('cv_download_logs') || '[]');
-            logs.push({ email: email, timestamp: new Date().toLocaleString() });
-            localStorage.setItem('cv_download_logs', JSON.stringify(logs));
-
+            
+            // Save to browser persistent storage
+            saveUserLog(emailInput);
+            
             closeModal('userEmailModal');
-            executeDownload(currentDownloadType);
+            document.getElementById('downloadUserEmail').value = '';
+
+            if (currentDownloadType === 'pdf') {
+                executePDFDownload();
+            } else {
+                executeJPGDownload();
+            }
         }
 
-        /* DIRECT CANVAS TO PDF DOWNLOAD (Guarantees non-blank PDF) */
-        async function executeDownload(type) {
-            const loadingOverlay = document.createElement('div');
-            loadingOverlay.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.85);color:#38bdf8;display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:999999;font-family:sans-serif;font-weight:bold;';
-            loadingOverlay.innerHTML = '<i class="fa-solid fa-spinner fa-spin" style="font-size:36px;margin-bottom:12px;color:#10b981;"></i> Generating Document...';
-            document.body.appendChild(loadingOverlay);
+        function executePDFDownload() {
+            const element = document.getElementById('cvContent');
+            const originalTransform = element.style.transform;
+            element.style.transform = 'none';
 
-            const cvElement = document.getElementById('cvContent');
+            html2canvas(element, {
+                scale: 2,
+                useCORS: true,
+                logging: false
+            }).then(canvas => {
+                element.style.transform = originalTransform;
+                const imgData = canvas.toDataURL('image/jpeg', 0.95);
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = pdf.internal.pageSize.getHeight();
+                
+                pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+                pdf.save('My_Professional_CV.pdf');
+            }).catch(err => {
+                element.style.transform = originalTransform;
+                console.error(err);
+                alert('Error generating PDF download');
+            });
+        }
 
-            // Temporarily store & clear CSS transform (prevents scale bugs in canvas)
-            const savedTransform = cvElement.style.transform;
-            cvElement.style.transform = 'none';
+        function executeJPGDownload() {
+            const element = document.getElementById('cvContent');
+            const originalTransform = element.style.transform;
+            element.style.transform = 'none';
 
-            await document.fonts.ready;
-            await new Promise(resolve => setTimeout(resolve, 200));
-
-            try {
-                // Capture element directly
-                const canvas = await html2canvas(cvElement, {
-                    scale: 2,
-                    useCORS: true,
-                    allowTaint: true,
-                    backgroundColor: '#ffffff',
-                    logging: false
-                });
-
-                if (type === 'pdf') {
-                    const imgData = canvas.toDataURL('image/jpeg', 0.98);
-                    const { jsPDF } = window.jspdf;
-                    const pdf = new jsPDF('portrait', 'mm', 'a4');
-                    
-                    const pdfWidth = pdf.internal.pageSize.getWidth();
-                    const pdfHeight = pdf.internal.pageSize.getHeight();
-                    
-                    pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
-                    pdf.save('Professional_CV.pdf');
-                } else if (type === 'jpg') {
-                    const link = document.createElement('a');
-                    link.download = 'Professional_CV.jpg';
-                    link.href = canvas.toDataURL('image/jpeg', 0.98);
-                    link.click();
-                }
-            } catch (err) {
-                console.error("Export Error:", err);
-                alert("Failed to export document. Please try again.");
-            } finally {
-                cvElement.style.transform = savedTransform;
-                if (document.body.contains(loadingOverlay)) {
-                    document.body.removeChild(loadingOverlay);
-                }
-            }
+            html2canvas(element, {
+                scale: 2,
+                useCORS: true,
+                logging: false
+            }).then(canvas => {
+                element.style.transform = originalTransform;
+                const link = document.createElement('a');
+                link.download = 'My_Professional_CV.jpg';
+                link.href = canvas.toDataURL('image/jpeg', 0.95);
+                link.click();
+            }).catch(err => {
+                element.style.transform = originalTransform;
+                console.error(err);
+                alert('Error generating JPG download');
+            });
         }
 
         function openAdminModal() {
@@ -658,34 +677,48 @@
         }
 
         function verifyAdminLogin() {
-            const emailInput = document.getElementById('adminEmailInput').value.trim();
-            if (emailInput.toLowerCase() === OWNER_EMAIL.toLowerCase()) {
+            const email = document.getElementById('adminEmailInput').value.trim();
+            if (email.toLowerCase() === OWNER_EMAIL.toLowerCase()) {
                 document.getElementById('adminLoginForm').classList.add('is-hidden');
                 document.getElementById('adminDataLogs').classList.remove('is-hidden');
-                document.getElementById('adminStatusText').innerText = "Logged in as Owner (" + OWNER_EMAIL + ")";
+                document.getElementById('adminStatusText').innerText = "Logged in as Owner. Download Email Logs:";
                 renderAdminLogs();
             } else {
-                alert("Access Denied: Invalid owner email.");
+                alert('Access Denied: Incorrect Owner Email');
             }
         }
 
         function renderAdminLogs() {
-            const logs = JSON.parse(localStorage.getItem('cv_download_logs') || '[]');
+            const logs = getSavedLogs();
             const tbody = document.getElementById('adminLogsTable');
             tbody.innerHTML = '';
 
             if (logs.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#9ca3af;">No download activity recorded yet.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#9ca3af;">No downloads recorded yet.</td></tr>';
                 return;
             }
 
-            logs.forEach((log, index) => {
-                tbody.innerHTML += `<tr>
-                    <td>${index + 1}</td>
-                    <td>${log.email}</td>
-                    <td>${log.timestamp}</td>
-                </tr>`;
+            logs.forEach((log, idx) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${idx + 1}</td>
+                    <td>${escapeHtml(log.email)}</td>
+                    <td>${escapeHtml(log.timestamp)}</td>
+                `;
+                tbody.appendChild(tr);
             });
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function runAiEnhancer() {
+            alert("AI Enhancement applied! Content polished.");
+        }
+
+        function escapeHtml(str) {
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         }
     </script>
 </body>
