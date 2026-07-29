@@ -114,6 +114,13 @@
             transition: all 0.3s ease;
         }
 
+        /* Prevent Text Overlap in Export */
+        .cv-paper * {
+            letter-spacing: normal !important;
+            word-wrap: break-word !important;
+            overflow-wrap: break-word !important;
+        }
+
         /* Sidebar Styling */
         .cv-sidebar { 
             background: var(--sidebar-bg); 
@@ -126,24 +133,24 @@
         .cv-photo-img { width: 130px; height: 130px; border-radius: var(--photo-radius); object-fit: cover; border: 4px solid var(--primary); }
 
         .cv-side-block { margin-bottom: 20px; }
-        .cv-side-title { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--primary); border-bottom: 1px solid rgba(255,255,255,0.15); padding-bottom: 4px; margin-bottom: 10px; }
-        .cv-contact-item { background: rgba(255,255,255,0.06); padding: 8px; border-radius: 5px; font-size: 11px; margin-bottom: 6px; word-break: break-all; }
+        .cv-side-title { font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--primary); border-bottom: 1px solid rgba(255,255,255,0.15); padding-bottom: 4px; margin-bottom: 10px; line-height: 1.4 !important; }
+        .cv-contact-item { background: rgba(255,255,255,0.06); padding: 8px; border-radius: 5px; font-size: 11px; margin-bottom: 6px; word-break: break-all; line-height: 1.4 !important; }
 
         /* Main Section */
         .cv-main { padding: 35px; background: var(--main-bg); display: flex; flex-direction: column; justify-content: space-between; }
         .cv-header-card { background: var(--card-bg); padding: 20px; border-radius: 8px; border-left: 5px solid var(--primary); margin-bottom: 20px; }
-        .cv-header-card h1 { font-size: 26px; font-weight: 800; text-transform: uppercase; }
-        .cv-header-card h2 { font-size: 13px; font-weight: 700; color: var(--primary); margin-top: 4px; text-transform: uppercase; }
+        .cv-header-card h1 { font-size: 26px; font-weight: 800; text-transform: uppercase; line-height: 1.3 !important; }
+        .cv-header-card h2 { font-size: 13px; font-weight: 700; color: var(--primary); margin-top: 4px; text-transform: uppercase; line-height: 1.4 !important; }
 
         .cv-section { margin-bottom: 18px; }
-        .cv-sec-title { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--primary); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+        .cv-sec-title { font-size: 12px; font-weight: 800; text-transform: uppercase; color: var(--primary); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; line-height: 1.4 !important; }
         .cv-sec-title::after { content: ''; flex: 1; height: 2px; background: var(--border-color); }
 
         .cv-card { background: var(--card-bg); padding: 12px 15px; border-radius: 6px; border: 1px solid var(--border-color); margin-bottom: 10px; position: relative; }
-        .cv-card-title { font-weight: 700; font-size: 13px; }
+        .cv-card-title { font-weight: 700; font-size: 13px; line-height: 1.4 !important; }
         .cv-card-badge { font-size: 10px; font-weight: 700; background: var(--primary-light); color: var(--primary); padding: 2px 8px; border-radius: 10px; float: right; }
-        .cv-card-sub { font-size: 11px; font-weight: 600; color: var(--primary); margin-bottom: 5px; }
-        .cv-card-desc { font-size: 11px; color: var(--text-muted); line-height: 1.5; white-space: pre-line; }
+        .cv-card-sub { font-size: 11px; font-weight: 600; color: var(--primary); margin-bottom: 5px; line-height: 1.4 !important; }
+        .cv-card-desc { font-size: 11px; color: var(--text-muted); line-height: 1.5 !important; white-space: pre-line; }
 
         /* Timeline Cards */
         .timeline-card { border-left: 2px solid var(--primary); padding-left: 15px; border-radius: 0; border-top: none; border-right: none; border-bottom: none; background: transparent; }
@@ -602,25 +609,57 @@
             executeDownload(currentDownloadType);
         }
 
-        function executeDownload(type) {
-            const element = document.getElementById('cvContent');
+        async function executeDownload(type) {
+            const originalElement = document.getElementById('cvContent');
 
-            if (type === 'pdf') {
-                const opt = {
-                    margin: 0,
-                    filename: 'Professional_CV.pdf',
-                    image: { type: 'jpeg', quality: 0.98 },
-                    html2canvas: { scale: 2, useCORS: true, logging: false },
-                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-                };
-                html2pdf().set(opt).from(element).save();
-            } else if (type === 'jpg') {
-                html2canvas(element, { scale: 2, useCORS: true }).then(canvas => {
+            // Wait for all external Google fonts to finish loading completely
+            await document.fonts.ready;
+
+            // Clone element to off-screen rendering container to bypass responsive zoom/transform glitches
+            const clone = originalElement.cloneNode(true);
+            clone.style.zoom = '1';
+            clone.style.transform = 'none';
+            clone.style.width = '210mm';
+            clone.style.minHeight = '297mm';
+            clone.style.position = 'absolute';
+            clone.style.left = '-9999px';
+            clone.style.top = '0px';
+
+            document.body.appendChild(clone);
+
+            try {
+                if (type === 'pdf') {
+                    const opt = {
+                        margin: 0,
+                        filename: 'Professional_CV.pdf',
+                        image: { type: 'jpeg', quality: 0.98 },
+                        html2canvas: { 
+                            scale: 2, 
+                            useCORS: true, 
+                            logging: false,
+                            letterRendering: true,
+                            allowTaint: true
+                        },
+                        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                    };
+                    await html2pdf().set(opt).from(clone).save();
+                } else if (type === 'jpg') {
+                    const canvas = await html2canvas(clone, { 
+                        scale: 2, 
+                        useCORS: true,
+                        letterRendering: true,
+                        allowTaint: true 
+                    });
                     const link = document.createElement('a');
                     link.download = 'Professional_CV.jpg';
                     link.href = canvas.toDataURL('image/jpeg', 0.98);
                     link.click();
-                });
+                }
+            } catch (err) {
+                console.error("Export Error:", err);
+                alert("An error occurred during download. Please try again.");
+            } finally {
+                document.body.removeChild(clone);
             }
         }
 
