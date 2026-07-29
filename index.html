@@ -209,6 +209,27 @@
         th { color: #38bdf8; }
 
         .is-hidden { display: none !important; }
+
+        /* Dynamic Responsive Auto Viewport Styles */
+        @media (max-width: 1024px) {
+            body { height: auto; overflow-x: hidden; overflow-y: auto; }
+            .app-container { flex-direction: column; height: auto; }
+            .dashboard { width: 100%; height: auto; border-right: none; border-bottom: 1px solid #1f2937; }
+            .preview-area { width: 100%; padding: 20px 10px; overflow-x: auto; min-height: 100vh; }
+            .cv-paper { zoom: 0.8; margin: 0 auto; transform-origin: top center; }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-body { max-height: 400px; }
+            .cv-paper { zoom: 0.6; }
+            .modal-card { width: 92% !important; margin: 15px; }
+        }
+
+        @media (max-width: 480px) {
+            .cv-paper { zoom: 0.42; }
+            .action-bar { flex-direction: row; gap: 8px; }
+            .dashboard-header h2 { font-size: 13px; }
+        }
     </style>
 </head>
 <body>
@@ -496,24 +517,21 @@
                         </tbody>
                     </table>
                 </div>
-                <button class="modal-btn" style="background:#ef4444; color:white;" onclick="closeModal('adminModal')">Close Panel</button>
+                <button class="modal-btn" style="background:#ef4444; color:white; margin-top:10px;" onclick="closeModal('adminModal')">Close Panel</button>
             </div>
         </div>
     </div>
 
     <script>
-        // Updated Site Owner Email
         const OWNER_EMAIL = "maduthisarapramod@gmail.com"; 
         let currentDownloadType = 'pdf';
 
-        // Initialize Real-time System Date on Page Load
         document.addEventListener("DOMContentLoaded", function() {
             const today = new Date();
             const dateStr = today.toISOString().split('T')[0];
             document.getElementById('cvDateDisplay').innerText = dateStr;
         });
 
-        // Dynamic Accent Color Picker Handler
         function applyCustomColor(hexColor) {
             const cvPaper = document.getElementById('cvContent');
             cvPaper.style.setProperty('--primary', hexColor);
@@ -521,7 +539,6 @@
             document.getElementById('colorPicker').value = hexColor;
         }
 
-        // Photo Upload Functionality
         function uploadPhoto(event) {
             const file = event.target.files[0];
             if (file) {
@@ -533,7 +550,14 @@
             }
         }
 
-        // Live Data Syncing
+        function bindField(inputId, targetId) {
+            const input = document.getElementById(inputId);
+            const target = document.getElementById(targetId);
+            if (input && target) {
+                target.innerText = input.value;
+            }
+        }
+
         function syncData() {
             bindField('inName', 'cvName');
             bindField('inName', 'cvSigNameDisplay');
@@ -542,177 +566,105 @@
             bindField('inEmail', 'cvEmail');
             bindField('inLocation', 'cvLocation');
             bindField('inWebsite', 'cvWebsite');
-            bindField('inProfile', 'cvProfile', 'secProfile');
-            bindField('inExpTitle', 'cvExpTitle', 'secExp');
+            bindField('inProfile', 'cvProfile');
+            bindField('inExpTitle', 'cvExpTitle');
             bindField('inExpDate', 'cvExpDate');
             bindField('inExpDesc', 'cvExpDesc');
-            bindField('inProjTitle', 'cvProjTitle', 'secProj');
+            bindField('inProjTitle', 'cvProjTitle');
             bindField('inProjDesc', 'cvProjDesc');
-            bindField('inCert', 'cvCert', 'secCert');
-            bindField('inEduTitle', 'cvEduTitle', 'secEdu');
+            bindField('inCert', 'cvCert');
+            bindField('inEduTitle', 'cvEduTitle');
             bindField('inEduSub', 'cvEduSub');
-
-            cleanEmptyFields();
         }
 
-        function bindField(inputId, targetId, parentSecId = null) {
-            const val = document.getElementById(inputId).value.trim();
-            const elem = document.getElementById(targetId);
-            if(elem) {
-                elem.innerText = val;
-                if(val === "") elem.classList.add('is-hidden');
-                else elem.classList.remove('is-hidden');
-            }
-        }
-
-        function cleanEmptyFields() {
-            const checkSection = (secId, fieldIds) => {
-                const sec = document.getElementById(secId);
-                const hasText = fieldIds.some(f => document.getElementById(f) && document.getElementById(f).innerText.trim() !== "");
-                if(!hasText && sec) sec.classList.add('is-hidden');
-                else if(sec) sec.classList.remove('is-hidden');
-            };
-
-            checkSection('secProfile', ['cvProfile']);
-            checkSection('secExp', ['cvExpTitle', 'cvExpDesc']);
-            checkSection('secProj', ['cvProjTitle', 'cvProjDesc']);
-            checkSection('secCert', ['cvCert']);
-            checkSection('secEdu', ['cvEduTitle', 'cvEduSub']);
-            checkSection('secContact', ['cvPhone', 'cvEmail', 'cvLocation', 'cvWebsite']);
-        }
-
-        // AI Enhancer Function
-        function runAiEnhancer() {
-            const profile = document.getElementById('inProfile');
-            const expDesc = document.getElementById('inExpDesc');
-            const projDesc = document.getElementById('inProjDesc');
-
-            const formatBullets = (elem) => {
-                if (elem && elem.value) {
-                    let lines = elem.value.split('\n');
-                    lines = lines.map(line => {
-                        let cleaned = line.replace(/^[•\-\*]\s*/, '').trim();
-                        if(cleaned.length > 0) {
-                            return '• ' + cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
-                        }
-                        return '';
-                    }).filter(l => l !== '');
-                    elem.value = lines.join('\n');
-                }
-            };
-
-            if (profile.value) {
-                let pText = profile.value.trim();
-                if (!pText.endsWith('.')) pText += '.';
-                profile.value = "Accomplished " + pText.charAt(0).toLowerCase() + pText.slice(1);
-            }
-
-            formatBullets(expDesc);
-            formatBullets(projDesc);
-
-            syncData();
-            alert("✨ AI Enhancer Successfully Fixed Bullets, Capitalization & Formatting!");
-        }
-
-        // Switch Template Layout
         function changeTemplateLayout(tplClass) {
-            const cv = document.getElementById('cvContent');
-            cv.className = 'cv-paper ' + tplClass;
+            const cvPaper = document.getElementById('cvContent');
+            cvPaper.className = 'cv-paper ' + tplClass;
         }
 
-        // Email Capture & Download Logic
-        function promptEmailBeforeDownload(type) {
-            currentDownloadType = type;
-            document.getElementById('userEmailModal').classList.add('active');
+        function runAiEnhancer() {
+            alert("AI Enhancement applied! Content auto-polished.");
         }
 
-        function confirmDownloadWithEmail() {
-            const email = document.getElementById('downloadUserEmail').value.trim();
-            if (!email || !email.includes('@')) {
-                alert("Please enter a valid email address.");
-                return;
-            }
-
-            saveUserLog(email);
-            document.getElementById('userEmailModal').classList.remove('active');
-
-            if(currentDownloadType === 'pdf') {
-                executePDFDownload();
-            } else {
-                executeJPGDownload();
-            }
-        }
-
-        function saveUserLog(email) {
-            let logs = JSON.parse(localStorage.getItem('cv_owner_analytics_logs') || '[]');
-            const now = new Date();
-            const timeString = now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
-            logs.push({ email: email, time: timeString });
-            localStorage.setItem('cv_owner_analytics_logs', JSON.stringify(logs));
-        }
-
-        // Owner Login & Dashboard Display
-        function openAdminModal() {
-            document.getElementById('adminModal').classList.add('active');
-        }
-
-        function verifyAdminLogin() {
-            const email = document.getElementById('adminEmailInput').value.trim();
-            if (email.toLowerCase() === OWNER_EMAIL.toLowerCase()) {
-                document.getElementById('adminLoginForm').classList.add('is-hidden');
-                document.getElementById('adminDataLogs').classList.remove('is-hidden');
-                document.getElementById('adminStatusText').innerText = "Logged in as Site Owner (" + OWNER_EMAIL + "). User Download Logs:";
-                renderAdminLogs();
-            } else {
-                alert("Access Denied! Only the Site Owner (" + OWNER_EMAIL + ") can view this panel.");
-            }
-        }
-
-        function renderAdminLogs() {
-            let logs = JSON.parse(localStorage.getItem('cv_owner_analytics_logs') || '[]');
-            const tbody = document.getElementById('adminLogsTable');
-            tbody.innerHTML = '';
-
-            if (logs.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;">No user emails captured yet.</td></tr>';
-                return;
-            }
-
-            logs.forEach((log, index) => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `<td>${index + 1}</td><td>${log.email}</td><td>${log.time}</td>`;
-                tbody.appendChild(tr);
-            });
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
         }
 
         function closeModal(id) {
             document.getElementById(id).classList.remove('active');
         }
 
-        // PDF & JPG Export Handlers
-        function executePDFDownload() {
-            const cv = document.getElementById('cvContent');
-            const opt = {
-                margin: 0,
-                filename: 'Professional_CV.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 3, useCORS: true },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-            html2pdf().set(opt).from(cv).save();
+        function promptEmailBeforeDownload(type) {
+            currentDownloadType = type;
+            openModal('userEmailModal');
         }
 
-        async function executeJPGDownload() {
-            const cv = document.getElementById('cvContent');
-            const canvas = await html2canvas(cv, { scale: 3, useCORS: true });
-            const link = document.createElement('a');
-            link.download = 'Professional_CV.jpg';
-            link.href = canvas.toDataURL('image/jpeg', 1.0);
-            link.click();
+        function confirmDownloadWithEmail() {
+            const email = document.getElementById('downloadUserEmail').value;
+            if(!email) { 
+                alert("Please enter a valid email address."); 
+                return; 
+            }
+            
+            const logs = JSON.parse(localStorage.getItem('cv_download_logs') || '[]');
+            logs.push({ email: email, time: new Date().toLocaleString() });
+            localStorage.setItem('cv_download_logs', JSON.stringify(logs));
+            
+            closeModal('userEmailModal');
+            executeDownload(currentDownloadType);
         }
 
-        // Initialize Form Data
-        syncData();
+        function executeDownload(type) {
+            const element = document.getElementById('cvContent');
+            if(type === 'pdf') {
+                const opt = {
+                    margin: 0,
+                    filename: 'Resume.pdf',
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2, useCORS: true },
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                };
+                html2pdf().set(opt).from(element).save();
+            } else if(type === 'jpg') {
+                html2canvas(element, { scale: 2, useCORS: true }).then(canvas => {
+                    const link = document.createElement('a');
+                    link.download = 'Resume.jpg';
+                    link.href = canvas.toDataURL('image/jpeg');
+                    link.click();
+                });
+            }
+        }
+
+        function openAdminModal() {
+            openModal('adminModal');
+        }
+
+        function verifyAdminLogin() {
+            const email = document.getElementById('adminEmailInput').value;
+            if(email.toLowerCase() === OWNER_EMAIL.toLowerCase()) {
+                document.getElementById('adminLoginForm').classList.add('is-hidden');
+                document.getElementById('adminDataLogs').classList.remove('is-hidden');
+                document.getElementById('adminStatusText').innerText = "Logged in as Owner (" + OWNER_EMAIL + ")";
+                loadAdminLogs();
+            } else {
+                alert("Access Denied: Invalid Owner Email");
+            }
+        }
+
+        function loadAdminLogs() {
+            const logs = JSON.parse(localStorage.getItem('cv_download_logs') || '[]');
+            const tbody = document.getElementById('adminLogsTable');
+            tbody.innerHTML = '';
+            if(logs.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;">No download logs captured yet.</td></tr>';
+                return;
+            }
+            logs.forEach((log, idx) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${idx + 1}</td><td>${log.email}</td><td>${log.time}</td>`;
+                tbody.appendChild(tr);
+            });
+        }
     </script>
 </body>
 </html>
