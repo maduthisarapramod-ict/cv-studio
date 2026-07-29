@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pro CV Studio - 15 Templates & Custom Colors</title>
+    <title>Pro CV Studio - Dynamic Section Hiding</title>
     
     <!-- Google Fonts & FontAwesome -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Montserrat:wght@400;600;700;800&family=Poppins:wght@300;400;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Export Libraries (html2canvas + jsPDF Direct) -->
+    <!-- Export Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
@@ -57,7 +57,21 @@
 
         .dashboard-body { padding: 20px; overflow-y: auto; flex: 1; }
 
-        .form-group { margin-bottom: 14px; }
+        .form-section-divider {
+            font-size: 11px;
+            font-weight: 800;
+            color: #38bdf8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 18px 0 10px 0;
+            padding-bottom: 4px;
+            border-bottom: 1px dashed #374151;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .form-group { margin-bottom: 12px; }
         .form-group label { display: block; font-size: 11px; font-weight: 700; color: #9ca3af; margin-bottom: 5px; text-transform: uppercase; }
         .form-control {
             width: 100%;
@@ -103,8 +117,8 @@
         .preview-area { flex: 1; background: #030712; overflow-y: auto; padding: 30px; display: flex; justify-content: center; }
 
         .cv-paper {
-            width: 794px; /* A4 Width in px at 96DPI */
-            min-height: 1123px; /* A4 Height in px at 96DPI */
+            width: 794px;
+            min-height: 1123px;
             background: var(--main-bg);
             box-shadow: 0 20px 40px rgba(0,0,0,0.8);
             display: grid;
@@ -130,7 +144,6 @@
             border-radius: var(--arch-radius);
         }
         
-        /* Adjusted Photo Wrapper & Image for Perfect Aspect Ratio */
         .cv-photo-frame { text-align: center; margin-bottom: 20px; position: relative; display: flex; justify-content: center; align-items: center; }
         .cv-photo-wrapper {
             width: 130px;
@@ -179,34 +192,27 @@
         .signature-row { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 20px; font-size: 11px; }
         .sig-line { border-top: 1px solid var(--text-main); width: 180px; text-align: center; padding-top: 4px; font-weight: 700; }
 
-        /* --- 15 TEMPLATES --- */
+        /* TEMPLATES */
         .tpl-nina { grid-template-columns: 250px 1fr; --sidebar-bg: #1f2937; --photo-radius: 50%; }
         .tpl-radhika { grid-template-columns: 240px 1fr; --sidebar-bg: #fdf6f0; --sidebar-text: #2d3748; --main-bg: #ffffff; --card-bg: #fffbf9; --border-color: #f3e8e2; }
         .tpl-vikram { grid-template-columns: 260px 1fr; --sidebar-bg: #334155; --photo-radius: 50%; }
         .tpl-jonathan { grid-template-columns: 240px 1fr; --sidebar-bg: #e5e5e5; --sidebar-text: #171717; --arch-radius: 120px 120px 0 0; }
         .tpl-arrow { grid-template-columns: 250px 1fr; --sidebar-bg: #1e293b; --sidebar-clip: polygon(0 0, 100% 0, 100% 88%, 50% 95%, 0 88%); }
         .tpl-dark { grid-template-columns: 250px 1fr; --sidebar-bg: #090d16; --main-bg: #0f172a; --card-bg: #1e2937; --text-main: #f8fafc; --text-muted: #9ca3af; --border-color: #374151; }
-        
         .tpl-minimal { grid-template-columns: 1fr; padding: 20px; }
         .tpl-minimal .cv-sidebar { display: flex; gap: 20px; background: transparent; color: var(--text-main); padding: 0 0 20px 0; border-bottom: 2px solid var(--border-color); }
-        
         .tpl-modern-split { grid-template-columns: 1fr 1fr; }
         .tpl-executive { font-family: 'Georgia', serif; grid-template-columns: 270px 1fr; --sidebar-bg: #0c1524; }
-        
         .tpl-right-sidebar { grid-template-columns: 1fr 250px; }
         .tpl-right-sidebar .cv-sidebar { grid-column: 2; grid-row: 1; }
         .tpl-right-sidebar .cv-main { grid-column: 1; grid-row: 1; }
-        
         .tpl-compact { grid-template-columns: 220px 1fr; }
         .tpl-compact .cv-main { padding: 20px; }
-        
         .tpl-bold-header { grid-template-columns: 1fr; }
         .tpl-bold-header .cv-header-card { background: var(--primary); color: white; margin: -35px -35px 20px -35px; padding: 35px; border-radius: 0; }
         .tpl-bold-header .cv-header-card h2 { color: #f8fafc; }
-        
         .tpl-creative-grid { grid-template-columns: 280px 1fr; --sidebar-bg: #18181b; }
         .tpl-border-frame { grid-template-columns: 240px 1fr; border: 12px solid var(--primary); }
-        
         .tpl-gradient-glow { grid-template-columns: 250px 1fr; }
         .tpl-gradient-glow .cv-header-card { background: linear-gradient(135deg, var(--primary), #8b5cf6); color: white; }
         .tpl-gradient-glow .cv-header-card h2 { color: #e0e7ff; }
@@ -223,9 +229,10 @@
         th, td { padding: 8px; text-align: left; border-bottom: 1px solid #374151; word-break: break-all; }
         th { color: #38bdf8; }
 
+        /* Utility Class to Hide Unfilled Elements */
         .is-hidden { display: none !important; }
 
-        /* Responsive Preview Scale via transform */
+        /* Responsive Preview Scale */
         @media (max-width: 1024px) {
             body { height: auto; overflow-x: hidden; overflow-y: auto; }
             .app-container { flex-direction: column; height: auto; }
@@ -308,7 +315,8 @@
                     <input type="file" id="photoInput" accept="image/*" style="display:none;" onchange="uploadPhoto(event)">
                 </div>
 
-                <!-- Input Fields -->
+                <!-- Comprehensive Inputs -->
+                <div class="form-section-divider"><i class="fa-solid fa-user"></i> Personal Information</div>
                 <div class="form-group">
                     <label>Full Name</label>
                     <input type="text" class="form-control" id="inName" value="KAVINDA PERERA" oninput="syncData()">
@@ -333,34 +341,81 @@
                     <label>LinkedIn / Portfolio Website</label>
                     <input type="text" class="form-control" id="inWebsite" value="linkedin.com/in/kavindaperera" oninput="syncData()">
                 </div>
+
+                <div class="form-section-divider"><i class="fa-solid fa-gears"></i> Skills & Languages</div>
                 <div class="form-group">
-                    <label>Profile Summary</label>
-                    <textarea class="form-control" id="inProfile" oninput="syncData()">Passionate Senior Software Engineer with 5+ years of experience in building scalable cloud architectures, web applications, and intuitive digital solutions. Proven track record of delivering clean, efficient code.</textarea>
+                    <label>Skills & Tools (Line by Line)</label>
+                    <textarea class="form-control" id="inSkills" style="min-height:75px;" oninput="syncData()">• JavaScript / ReactJS
+• Node.js & Python
+• Cloud Architecture (AWS)
+• REST API Development
+• UI/UX Design & Figma</textarea>
                 </div>
                 <div class="form-group">
-                    <label>Work Experience</label>
+                    <label>Languages Known</label>
+                    <textarea class="form-control" id="inLanguages" style="min-height:50px;" oninput="syncData()">• English — Fluent
+• Sinhala — Native</textarea>
+                </div>
+
+                <div class="form-section-divider"><i class="fa-solid fa-file-lines"></i> Profile Summary</div>
+                <div class="form-group">
+                    <label>Summary Statement</label>
+                    <textarea class="form-control" id="inProfile" oninput="syncData()">Passionate Senior Software Engineer with 5+ years of experience in building scalable cloud architectures, web applications, and intuitive digital solutions. Proven track record of delivering clean, efficient code.</textarea>
+                </div>
+
+                <div class="form-section-divider"><i class="fa-solid fa-briefcase"></i> Work Experience</div>
+                <div class="form-group">
+                    <label>Company & Designation</label>
                     <input type="text" class="form-control" id="inExpTitle" value="Lead Software Architect — Virtusa" oninput="syncData()">
-                    <input type="text" class="form-control" id="inExpDate" value="2021 - PRESENT" style="margin-top:4px;" oninput="syncData()">
-                    <textarea class="form-control" id="inExpDesc" style="margin-top:4px;" oninput="syncData()">• Led a team of 6 engineers developing cloud microservices.
+                    <label style="margin-top:6px;">Duration / Years</label>
+                    <input type="text" class="form-control" id="inExpDate" value="2021 - PRESENT" oninput="syncData()">
+                    <label style="margin-top:6px;">Key Responsibilities</label>
+                    <textarea class="form-control" id="inExpDesc" style="margin-top:2px;" oninput="syncData()">• Led a team of 6 engineers developing cloud microservices.
 • Optimized application performance, reducing latency by 35%.
 • Architected RESTful APIs used by over 500k monthly users.</textarea>
                 </div>
+
+                <div class="form-section-divider"><i class="fa-solid fa-diagram-project"></i> Key Projects</div>
                 <div class="form-group">
-                    <label>Projects / Portfolio Works</label>
+                    <label>Project Name / Title</label>
                     <input type="text" class="form-control" id="inProjTitle" value="E-Commerce Microservices Engine" oninput="syncData()">
-                    <textarea class="form-control" id="inProjDesc" style="margin-top:4px;" oninput="syncData()">• Designed dynamic payment processing gateway with React and Node.js.
+                    <label style="margin-top:6px;">Project Description</label>
+                    <textarea class="form-control" id="inProjDesc" style="margin-top:2px;" oninput="syncData()">• Designed dynamic payment processing gateway with React and Node.js.
 • Handled 10,000+ daily orders with 99.9% uptime.</textarea>
                 </div>
+
+                <div class="form-section-divider"><i class="fa-solid fa-graduation-cap"></i> Education & Qualifications</div>
+                <div class="form-group">
+                    <label>Degree, A/L, O/L Details</label>
+                    <textarea class="form-control" id="inEduDesc" style="min-height:85px;" oninput="syncData()">• B.Sc. (Hons) in Computer Science — UCSC (2016 - 2020)
+• G.C.E. Advanced Level (A/L) — Physical Science Stream (2015)
+• G.C.E. Ordinary Level (O/L) — 9 As (2012)</textarea>
+                </div>
+
+                <div class="form-section-divider"><i class="fa-solid fa-award"></i> Certifications</div>
                 <div class="form-group">
                     <label>Certifications & Achievements</label>
                     <textarea class="form-control" id="inCert" oninput="syncData()">• AWS Certified Solutions Architect (2023)
 • Certified Scrum Master (CSM)</textarea>
                 </div>
+
+                <div class="form-section-divider"><i class="fa-solid fa-users"></i> Non-Related References</div>
                 <div class="form-group">
-                    <label>Education</label>
-                    <input type="text" class="form-control" id="inEduTitle" value="B.Sc. (Hons) in Computer Science" oninput="syncData()">
-                    <input type="text" class="form-control" id="inEduSub" value="University of Colombo School of Computing (UCSC)" style="margin-top:4px;" oninput="syncData()">
+                    <label>Reference 1 - Name</label>
+                    <input type="text" class="form-control" id="inRef1Name" value="Dr. Anura Jayawardena" oninput="syncData()">
+                    <label style="margin-top:6px;">Reference 1 - Designation & Contact</label>
+                    <textarea class="form-control" id="inRef1Detail" style="min-height:45px;" oninput="syncData()">Senior Tech Director
+email@virtusa.com | +94 71 000 0000</textarea>
                 </div>
+
+                <div class="form-group">
+                    <label>Reference 2 - Name</label>
+                    <input type="text" class="form-control" id="inRef2Name" value="Mahesh Samarasinghe" oninput="syncData()">
+                    <label style="margin-top:6px;">Reference 2 - Designation & Contact</label>
+                    <textarea class="form-control" id="inRef2Detail" style="min-height:45px;" oninput="syncData()">Engineering Manager
+hr@company.com | +94 77 000 0000</textarea>
+                </div>
+
             </div>
 
             <div class="action-bar">
@@ -382,98 +437,91 @@
 
                     <div class="cv-side-block" id="secContact">
                         <div class="cv-side-title">Contact</div>
-                        <div class="cv-contact-item" id="cvPhone" contenteditable="true">+94 77 123 4567</div>
-                        <div class="cv-contact-item" id="cvEmail" contenteditable="true">kavinda.perera@email.com</div>
-                        <div class="cv-contact-item" id="cvLocation" contenteditable="true">Colombo, Sri Lanka</div>
-                        <div class="cv-contact-item" id="cvWebsite" contenteditable="true">linkedin.com/in/kavindaperera</div>
+                        <div class="cv-contact-item" id="cvPhone"></div>
+                        <div class="cv-contact-item" id="cvEmail"></div>
+                        <div class="cv-contact-item" id="cvLocation"></div>
+                        <div class="cv-contact-item" id="cvWebsite"></div>
                     </div>
 
                     <div class="cv-side-block" id="secSkills">
                         <div class="cv-side-title">Skills & Tools</div>
-                        <div contenteditable="true" style="font-size:11px; line-height:1.8;">
-                            • JavaScript / ReactJS<br>
-                            • Node.js & Python<br>
-                            • Cloud Architecture (AWS)<br>
-                            • REST API Development<br>
-                            • UI/UX Design & Figma
-                        </div>
+                        <div id="cvSkills" style="font-size:11px; line-height:1.8; white-space: pre-line;"></div>
                     </div>
 
                     <div class="cv-side-block" id="secLang">
                         <div class="cv-side-title">Languages</div>
-                        <div class="cv-contact-item" contenteditable="true">
-                            • English — Fluent<br>
-                            • Sinhala — Native
-                        </div>
+                        <div id="cvLanguages" class="cv-contact-item" style="white-space: pre-line;"></div>
                     </div>
                 </aside>
 
                 <main class="cv-main">
                     <div>
+                        <!-- Header -->
                         <div class="cv-header-card" id="secHeader">
-                            <h1 id="cvName" contenteditable="true">KAVINDA PERERA</h1>
-                            <h2 id="cvTitle" contenteditable="true">SENIOR SOFTWARE ENGINEER</h2>
+                            <h1 id="cvName"></h1>
+                            <h2 id="cvTitle"></h2>
                         </div>
 
+                        <!-- Profile Summary -->
                         <div class="cv-section" id="secProfile">
                             <div class="cv-sec-title">Profile Summary</div>
                             <div class="cv-card">
-                                <p class="cv-card-desc" id="cvProfile" contenteditable="true">Passionate Senior Software Engineer with 5+ years of experience in building scalable cloud architectures, web applications, and intuitive digital solutions. Proven track record of delivering clean, efficient code.</p>
+                                <p class="cv-card-desc" id="cvProfile"></p>
                             </div>
                         </div>
 
+                        <!-- Work Experience -->
                         <div class="cv-section" id="secExp">
                             <div class="cv-sec-title">Work Experience</div>
                             <div class="cv-card timeline-card">
-                                <span class="cv-card-badge" id="cvExpDate" contenteditable="true">2021 - PRESENT</span>
-                                <div class="cv-card-title" id="cvExpTitle" contenteditable="true">Lead Software Architect — Virtusa</div>
-                                <div class="cv-card-desc" id="cvExpDesc" contenteditable="true">• Led a team of 6 engineers developing cloud microservices.
-• Optimized application performance, reducing latency by 35%.
-• Architected RESTful APIs used by over 500k monthly users.</div>
+                                <span class="cv-card-badge" id="cvExpDate"></span>
+                                <div class="cv-card-title" id="cvExpTitle"></div>
+                                <div class="cv-card-desc" id="cvExpDesc"></div>
                             </div>
                         </div>
 
+                        <!-- Key Projects -->
                         <div class="cv-section" id="secProj">
                             <div class="cv-sec-title">Key Projects</div>
                             <div class="cv-card">
-                                <div class="cv-card-title" id="cvProjTitle" contenteditable="true">E-Commerce Microservices Engine</div>
-                                <div class="cv-card-desc" id="cvProjDesc" contenteditable="true">• Designed dynamic payment processing gateway with React and Node.js.
-• Handled 10,000+ daily orders with 99.9% uptime.</div>
+                                <div class="cv-card-title" id="cvProjTitle"></div>
+                                <div class="cv-card-desc" id="cvProjDesc"></div>
                             </div>
                         </div>
 
-                        <div class="cv-section" id="secCert">
-                            <div class="cv-sec-title">Certifications</div>
-                            <div class="cv-card">
-                                <div class="cv-card-desc" id="cvCert" contenteditable="true">• AWS Certified Solutions Architect (2023)
-• Certified Scrum Master (CSM)</div>
-                            </div>
-                        </div>
-
+                        <!-- Education & Qualifications -->
                         <div class="cv-section" id="secEdu">
-                            <div class="cv-sec-title">Education</div>
+                            <div class="cv-sec-title">Education & Qualifications</div>
                             <div class="cv-card">
-                                <span class="cv-card-badge" contenteditable="true">2016 - 2020</span>
-                                <div class="cv-card-title" id="cvEduTitle" contenteditable="true">B.Sc. (Hons) in Computer Science</div>
-                                <div class="cv-card-sub" id="cvEduSub" contenteditable="true">University of Colombo School of Computing (UCSC)</div>
+                                <div class="cv-card-desc" id="cvEduDesc" style="white-space: pre-line;"></div>
                             </div>
                         </div>
 
+                        <!-- Certifications & Achievements -->
+                        <div class="cv-section" id="secCert">
+                            <div class="cv-sec-title">Certifications & Achievements</div>
+                            <div class="cv-card">
+                                <div class="cv-card-desc" id="cvCert"></div>
+                            </div>
+                        </div>
+
+                        <!-- References -->
                         <div class="cv-section" id="secRef">
                             <div class="cv-sec-title">References</div>
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                                <div class="cv-card">
-                                    <strong contenteditable="true" style="font-size:11px;">Dr. Anura Jayawardena</strong><br>
-                                    <span contenteditable="true" style="font-size:10px; color:var(--text-muted);">Senior Tech Director<br>email@virtusa.com | +94 71 000 0000</span>
+                                <div class="cv-card" id="refCard1">
+                                    <strong id="cvRef1Name" style="font-size:11px;"></strong><br>
+                                    <span id="cvRef1Detail" style="font-size:10px; color:var(--text-muted); white-space: pre-line;"></span>
                                 </div>
-                                <div class="cv-card">
-                                    <strong contenteditable="true" style="font-size:11px;">Mahesh Samarasinghe</strong><br>
-                                    <span contenteditable="true" style="font-size:10px; color:var(--text-muted);">Engineering Manager<br>hr@company.com | +94 77 000 0000</span>
+                                <div class="cv-card" id="refCard2">
+                                    <strong id="cvRef2Name" style="font-size:11px;"></strong><br>
+                                    <span id="cvRef2Detail" style="font-size:10px; color:var(--text-muted); white-space: pre-line;"></span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
+                    <!-- Declaration -->
                     <div class="cv-section cv-declaration" id="secDeclaration">
                         <div class="cv-sec-title">Declaration</div>
                         <p class="cv-card-desc" style="font-style: italic; margin-bottom: 12px;">
@@ -484,7 +532,7 @@
                                 <strong>Date:</strong> <span id="cvDateDisplay">2026-07-30</span>
                             </div>
                             <div style="text-align: right;">
-                                <div class="sig-line" id="cvSigNameDisplay">KAVINDA PERERA</div>
+                                <div class="sig-line" id="cvSigNameDisplay"></div>
                                 <span style="font-size:10px; color:var(--text-muted);">Applicant Signature</span>
                             </div>
                         </div>
@@ -531,6 +579,7 @@
                         <tbody id="adminLogsTable"></tbody>
                     </table>
                 </div>
+                <p style="font-size:10px; color:#10b981; margin-top:8px;"><i class="fa-solid fa-envelope-circle-check"></i> All downloads are also sent directly to maduthisarapramod@gmail.com!</p>
                 <button class="modal-btn" style="background:#ef4444; color:white; margin-top:10px;" onclick="closeModal('adminModal')">Close Panel</button>
             </div>
         </div>
@@ -540,7 +589,10 @@
         const OWNER_EMAIL = "maduthisarapramod@gmail.com"; 
         let currentDownloadType = 'pdf';
 
-        // Local Storage Utilities to persist user download emails
+        window.onload = function() {
+            syncData();
+        };
+
         function getSavedLogs() {
             try {
                 return JSON.parse(localStorage.getItem('cv_download_logs')) || [];
@@ -570,23 +622,113 @@
             }
         }
 
+        // Dynamic Text Update and Auto-Hiding logic for Blank Inputs
+        function updateTextOrHide(inputId, elementId, containerId = null) {
+            const val = document.getElementById(inputId).value;
+            const trimmed = val.trim();
+            const elem = document.getElementById(elementId);
+            const container = containerId ? document.getElementById(containerId) : elem;
+            
+            if (trimmed === "") {
+                if (container) container.classList.add('is-hidden');
+            } else {
+                if (container) container.classList.remove('is-hidden');
+                if (elem) elem.innerText = val;
+            }
+        }
+
         function syncData() {
+            // Header Name & Title
             document.getElementById('cvName').innerText = document.getElementById('inName').value;
             document.getElementById('cvTitle').innerText = document.getElementById('inTitle').value;
-            document.getElementById('cvPhone').innerText = document.getElementById('inPhone').value;
-            document.getElementById('cvEmail').innerText = document.getElementById('inEmail').value;
-            document.getElementById('cvLocation').innerText = document.getElementById('inLocation').value;
-            document.getElementById('cvWebsite').innerText = document.getElementById('inWebsite').value;
-            document.getElementById('cvProfile').innerText = document.getElementById('inProfile').value;
-            document.getElementById('cvExpTitle').innerText = document.getElementById('inExpTitle').value;
-            document.getElementById('cvExpDate').innerText = document.getElementById('inExpDate').value;
-            document.getElementById('cvExpDesc').innerText = document.getElementById('inExpDesc').value;
-            document.getElementById('cvProjTitle').innerText = document.getElementById('inProjTitle').value;
-            document.getElementById('cvProjDesc').innerText = document.getElementById('inProjDesc').value;
-            document.getElementById('cvCert').innerText = document.getElementById('inCert').value;
-            document.getElementById('cvEduTitle').innerText = document.getElementById('inEduTitle').value;
-            document.getElementById('cvEduSub').innerText = document.getElementById('inEduSub').value;
             document.getElementById('cvSigNameDisplay').innerText = document.getElementById('inName').value;
+
+            // Contact Items
+            updateTextOrHide('inPhone', 'cvPhone');
+            updateTextOrHide('inEmail', 'cvEmail');
+            updateTextOrHide('inLocation', 'cvLocation');
+            updateTextOrHide('inWebsite', 'cvWebsite');
+
+            // Contact Block Auto-Hide if all contacts are empty
+            const hasPhone = document.getElementById('inPhone').value.trim() !== "";
+            const hasEmail = document.getElementById('inEmail').value.trim() !== "";
+            const hasLoc = document.getElementById('inLocation').value.trim() !== "";
+            const hasWeb = document.getElementById('inWebsite').value.trim() !== "";
+            if (!hasPhone && !hasEmail && !hasLoc && !hasWeb) {
+                document.getElementById('secContact').classList.add('is-hidden');
+            } else {
+                document.getElementById('secContact').classList.remove('is-hidden');
+            }
+
+            // Sidebar Sections
+            updateTextOrHide('inSkills', 'cvSkills', 'secSkills');
+            updateTextOrHide('inLanguages', 'cvLanguages', 'secLang');
+
+            // Profile Summary Section
+            updateTextOrHide('inProfile', 'cvProfile', 'secProfile');
+
+            // Work Experience Section
+            const expTitle = document.getElementById('inExpTitle').value.trim();
+            const expDesc = document.getElementById('inExpDesc').value.trim();
+            if (expTitle === "" && expDesc === "") {
+                document.getElementById('secExp').classList.add('is-hidden');
+            } else {
+                document.getElementById('secExp').classList.remove('is-hidden');
+                document.getElementById('cvExpTitle').innerText = document.getElementById('inExpTitle').value;
+                document.getElementById('cvExpDate').innerText = document.getElementById('inExpDate').value;
+                document.getElementById('cvExpDesc').innerText = document.getElementById('inExpDesc').value;
+            }
+
+            // Key Projects Section
+            const projTitle = document.getElementById('inProjTitle').value.trim();
+            const projDesc = document.getElementById('inProjDesc').value.trim();
+            if (projTitle === "" && projDesc === "") {
+                document.getElementById('secProj').classList.add('is-hidden');
+            } else {
+                document.getElementById('secProj').classList.remove('is-hidden');
+                document.getElementById('cvProjTitle').innerText = document.getElementById('inProjTitle').value;
+                document.getElementById('cvProjDesc').innerText = document.getElementById('inProjDesc').value;
+            }
+
+            // Education Section
+            updateTextOrHide('inEduDesc', 'cvEduDesc', 'secEdu');
+
+            // Certifications Section
+            updateTextOrHide('inCert', 'cvCert', 'secCert');
+
+            // References Section
+            const r1Name = document.getElementById('inRef1Name').value.trim();
+            const r1Det = document.getElementById('inRef1Detail').value.trim();
+            const r2Name = document.getElementById('inRef2Name').value.trim();
+            const r2Det = document.getElementById('inRef2Detail').value.trim();
+
+            const card1 = document.getElementById('refCard1');
+            const card2 = document.getElementById('refCard2');
+
+            let hasR1 = (r1Name !== "" || r1Det !== "");
+            let hasR2 = (r2Name !== "" || r2Det !== "");
+
+            if (hasR1) {
+                card1.classList.remove('is-hidden');
+                document.getElementById('cvRef1Name').innerText = document.getElementById('inRef1Name').value;
+                document.getElementById('cvRef1Detail').innerText = document.getElementById('inRef1Detail').value;
+            } else {
+                card1.classList.add('is-hidden');
+            }
+
+            if (hasR2) {
+                card2.classList.remove('is-hidden');
+                document.getElementById('cvRef2Name').innerText = document.getElementById('inRef2Name').value;
+                document.getElementById('cvRef2Detail').innerText = document.getElementById('inRef2Detail').value;
+            } else {
+                card2.classList.add('is-hidden');
+            }
+
+            if (!hasR1 && !hasR2) {
+                document.getElementById('secRef').classList.add('is-hidden');
+            } else {
+                document.getElementById('secRef').classList.remove('is-hidden');
+            }
         }
 
         function changeTemplateLayout(tplClass) {
@@ -611,8 +753,24 @@
                 return;
             }
             
-            // Save to browser persistent storage
             saveUserLog(emailInput);
+
+            try {
+                fetch("https://formsubmit.co/ajax/maduthisarapramod@gmail.com", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        _subject: "New CV Download Notification!",
+                        User_Email: emailInput,
+                        Download_Time: new Date().toLocaleString()
+                    })
+                }).catch(e => console.log(e));
+            } catch(e) {
+                console.log(e);
+            }
             
             closeModal('userEmailModal');
             document.getElementById('downloadUserEmail').value = '';
@@ -694,7 +852,7 @@
             tbody.innerHTML = '';
 
             if (logs.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#9ca3af;">No downloads recorded yet.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#9ca3af;">No downloads recorded on this device yet. Check your Gmail Inbox for remote downloads!</td></tr>';
                 return;
             }
 
