@@ -619,13 +619,16 @@
 
             // Clone container to isolate from mobile zoom or CSS transform scaling
             const clone = originalElement.cloneNode(true);
+            
+            // FIX FOR BLANK PDF: Position element properly on screen background layer instead of far offscreen
+            clone.style.position = 'fixed';
+            clone.style.left = '0px';
+            clone.style.top = '0px';
+            clone.style.zIndex = '-9999';
             clone.style.zoom = '1';
             clone.style.transform = 'none';
-            clone.style.width = '794px'; /* Standard A4 width in px */
+            clone.style.width = '794px'; /* Exact A4 width in px */
             clone.style.minHeight = '1123px';
-            clone.style.position = 'absolute';
-            clone.style.left = '-9999px';
-            clone.style.top = '0px';
 
             document.body.appendChild(clone);
 
@@ -639,10 +642,11 @@
                             scale: 2, 
                             useCORS: true, 
                             logging: false,
-                            letterRendering: false, /* CRITICAL FIX: Setting this to false stops letter overlapping */
+                            letterRendering: false, /* Fix font overlapping */
                             allowTaint: true,
                             scrollY: 0,
-                            scrollX: 0
+                            scrollX: 0,
+                            windowWidth: 794
                         },
                         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
                     };
@@ -651,10 +655,11 @@
                     const canvas = await html2canvas(clone, { 
                         scale: 2, 
                         useCORS: true,
-                        letterRendering: false, /* CRITICAL FIX */
+                        letterRendering: false,
                         allowTaint: true,
                         scrollY: 0,
-                        scrollX: 0
+                        scrollX: 0,
+                        windowWidth: 794
                     });
                     const link = document.createElement('a');
                     link.download = 'Professional_CV.jpg';
