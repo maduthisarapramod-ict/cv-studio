@@ -161,37 +161,26 @@
         .tpl-arrow { grid-template-columns: 250px 1fr; --sidebar-bg: #1e293b; --sidebar-clip: polygon(0 0, 100% 0, 100% 88%, 50% 95%, 0 88%); }
         .tpl-dark { grid-template-columns: 250px 1fr; --sidebar-bg: #090d16; --main-bg: #0f172a; --card-bg: #1e2937; --text-main: #f8fafc; --text-muted: #9ca3af; --border-color: #374151; }
         
-        /* 7. Minimalist Clean */
         .tpl-minimal { grid-template-columns: 1fr; padding: 20px; }
         .tpl-minimal .cv-sidebar { display: flex; gap: 20px; background: transparent; color: var(--text-main); padding: 0 0 20px 0; border-bottom: 2px solid var(--border-color); }
         
-        /* 8. Modern Split 50/50 */
         .tpl-modern-split { grid-template-columns: 1fr 1fr; }
-        
-        /* 9. Executive Classic */
         .tpl-executive { font-family: 'Georgia', serif; grid-template-columns: 270px 1fr; --sidebar-bg: #0c1524; }
         
-        /* 10. Elegant Right Sidebar */
         .tpl-right-sidebar { grid-template-columns: 1fr 250px; }
         .tpl-right-sidebar .cv-sidebar { grid-column: 2; grid-row: 1; }
         .tpl-right-sidebar .cv-main { grid-column: 1; grid-row: 1; }
         
-        /* 11. Compact Technical */
         .tpl-compact { grid-template-columns: 220px 1fr; }
         .tpl-compact .cv-main { padding: 20px; }
         
-        /* 12. Bold Header Banner */
         .tpl-bold-header { grid-template-columns: 1fr; }
         .tpl-bold-header .cv-header-card { background: var(--primary); color: white; margin: -35px -35px 20px -35px; padding: 35px; border-radius: 0; }
         .tpl-bold-header .cv-header-card h2 { color: #f8fafc; }
         
-        /* 13. Creative Two-Column Grid */
         .tpl-creative-grid { grid-template-columns: 280px 1fr; --sidebar-bg: #18181b; }
-        
-        /* 14. Framed Border Elegance */
         .tpl-border-frame { grid-template-columns: 240px 1fr; border: 12px solid var(--primary); }
         
-        /* 15. Vibrant Gradient Glow */
         .tpl-gradient-glow { grid-template-columns: 250px 1fr; }
         .tpl-gradient-glow .cv-header-card { background: linear-gradient(135deg, var(--primary), #8b5cf6); color: white; }
         .tpl-gradient-glow .cv-header-card h2 { color: #e0e7ff; }
@@ -210,7 +199,7 @@
 
         .is-hidden { display: none !important; }
 
-        /* Dynamic Responsive Auto Viewport Styles */
+        /* Dynamic Responsive Styles */
         @media (max-width: 1024px) {
             body { height: auto; overflow-x: hidden; overflow-y: auto; }
             .app-container { flex-direction: column; height: auto; }
@@ -246,7 +235,7 @@
             <div class="dashboard-body">
                 <button class="btn-ai" onclick="runAiEnhancer()"><i class="fa-solid fa-brain"></i> AI Polish & Auto-Fix Content</button>
 
-                <!-- Template Selector (15 Templates) -->
+                <!-- Template Selector -->
                 <div class="form-group">
                     <label><i class="fa-solid fa-layer-group"></i> Choose CV Layout Template (15 Styles)</label>
                     <select class="form-control" id="tplSelect" onchange="changeTemplateLayout(this.value)">
@@ -459,7 +448,7 @@
                         </div>
                     </div>
 
-                    <!-- Dynamic Real-time Date & Signature Declaration -->
+                    <!-- Dynamic Date & Signature Declaration -->
                     <div class="cv-section cv-declaration" id="secDeclaration">
                         <div class="cv-sec-title">Declaration</div>
                         <p class="cv-card-desc" style="font-style: italic; margin-bottom: 12px;">
@@ -489,6 +478,7 @@
             <p>Please enter your email address to download your professional CV instantly.</p>
             <input type="email" class="form-control" id="downloadUserEmail" placeholder="your.email@example.com">
             <button class="modal-btn" onclick="confirmDownloadWithEmail()">Submit & Auto Download CV</button>
+            <button class="modal-btn" style="background:#374151; color:#9ca3af; margin-top:6px;" onclick="closeModal('userEmailModal')">Cancel</button>
         </div>
     </div>
 
@@ -500,6 +490,7 @@
             <div id="adminLoginForm">
                 <input type="email" class="form-control" id="adminEmailInput" placeholder="Enter owner email...">
                 <button class="modal-btn" onclick="verifyAdminLogin()">Login as Owner</button>
+                <button class="modal-btn" style="background:#374151; color:#9ca3af; margin-top:6px;" onclick="closeModal('adminModal')">Cancel</button>
             </div>
             
             <div id="adminDataLogs" class="is-hidden">
@@ -550,119 +541,122 @@
             }
         }
 
-        function bindField(inputId, targetId) {
-            const input = document.getElementById(inputId);
-            const target = document.getElementById(targetId);
-            if (input && target) {
-                target.innerText = input.value;
-            }
-        }
-
         function syncData() {
-            bindField('inName', 'cvName');
-            bindField('inName', 'cvSigNameDisplay');
-            bindField('inTitle', 'cvTitle');
-            bindField('inPhone', 'cvPhone');
-            bindField('inEmail', 'cvEmail');
-            bindField('inLocation', 'cvLocation');
-            bindField('inWebsite', 'cvWebsite');
-            bindField('inProfile', 'cvProfile');
-            bindField('inExpTitle', 'cvExpTitle');
-            bindField('inExpDate', 'cvExpDate');
-            bindField('inExpDesc', 'cvExpDesc');
-            bindField('inProjTitle', 'cvProjTitle');
-            bindField('inProjDesc', 'cvProjDesc');
-            bindField('inCert', 'cvCert');
-            bindField('inEduTitle', 'cvEduTitle');
-            bindField('inEduSub', 'cvEduSub');
+            const name = document.getElementById('inName').value;
+            document.getElementById('cvName').innerText = name;
+            document.getElementById('cvSigNameDisplay').innerText = name;
+
+            document.getElementById('cvTitle').innerText = document.getElementById('inTitle').value;
+            document.getElementById('cvPhone').innerText = document.getElementById('inPhone').value;
+            document.getElementById('cvEmail').innerText = document.getElementById('inEmail').value;
+            document.getElementById('cvLocation').innerText = document.getElementById('inLocation').value;
+            document.getElementById('cvWebsite').innerText = document.getElementById('inWebsite').value;
+            document.getElementById('cvProfile').innerText = document.getElementById('inProfile').value;
+
+            document.getElementById('cvExpTitle').innerText = document.getElementById('inExpTitle').value;
+            document.getElementById('cvExpDate').innerText = document.getElementById('inExpDate').value;
+            document.getElementById('cvExpDesc').innerText = document.getElementById('inExpDesc').value;
+
+            document.getElementById('cvProjTitle').innerText = document.getElementById('inProjTitle').value;
+            document.getElementById('cvProjDesc').innerText = document.getElementById('inProjDesc').value;
+
+            document.getElementById('cvCert').innerText = document.getElementById('inCert').value;
+
+            document.getElementById('cvEduTitle').innerText = document.getElementById('inEduTitle').value;
+            document.getElementById('cvEduSub').innerText = document.getElementById('inEduSub').value;
         }
 
         function changeTemplateLayout(tplClass) {
-            const cvPaper = document.getElementById('cvContent');
-            cvPaper.className = 'cv-paper ' + tplClass;
+            const cv = document.getElementById('cvContent');
+            cv.className = 'cv-paper ' + tplClass;
         }
 
         function runAiEnhancer() {
-            alert("AI Enhancement applied! Content auto-polished.");
-        }
-
-        function openModal(id) {
-            document.getElementById(id).classList.add('active');
-        }
-
-        function closeModal(id) {
-            document.getElementById(id).classList.remove('active');
+            document.getElementById('inProfile').value = "Results-driven Senior Software Engineer with over 5 years of experience in architecting scalable web applications and high-performance cloud infrastructure. Expert in Node.js, React, and AWS microservices architecture with a strong record of optimizing system efficiency.";
+            syncData();
+            alert("CV Profile text has been enhanced with professional keywords!");
         }
 
         function promptEmailBeforeDownload(type) {
             currentDownloadType = type;
-            openModal('userEmailModal');
+            document.getElementById('userEmailModal').classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
         }
 
         function confirmDownloadWithEmail() {
-            const email = document.getElementById('downloadUserEmail').value;
-            if(!email) { 
-                alert("Please enter a valid email address."); 
-                return; 
+            const email = document.getElementById('downloadUserEmail').value.trim();
+            if (!email || !email.includes('@')) {
+                alert('Please enter a valid email address.');
+                return;
             }
-            
-            const logs = JSON.parse(localStorage.getItem('cv_download_logs') || '[]');
-            logs.push({ email: email, time: new Date().toLocaleString() });
+
+            // Record download log in browser storage
+            let logs = JSON.parse(localStorage.getItem('cv_download_logs') || '[]');
+            logs.push({ email: email, timestamp: new Date().toLocaleString() });
             localStorage.setItem('cv_download_logs', JSON.stringify(logs));
-            
+
             closeModal('userEmailModal');
             executeDownload(currentDownloadType);
         }
 
         function executeDownload(type) {
             const element = document.getElementById('cvContent');
-            if(type === 'pdf') {
+
+            if (type === 'pdf') {
                 const opt = {
                     margin: 0,
-                    filename: 'Resume.pdf',
+                    filename: 'Professional_CV.pdf',
                     image: { type: 'jpeg', quality: 0.98 },
-                    html2canvas: { scale: 2, useCORS: true },
+                    html2canvas: { scale: 2, useCORS: true, logging: false },
                     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
                 };
                 html2pdf().set(opt).from(element).save();
-            } else if(type === 'jpg') {
+            } else if (type === 'jpg') {
                 html2canvas(element, { scale: 2, useCORS: true }).then(canvas => {
                     const link = document.createElement('a');
-                    link.download = 'Resume.jpg';
-                    link.href = canvas.toDataURL('image/jpeg');
+                    link.download = 'Professional_CV.jpg';
+                    link.href = canvas.toDataURL('image/jpeg', 0.98);
                     link.click();
                 });
             }
         }
 
         function openAdminModal() {
-            openModal('adminModal');
+            document.getElementById('adminModal').classList.add('active');
         }
 
         function verifyAdminLogin() {
-            const email = document.getElementById('adminEmailInput').value;
-            if(email.toLowerCase() === OWNER_EMAIL.toLowerCase()) {
+            const emailInput = document.getElementById('adminEmailInput').value.trim();
+            if (emailInput.toLowerCase() === OWNER_EMAIL.toLowerCase()) {
                 document.getElementById('adminLoginForm').classList.add('is-hidden');
                 document.getElementById('adminDataLogs').classList.remove('is-hidden');
                 document.getElementById('adminStatusText').innerText = "Logged in as Owner (" + OWNER_EMAIL + ")";
-                loadAdminLogs();
+                renderAdminLogs();
             } else {
-                alert("Access Denied: Invalid Owner Email");
+                alert("Access Denied: Invalid owner email.");
             }
         }
 
-        function loadAdminLogs() {
+        function renderAdminLogs() {
             const logs = JSON.parse(localStorage.getItem('cv_download_logs') || '[]');
             const tbody = document.getElementById('adminLogsTable');
             tbody.innerHTML = '';
-            if(logs.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;">No download logs captured yet.</td></tr>';
+
+            if (logs.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#9ca3af;">No download activity recorded yet.</td></tr>';
                 return;
             }
-            logs.forEach((log, idx) => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `<td>${idx + 1}</td><td>${log.email}</td><td>${log.time}</td>`;
-                tbody.appendChild(tr);
+
+            logs.forEach((log, index) => {
+                const row = `<tr>
+                    <td>${index + 1}</td>
+                    <td>${log.email}</td>
+                    <td>${log.timestamp}</td>
+                </tr>`;
+                tbody.innerHTML += row;
             });
         }
     </script>
