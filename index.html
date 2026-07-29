@@ -114,11 +114,13 @@
             transition: all 0.3s ease;
         }
 
-        /* Prevent Text Overlap in Export */
-        .cv-paper * {
-            letter-spacing: normal !important;
-            word-wrap: break-word !important;
-            overflow-wrap: break-word !important;
+        /* Strict CSS Rules to Prevent Overlapping Fonts */
+        .cv-paper, .cv-paper * {
+            letter-spacing: 0px !important;
+            word-spacing: normal !important;
+            text-rendering: optimizeLegibility !important;
+            -webkit-font-smoothing: antialiased !important;
+            font-variant-ligatures: none !important;
         }
 
         /* Sidebar Styling */
@@ -612,15 +614,15 @@
         async function executeDownload(type) {
             const originalElement = document.getElementById('cvContent');
 
-            // Wait for all external Google fonts to finish loading completely
+            // Wait for all external Google fonts to render properly
             await document.fonts.ready;
 
-            // Clone element to off-screen rendering container to bypass responsive zoom/transform glitches
+            // Clone container to isolate from mobile zoom or CSS transform scaling
             const clone = originalElement.cloneNode(true);
             clone.style.zoom = '1';
             clone.style.transform = 'none';
-            clone.style.width = '210mm';
-            clone.style.minHeight = '297mm';
+            clone.style.width = '794px'; /* Standard A4 width in px */
+            clone.style.minHeight = '1123px';
             clone.style.position = 'absolute';
             clone.style.left = '-9999px';
             clone.style.top = '0px';
@@ -637,8 +639,10 @@
                             scale: 2, 
                             useCORS: true, 
                             logging: false,
-                            letterRendering: true,
-                            allowTaint: true
+                            letterRendering: false, /* CRITICAL FIX: Setting this to false stops letter overlapping */
+                            allowTaint: true,
+                            scrollY: 0,
+                            scrollX: 0
                         },
                         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
                     };
@@ -647,8 +651,10 @@
                     const canvas = await html2canvas(clone, { 
                         scale: 2, 
                         useCORS: true,
-                        letterRendering: true,
-                        allowTaint: true 
+                        letterRendering: false, /* CRITICAL FIX */
+                        allowTaint: true,
+                        scrollY: 0,
+                        scrollX: 0
                     });
                     const link = document.createElement('a');
                     link.download = 'Professional_CV.jpg';
