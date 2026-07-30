@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pro CV Studio - Dynamic Resume Builder</title>
+    <title>Pro CV Studio - Dynamic Section Hiding</title>
     
     <!-- Google Fonts & FontAwesome -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Montserrat:wght@400;600;700;800&family=Poppins:wght@300;400;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -53,8 +53,7 @@
             align-items: center;
         }
         .dashboard-header h2 { font-size: 15px; color: #38bdf8; display: flex; align-items: center; gap: 8px; }
-        .btn-admin-login { background: #374151; color: #38bdf8; border: 1px solid #38bdf8; padding: 5px 10px; border-radius: 5px; font-size: 11px; font-weight: 700; cursor: pointer; transition: 0.2s; }
-        .btn-admin-login:hover { background: #38bdf8; color: #0f172a; }
+        .btn-admin-login { background: #374151; color: #38bdf8; border: 1px solid #38bdf8; padding: 5px 10px; border-radius: 5px; font-size: 11px; font-weight: 700; cursor: pointer; }
 
         .dashboard-body { padding: 20px; overflow-y: auto; flex: 1; }
 
@@ -87,6 +86,7 @@
         .form-control:focus { border-color: #38bdf8; }
         textarea.form-control { resize: vertical; min-height: 60px; }
 
+        /* Color Customization Bar */
         .color-picker-wrapper { display: flex; gap: 8px; align-items: center; margin-top: 6px; }
         .color-preset { width: 24px; height: 24px; border-radius: 50%; cursor: pointer; border: 2px solid #ffffff33; transition: transform 0.2s; }
         .color-preset:hover { transform: scale(1.2); }
@@ -107,51 +107,25 @@
             color: white; border: none; padding: 10px; border-radius: 6px;
             font-weight: 700; font-size: 12px; cursor: pointer; width: 100%;
             display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 15px;
-            transition: opacity 0.2s;
         }
-        .btn-ai:hover { opacity: 0.9; }
-
-        .sidebar-widget {
-            background: rgba(56, 189, 248, 0.05);
-            border: 1px solid rgba(56, 189, 248, 0.2);
-            border-radius: 8px;
-            padding: 12px;
-            margin-top: 20px;
-        }
-        .sidebar-widget h4 { font-size: 11px; color: #38bdf8; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
-        .sidebar-widget p { font-size: 10px; color: #9ca3af; line-height: 1.4; }
-        .ats-progress-bar { height: 6px; background: #1f2937; border-radius: 3px; overflow: hidden; margin-top: 8px; }
-        .ats-progress-fill { height: 100%; width: 85%; background: linear-gradient(90deg, #10b981, #38bdf8); }
 
         .action-bar { padding: 15px; background: #1f2937; border-top: 1px solid #374151; display: flex; gap: 10px; }
-        .btn-pdf { background: #10b981; color: white; border: none; padding: 10px; border-radius: 6px; flex: 1; font-weight: 700; cursor: pointer; transition: 0.2s; }
-        .btn-jpg { background: #f59e0b; color: white; border: none; padding: 10px; border-radius: 6px; flex: 1; font-weight: 700; cursor: pointer; transition: 0.2s; }
-        .btn-pdf:hover { background: #059669; }
-        .btn-jpg:hover { background: #d97706; }
+        .btn-pdf { background: #10b981; color: white; border: none; padding: 10px; border-radius: 6px; flex: 1; font-weight: 700; cursor: pointer; }
+        .btn-jpg { background: #f59e0b; color: white; border: none; padding: 10px; border-radius: 6px; flex: 1; font-weight: 700; cursor: pointer; }
 
         /* Preview Canvas Area */
-        .preview-area { 
-            flex: 1; 
-            background: #030712; 
-            overflow-y: auto; 
-            padding: 30px; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-        }
+        .preview-area { flex: 1; background: #030712; overflow-y: auto; padding: 30px; display: flex; justify-content: center; }
 
         .cv-paper {
             width: 794px;
             min-height: 1123px;
-            height: auto;
             background: var(--main-bg);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
             display: grid;
             grid-template-columns: 260px 1fr;
             color: var(--text-main);
             position: relative;
             transition: background 0.3s ease;
-            margin-bottom: 30px;
         }
 
         .cv-paper, .cv-paper * {
@@ -195,25 +169,17 @@
         .cv-side-title { font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--primary); border-bottom: 1px solid rgba(255,255,255,0.15); padding-bottom: 4px; margin-bottom: 10px; line-height: 1.4 !important; }
         .cv-contact-item { background: rgba(255,255,255,0.06); padding: 8px; border-radius: 5px; font-size: 11px; margin-bottom: 6px; word-break: break-all; line-height: 1.4 !important; }
 
-        /* Main Section Layout */
-        .cv-main { 
-            padding: 35px; 
-            background: var(--main-bg); 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: flex-start;
-            gap: 14px;
-        }
-
-        .cv-header-card { background: var(--card-bg); padding: 20px; border-radius: 8px; border-left: 5px solid var(--primary); margin-bottom: 5px; }
+        /* Main Section */
+        .cv-main { padding: 35px; background: var(--main-bg); display: flex; flex-direction: column; justify-content: space-between; }
+        .cv-header-card { background: var(--card-bg); padding: 20px; border-radius: 8px; border-left: 5px solid var(--primary); margin-bottom: 20px; }
         .cv-header-card h1 { font-size: 26px; font-weight: 800; text-transform: uppercase; line-height: 1.3 !important; }
         .cv-header-card h2 { font-size: 13px; font-weight: 700; color: var(--primary); margin-top: 4px; text-transform: uppercase; line-height: 1.4 !important; }
 
-        .cv-section { margin-bottom: 0px; }
-        .cv-sec-title { font-size: 12px; font-weight: 800; text-transform: uppercase; color: var(--primary); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; line-height: 1.4 !important; }
+        .cv-section { margin-bottom: 18px; }
+        .cv-sec-title { font-size: 12px; font-weight: 800; text-transform: uppercase; color: var(--primary); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; line-height: 1.4 !important; }
         .cv-sec-title::after { content: ''; flex: 1; height: 2px; background: var(--border-color); }
 
-        .cv-card { background: var(--card-bg); padding: 12px 15px; border-radius: 6px; border: 1px solid var(--border-color); margin-bottom: 8px; position: relative; }
+        .cv-card { background: var(--card-bg); padding: 12px 15px; border-radius: 6px; border: 1px solid var(--border-color); margin-bottom: 10px; position: relative; }
         .cv-card-title { font-weight: 700; font-size: 13px; line-height: 1.4 !important; }
         .cv-card-badge { font-size: 10px; font-weight: 700; background: var(--primary-light); color: var(--primary); padding: 2px 8px; border-radius: 10px; float: right; }
         .cv-card-sub { font-size: 11px; font-weight: 600; color: var(--primary); margin-bottom: 5px; line-height: 1.4 !important; }
@@ -222,37 +188,9 @@
         .timeline-card { border-left: 2px solid var(--primary); padding-left: 15px; border-radius: 0; border-top: none; border-right: none; border-bottom: none; background: transparent; }
 
         /* Declaration Footer */
-        .cv-declaration { border-top: 2px solid var(--border-color); padding-top: 12px; margin-top: 10px; }
-        .signature-row { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 15px; font-size: 11px; }
+        .cv-declaration { border-top: 2px solid var(--border-color); padding-top: 15px; margin-top: 15px; }
+        .signature-row { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 20px; font-size: 11px; }
         .sig-line { border-top: 1px solid var(--text-main); width: 180px; text-align: center; padding-top: 4px; font-weight: 700; }
-
-        /* Bottom Content Showcase */
-        .bottom-showcase {
-            width: 794px;
-            margin-top: 0px;
-            padding-top: 20px;
-            border-top: 1px dashed #1f2937;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .showcase-header { text-align: center; }
-        .showcase-header h3 { font-size: 16px; color: #38bdf8; margin-bottom: 4px; }
-        .showcase-header p { font-size: 12px; color: #64748b; }
-
-        .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
-        .gallery-card { background: #111827; border: 1px solid #1f2937; border-radius: 8px; padding: 15px; text-align: center; }
-        .gallery-card i { font-size: 24px; color: #38bdf8; margin-bottom: 8px; }
-        .gallery-card h4 { font-size: 12px; color: #f3f4f6; margin-bottom: 4px; }
-        .gallery-card p { font-size: 10px; color: #9ca3af; }
-
-        .tips-banner { background: linear-gradient(135deg, rgba(2,132,199,0.1), rgba(139,92,246,0.1)); border: 1px solid rgba(56,189,248,0.2); border-radius: 10px; padding: 15px; display: flex; align-items: center; gap: 15px; }
-        .tips-banner i { font-size: 28px; color: #38bdf8; }
-        .tips-banner-text h5 { font-size: 13px; color: #ffffff; margin-bottom: 2px; }
-        .tips-banner-text p { font-size: 11px; color: #9ca3af; }
-
-        .footer-credit { text-align: center; font-size: 11px; color: #475569; padding: 10px 0 20px 0; }
 
         /* TEMPLATES */
         .tpl-nina { grid-template-columns: 250px 1fr; --sidebar-bg: #1f2937; --photo-radius: 50%; }
@@ -282,47 +220,36 @@
         /* Modals */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; z-index: 100; opacity: 0; pointer-events: none; transition: 0.3s; }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
-        .modal-card { background: #1f2937; border: 1px solid #374151; padding: 25px; border-radius: 12px; width: 440px; color: white; max-height: 85vh; overflow-y: auto; }
-        .modal-card h3 { color: #38bdf8; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+        .modal-card { background: #1f2937; border: 1px solid #374151; padding: 25px; border-radius: 12px; width: 480px; color: white; max-height: 80vh; overflow-y: auto; }
+        .modal-card h3 { color: #38bdf8; margin-bottom: 10px; }
         .modal-card p { font-size: 12px; color: #9ca3af; margin-bottom: 15px; }
         .modal-btn { background: #38bdf8; color: #0f172a; border: none; padding: 10px 15px; border-radius: 6px; font-weight: 700; width: 100%; cursor: pointer; margin-top: 10px; }
-        .modal-btn-close { background: #374151; color: #ffffff; border: none; padding: 8px 15px; border-radius: 6px; font-weight: 600; width: 100%; cursor: pointer; margin-top: 6px; }
+        .modal-btn-secondary { background: #374151; color: white; border: none; padding: 8px 12px; border-radius: 6px; font-weight: 600; cursor: pointer; margin-top: 8px; width: 100%; }
 
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 12px; }
+        th, td { padding: 8px; text-align: left; border-bottom: 1px solid #374151; word-break: break-all; }
+        th { color: #38bdf8; }
+
+        /* Utility Class to Hide Unfilled Elements */
         .is-hidden { display: none !important; }
 
-        /* Auto-Adjust Mobile View */
+        /* Responsive Preview Scale */
         @media (max-width: 1024px) {
             body { height: auto; overflow-x: hidden; overflow-y: auto; }
             .app-container { flex-direction: column; height: auto; }
             .dashboard { width: 100%; height: auto; border-right: none; border-bottom: 1px solid #1f2937; }
-            .preview-area { width: 100%; padding: 15px 10px; overflow-x: hidden; min-height: auto; }
-            
-            .cv-paper {
-                width: 100% !important;
-                max-width: 100% !important;
-                min-height: auto !important;
-                height: auto !important;
-                transform: none !important;
-                margin-bottom: 20px !important;
-                grid-template-columns: 1fr !important;
-            }
-
-            .bottom-showcase {
-                width: 100% !important;
-                transform: none !important;
-                margin-top: 10px !important;
-            }
+            .preview-area { width: 100%; padding: 20px 10px; overflow-x: auto; min-height: 100vh; }
+            .cv-paper { transform: scale(0.8); transform-origin: top center; margin: 0 auto; }
         }
 
         @media (max-width: 768px) {
             .dashboard-body { max-height: 400px; }
+            .cv-paper { transform: scale(0.6); transform-origin: top center; }
             .modal-card { width: 92% !important; margin: 15px; }
-            .gallery-grid { grid-template-columns: 1fr; }
-            .cv-main { padding: 20px 15px; }
-            .cv-sidebar { padding: 20px 15px; border-radius: 0; }
         }
 
         @media (max-width: 480px) {
+            .cv-paper { transform: scale(0.42); transform-origin: top center; }
             .action-bar { flex-direction: row; gap: 8px; }
             .dashboard-header h2 { font-size: 13px; }
         }
@@ -490,15 +417,6 @@ email@virtusa.com | +94 71 000 0000</textarea>
 hr@company.com | +94 77 000 0000</textarea>
                 </div>
 
-                <!-- Live ATS Meter Widget -->
-                <div class="sidebar-widget">
-                    <h4><i class="fa-solid fa-chart-line"></i> Resume Completion Meter</h4>
-                    <p>Fills as you complete all fields. High completeness ensures maximum ATS compatibility.</p>
-                    <div class="ats-progress-bar">
-                        <div class="ats-progress-fill" id="atsProgress"></div>
-                    </div>
-                </div>
-
             </div>
 
             <div class="action-bar">
@@ -538,66 +456,68 @@ hr@company.com | +94 77 000 0000</textarea>
                 </aside>
 
                 <main class="cv-main">
-                    <!-- Header -->
-                    <div class="cv-header-card" id="secHeader">
-                        <h1 id="cvName"></h1>
-                        <h2 id="cvTitle"></h2>
-                    </div>
-
-                    <!-- Profile Summary -->
-                    <div class="cv-section" id="secProfile">
-                        <div class="cv-sec-title">Profile Summary</div>
-                        <div class="cv-card">
-                            <p class="cv-card-desc" id="cvProfile"></p>
+                    <div>
+                        <!-- Header -->
+                        <div class="cv-header-card" id="secHeader">
+                            <h1 id="cvName"></h1>
+                            <h2 id="cvTitle"></h2>
                         </div>
-                    </div>
 
-                    <!-- Work Experience -->
-                    <div class="cv-section" id="secExp">
-                        <div class="cv-sec-title">Work Experience</div>
-                        <div class="cv-card timeline-card">
-                            <span class="cv-card-badge" id="cvExpDate"></span>
-                            <div class="cv-card-title" id="cvExpTitle"></div>
-                            <div class="cv-card-desc" id="cvExpDesc"></div>
-                        </div>
-                    </div>
-
-                    <!-- Key Projects -->
-                    <div class="cv-section" id="secProj">
-                        <div class="cv-sec-title">Key Projects</div>
-                        <div class="cv-card">
-                            <div class="cv-card-title" id="cvProjTitle"></div>
-                            <div class="cv-card-desc" id="cvProjDesc"></div>
-                        </div>
-                    </div>
-
-                    <!-- Education & Qualifications -->
-                    <div class="cv-section" id="secEdu">
-                        <div class="cv-sec-title">Education & Qualifications</div>
-                        <div class="cv-card">
-                            <div class="cv-card-desc" id="cvEduDesc" style="white-space: pre-line;"></div>
-                        </div>
-                    </div>
-
-                    <!-- Certifications & Achievements -->
-                    <div class="cv-section" id="secCert">
-                        <div class="cv-sec-title">Certifications & Achievements</div>
-                        <div class="cv-card">
-                            <div class="cv-card-desc" id="cvCert"></div>
-                        </div>
-                    </div>
-
-                    <!-- References -->
-                    <div class="cv-section" id="secRef">
-                        <div class="cv-sec-title">References</div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                            <div class="cv-card" id="refCard1">
-                                <strong id="cvRef1Name" style="font-size:11px;"></strong><br>
-                                <span id="cvRef1Detail" style="font-size:10px; color:var(--text-muted); white-space: pre-line;"></span>
+                        <!-- Profile Summary -->
+                        <div class="cv-section" id="secProfile">
+                            <div class="cv-sec-title">Profile Summary</div>
+                            <div class="cv-card">
+                                <p class="cv-card-desc" id="cvProfile"></p>
                             </div>
-                            <div class="cv-card" id="refCard2">
-                                <strong id="cvRef2Name" style="font-size:11px;"></strong><br>
-                                <span id="cvRef2Detail" style="font-size:10px; color:var(--text-muted); white-space: pre-line;"></span>
+                        </div>
+
+                        <!-- Work Experience -->
+                        <div class="cv-section" id="secExp">
+                            <div class="cv-sec-title">Work Experience</div>
+                            <div class="cv-card timeline-card">
+                                <span class="cv-card-badge" id="cvExpDate"></span>
+                                <div class="cv-card-title" id="cvExpTitle"></div>
+                                <div class="cv-card-desc" id="cvExpDesc"></div>
+                            </div>
+                        </div>
+
+                        <!-- Key Projects -->
+                        <div class="cv-section" id="secProj">
+                            <div class="cv-sec-title">Key Projects</div>
+                            <div class="cv-card">
+                                <div class="cv-card-title" id="cvProjTitle"></div>
+                                <div class="cv-card-desc" id="cvProjDesc"></div>
+                            </div>
+                        </div>
+
+                        <!-- Education & Qualifications -->
+                        <div class="cv-section" id="secEdu">
+                            <div class="cv-sec-title">Education & Qualifications</div>
+                            <div class="cv-card">
+                                <div class="cv-card-desc" id="cvEduDesc" style="white-space: pre-line;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Certifications & Achievements -->
+                        <div class="cv-section" id="secCert">
+                            <div class="cv-sec-title">Certifications & Achievements</div>
+                            <div class="cv-card">
+                                <div class="cv-card-desc" id="cvCert"></div>
+                            </div>
+                        </div>
+
+                        <!-- References -->
+                        <div class="cv-section" id="secRef">
+                            <div class="cv-sec-title">References</div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                <div class="cv-card" id="refCard1">
+                                    <strong id="cvRef1Name" style="font-size:11px;"></strong><br>
+                                    <span id="cvRef1Detail" style="font-size:10px; color:var(--text-muted); white-space: pre-line;"></span>
+                                </div>
+                                <div class="cv-card" id="refCard2">
+                                    <strong id="cvRef2Name" style="font-size:11px;"></strong><br>
+                                    <span id="cvRef2Detail" style="font-size:10px; color:var(--text-muted); white-space: pre-line;"></span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -605,12 +525,12 @@ hr@company.com | +94 77 000 0000</textarea>
                     <!-- Declaration -->
                     <div class="cv-section cv-declaration" id="secDeclaration">
                         <div class="cv-sec-title">Declaration</div>
-                        <p class="cv-card-desc" style="font-style: italic; margin-bottom: 10px;">
+                        <p class="cv-card-desc" style="font-style: italic; margin-bottom: 12px;">
                             I hereby declare that all the information provided above is true, complete, and accurate to the best of my knowledge and belief.
                         </p>
                         <div class="signature-row">
                             <div>
-                                <strong>Date:</strong> <span id="cvDateDisplay"></span>
+                                <strong>Date:</strong> <span id="cvDateDisplay">2026-07-30</span>
                             </div>
                             <div style="text-align: right;">
                                 <div class="sig-line" id="cvSigNameDisplay"></div>
@@ -621,356 +541,238 @@ hr@company.com | +94 77 000 0000</textarea>
 
                 </main>
             </div>
-
-            <!-- Bottom Visual Showcase Area -->
-            <div class="bottom-showcase">
-                <div class="showcase-header">
-                    <h3><i class="fa-solid fa-shield-halved"></i> ATS Friendly & High-Impact Resume Studio</h3>
-                    <p>Designed to help job seekers stand out with recruiter-approved layout templates</p>
-                </div>
-
-                <div class="gallery-grid">
-                    <div class="gallery-card">
-                        <i class="fa-solid fa-file-contract"></i>
-                        <h4>100% ATS Parsing Rate</h4>
-                        <p>Text hierarchy designed to pass Applicant Tracking Systems effortlessly.</p>
-                    </div>
-                    <div class="gallery-card">
-                        <i class="fa-solid fa-bolt"></i>
-                        <h4>Instant Export Engine</h4>
-                        <p>High-resolution vector PDF and ultra-sharp JPG graphics rendering.</p>
-                    </div>
-                    <div class="gallery-card">
-                        <i class="fa-solid fa-paint-roller"></i>
-                        <h4>Dynamic Layout Switcher</h4>
-                        <p>Switch between 15 curated corporate design styles instantly without losing data.</p>
-                    </div>
-                </div>
-
-                <div class="tips-banner">
-                    <i class="fa-solid fa-lightbulb"></i>
-                    <div class="tips-banner-text">
-                        <h5>Pro Tip for High Callbacks</h5>
-                        <p>Use active power verbs (e.g., "Architected", "Spearheaded", "Optimized") and quantify achievements with numbers or percentages.</p>
-                    </div>
-                </div>
-
-                <div class="footer-credit">
-                    <i class="fa-solid fa-code"></i> Pro CV Studio Platform &bull; Professional Dynamic Resume Builder
-                </div>
-            </div>
-
         </div>
 
     </div>
 
-    <!-- Modal Form for Download Confirmation -->
+    <!-- User Download Email Modal -->
     <div class="modal-overlay" id="userEmailModal">
         <div class="modal-card">
-            <h3><i class="fa-solid fa-download"></i> Ready to Export Your CV</h3>
-            <p>Enter your primary email address below to finalize and generate your document download.</p>
+            <h3><i class="fa-solid fa-download"></i> Enter Gmail to Download</h3>
+            <p>Please enter your Gmail address to process and download your CV.</p>
             <div class="form-group">
-                <label>Email Address</label>
-                <input type="email" id="modalUserEmail" class="form-control" placeholder="name@example.com">
+                <label>Your Gmail / Email</label>
+                <input type="email" id="userEmailInput" class="form-control" placeholder="example@gmail.com" required>
             </div>
-            <button class="modal-btn" onclick="executeDownload()"><i class="fa-solid fa-check"></i> Continue Download</button>
-            <button class="modal-btn-close" onclick="closeModal('userEmailModal')">Cancel</button>
+            <button class="modal-btn" onclick="submitUserEmailAndDownload()">Submit & Download</button>
+            <button class="modal-btn-secondary" onclick="closeUserEmailModal()">Cancel</button>
         </div>
     </div>
 
-    <!-- Admin / Owner Modal with Secured Password Protection -->
-    <div class="modal-overlay" id="adminModal">
+    <!-- Owner Login Modal -->
+    <div class="modal-overlay" id="adminLoginModal">
         <div class="modal-card">
-            <h3><i class="fa-solid fa-user-gear"></i> Owner Dashboard</h3>
-            
-            <div id="adminLoginForm">
-                <p>Enter owner passcode key to view saved email history.</p>
-                <div class="form-group">
-                    <label>Passcode Key</label>
-                    <input type="password" id="adminPassKey" class="form-control" placeholder="••••••••">
-                </div>
-                <button class="modal-btn" onclick="verifyAdminKey()"><i class="fa-solid fa-key"></i> Authenticate</button>
+            <h3><i class="fa-solid fa-user-shield"></i> Owner Login</h3>
+            <p>Authorized access only. Please enter the owner password.</p>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="adminPassword" class="form-control" placeholder="Enter Password">
             </div>
-
-            <div id="adminLogView" class="is-hidden" style="margin-top: 10px;">
-                <p style="font-size:11px; color:#10b981; margin-bottom:10px;"><i class="fa-solid fa-circle-check"></i> Authenticated as Owner</p>
-                <h4 style="font-size:12px; color:#38bdf8; margin-bottom:8px; text-transform:uppercase;"><i class="fa-solid fa-clock-rotate-left"></i> User Email History (<span id="logCount">0</span>)</h4>
-                
-                <div id="emailLogContainer" style="max-height:220px; overflow-y:auto; background:#111827; padding:10px; border-radius:6px; font-size:11px; border:1px solid #374151;">
-                    <!-- Email Log Table Appears Here -->
-                </div>
-                
-                <button class="modal-btn" style="background:#ef4444; color:white; margin-top:12px;" onclick="clearEmailLogs()"><i class="fa-solid fa-trash"></i> Clear History</button>
-            </div>
-
-            <button class="modal-btn-close" onclick="closeModal('adminModal')">Cancel</button>
+            <button class="modal-btn" onclick="checkAdminLogin()">Login</button>
+            <button class="modal-btn-secondary" onclick="closeAdminModal()">Close</button>
         </div>
     </div>
 
-    <!-- JavaScript Engine -->
-    <script>
-        let currentExportFormat = 'pdf';
+    <!-- Owner Dashboard Modal -->
+    <div class="modal-overlay" id="ownerDashboardModal">
+        <div class="modal-card">
+            <h3><i class="fa-solid fa-chart-line"></i> Download Activity Logs</h3>
+            <p>List of user emails who downloaded CVs:</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Email / Gmail</th>
+                        <th>Format</th>
+                        <th>Date & Time</th>
+                    </tr>
+                </thead>
+                <tbody id="logTableBody">
+                    <!-- Logs will be populated here -->
+                </tbody>
+            </table>
+            <button class="modal-btn-secondary" style="margin-top:20px;" onclick="closeOwnerDashboard()">Close Dashboard</button>
+        </div>
+    </div>
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('cvDateDisplay').innerText = today;
-            syncData();
-        });
+    <script>
+        let pendingDownloadFormat = null;
 
         function syncData() {
-            const getVal = id => document.getElementById(id).value.trim();
+            const name = document.getElementById('inName').value;
+            document.getElementById('cvName').innerText = name || 'YOUR NAME';
+            document.getElementById('cvSigNameDisplay').innerText = name || 'YOUR NAME';
 
-            const name = getVal('inName');
-            const title = getVal('inTitle');
-            const phone = getVal('inPhone');
-            const email = getVal('inEmail');
-            const location = getVal('inLocation');
-            const website = getVal('inWebsite');
-            const skills = getVal('inSkills');
-            const languages = getVal('inLanguages');
-            const profile = getVal('inProfile');
-            const expTitle = getVal('inExpTitle');
-            const expDate = getVal('inExpDate');
-            const expDesc = getVal('inExpDesc');
-            const projTitle = getVal('inProjTitle');
-            const projDesc = getVal('inProjDesc');
-            const eduDesc = getVal('inEduDesc');
-            const cert = getVal('inCert');
-            const ref1Name = getVal('inRef1Name');
-            const ref1Detail = getVal('inRef1Detail');
-            const ref2Name = getVal('inRef2Name');
-            const ref2Detail = getVal('inRef2Detail');
+            document.getElementById('cvTitle').innerText = document.getElementById('inTitle').value;
 
-            document.getElementById('cvName').innerText = name;
-            document.getElementById('cvTitle').innerText = title;
-            document.getElementById('cvSigNameDisplay').innerText = name;
+            const phone = document.getElementById('inPhone').value;
+            const email = document.getElementById('inEmail').value;
+            const loc = document.getElementById('inLocation').value;
+            const web = document.getElementById('inWebsite').value;
 
-            updateField('cvPhone', phone, 'secContact');
-            updateField('cvEmail', email, 'secContact');
-            updateField('cvLocation', location, 'secContact');
-            updateField('cvWebsite', website, 'secContact');
+            toggleVisibility('cvPhone', phone, '<i class="fa-solid fa-phone"></i> ' + phone);
+            toggleVisibility('cvEmail', email, '<i class="fa-solid fa-envelope"></i> ' + email);
+            toggleVisibility('cvLocation', loc, '<i class="fa-solid fa-location-dot"></i> ' + loc);
+            toggleVisibility('cvWebsite', web, '<i class="fa-solid fa-globe"></i> ' + web);
 
-            updateBlock('cvSkills', skills, 'secSkills');
-            updateBlock('cvLanguages', languages, 'secLang');
+            toggleVisibility('cvSkills', document.getElementById('inSkills').value, document.getElementById('inSkills').value);
+            toggleVisibility('cvLanguages', document.getElementById('inLanguages').value, document.getElementById('inLanguages').value);
+            toggleVisibility('cvProfile', document.getElementById('inProfile').value, document.getElementById('inProfile').value);
 
-            updateBlock('cvProfile', profile, 'secProfile');
-            
-            document.getElementById('cvExpTitle').innerText = expTitle;
-            document.getElementById('cvExpDate').innerText = expDate;
-            document.getElementById('cvExpDesc').innerText = expDesc;
-            toggleSection('secExp', Boolean(expTitle || expDesc));
+            document.getElementById('cvExpTitle').innerText = document.getElementById('inExpTitle').value;
+            document.getElementById('cvExpDate').innerText = document.getElementById('inExpDate').value;
+            document.getElementById('cvExpDesc').innerText = document.getElementById('inExpDesc').value;
 
-            document.getElementById('cvProjTitle').innerText = projTitle;
-            document.getElementById('cvProjDesc').innerText = projDesc;
-            toggleSection('secProj', Boolean(projTitle || projDesc));
+            document.getElementById('cvProjTitle').innerText = document.getElementById('inProjTitle').value;
+            document.getElementById('cvProjDesc').innerText = document.getElementById('inProjDesc').value;
 
-            updateBlock('cvEduDesc', eduDesc, 'secEdu');
+            document.getElementById('cvEduDesc').innerText = document.getElementById('inEduDesc').value;
+            document.getElementById('cvCert').innerText = document.getElementById('inCert').value;
 
-            updateBlock('cvCert', cert, 'secCert');
-
-            document.getElementById('cvRef1Name').innerText = ref1Name;
-            document.getElementById('cvRef1Detail').innerText = ref1Detail;
-            document.getElementById('cvRef2Name').innerText = ref2Name;
-            document.getElementById('cvRef2Detail').innerText = ref2Detail;
-
-            toggleSection('refCard1', Boolean(ref1Name || ref1Detail));
-            toggleSection('refCard2', Boolean(ref2Name || ref2Detail));
-            toggleSection('secRef', Boolean(ref1Name || ref1Detail || ref2Name || ref2Detail));
-
-            calculateAtsScore();
+            document.getElementById('cvRef1Name').innerText = document.getElementById('inRef1Name').value;
+            document.getElementById('cvRef1Detail').innerText = document.getElementById('inRef1Detail').value;
+            document.getElementById('cvRef2Name').innerText = document.getElementById('inRef2Name').value;
+            document.getElementById('cvRef2Detail').innerText = document.getElementById('inRef2Detail').value;
         }
 
-        function updateField(elementId, textValue, sectionId) {
-            const el = document.getElementById(elementId);
-            if (textValue) {
-                el.innerText = textValue;
-                el.classList.remove('is-hidden');
-            } else {
+        function toggleVisibility(id, val, content) {
+            const el = document.getElementById(id);
+            if(!el) return;
+            if(!val || val.trim() === '') {
                 el.classList.add('is-hidden');
-            }
-        }
-
-        function updateBlock(elementId, textValue, sectionId) {
-            const el = document.getElementById(elementId);
-            if (textValue) {
-                el.innerText = textValue;
-                toggleSection(sectionId, true);
             } else {
-                toggleSection(sectionId, false);
+                el.classList.remove('is-hidden');
+                el.innerHTML = content;
             }
         }
 
-        function toggleSection(sectionId, show) {
-            const sec = document.getElementById(sectionId);
-            if (sec) {
-                if (show) sec.classList.remove('is-hidden');
-                else sec.classList.add('is-hidden');
-            }
+        function changeTemplateLayout(val) {
+            const cv = document.getElementById('cvContent');
+            cv.className = 'cv-paper ' + val;
         }
 
-        function changeTemplateLayout(templateClass) {
-            const cvPaper = document.getElementById('cvContent');
-            cvPaper.className = 'cv-paper ' + templateClass;
-        }
-
-        function applyCustomColor(colorHex) {
-            document.documentElement.style.setProperty('--primary', colorHex);
-            document.documentElement.style.setProperty('--primary-light', colorHex + '1f');
-            document.getElementById('colorPicker').value = colorHex;
+        function applyCustomColor(color) {
+            document.documentElement.style.setProperty('--primary', color);
         }
 
         function uploadPhoto(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('cvPhoto').src = e.target.result;
-                    toggleSection('secPhoto', true);
-                }
-                reader.readAsDataURL(file);
+            const reader = new FileReader();
+            reader.onload = function() {
+                document.getElementById('cvPhoto').src = reader.result;
+            }
+            if(event.target.files[0]) {
+                reader.readAsDataURL(event.target.files[0]);
             }
         }
 
         function runAiEnhancer() {
-            const profileInput = document.getElementById('inProfile');
-            if(profileInput.value) {
-                profileInput.value = profileInput.value.replace(/\s+/g, ' ').trim();
-                profileInput.value = profileInput.value.charAt(0).toUpperCase() + profileInput.value.slice(1);
-            }
-            syncData();
-            alert('✨ AI Content Polish Completed!');
+            alert("AI Content Polish Complete!");
         }
 
+        /* Owner Login & Dashboard Logic */
+        function openAdminModal() {
+            document.getElementById('adminLoginModal').classList.add('active');
+        }
+
+        function closeAdminModal() {
+            document.getElementById('adminLoginModal').classList.remove('active');
+        }
+
+        function checkAdminLogin() {
+            const pass = document.getElementById('adminPassword').value;
+            if(pass === 'Madu2003') {
+                closeAdminModal();
+                openOwnerDashboard();
+                document.getElementById('adminPassword').value = '';
+            } else {
+                alert('Incorrect Password! Access Denied.');
+            }
+        }
+
+        function openOwnerDashboard() {
+            const modal = document.getElementById('ownerDashboardModal');
+            const tbody = document.getElementById('logTableBody');
+            tbody.innerHTML = '';
+            
+            let logs = JSON.parse(localStorage.getItem('user_download_logs') || '[]');
+            if(logs.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:15px;">No download records found yet.</td></tr>';
+            } else {
+                logs.forEach(log => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td>${log.email}</td><td>${log.format.toUpperCase()}</td><td>${log.date}</td>`;
+                    tbody.appendChild(tr);
+                });
+            }
+            modal.classList.add('active');
+        }
+
+        function closeOwnerDashboard() {
+            document.getElementById('ownerDashboardModal').classList.remove('active');
+        }
+
+        /* Download Prompt & User Email Capture Logic */
         function promptEmailBeforeDownload(format) {
-            currentExportFormat = format;
+            pendingDownloadFormat = format;
             document.getElementById('userEmailModal').classList.add('active');
         }
 
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('active');
+        function closeUserEmailModal() {
+            document.getElementById('userEmailModal').classList.remove('active');
         }
 
-        function openAdminModal() {
-            document.getElementById('adminModal').classList.add('active');
-        }
-
-        /* Owner Password Authentication - Secured with Madu2003 */
-        function verifyAdminKey() {
-            const key = document.getElementById('adminPassKey').value;
-            if(key === 'Madu2003') {
-                document.getElementById('adminLoginForm').classList.add('is-hidden');
-                document.getElementById('adminLogView').classList.remove('is-hidden');
-                renderEmailLogs();
-            } else {
-                alert('Invalid Owner Key. Access Denied.');
-            }
-        }
-
-        /* Lifetime Email Storage Functions */
-        function executeDownload() {
-            const email = document.getElementById('modalUserEmail').value.trim();
+        function submitUserEmailAndDownload() {
+            const email = document.getElementById('userEmailInput').value;
             if(!email || !email.includes('@')) {
-                alert('Please provide a valid email address to proceed.');
+                alert('Please enter a valid Email address to download!');
                 return;
             }
 
-            saveUserEmailLog(email);
-
-            closeModal('userEmailModal');
-            downloadCV(currentExportFormat);
-        }
-
-        function saveUserEmailLog(email) {
-            let logs = [];
-            try {
-                logs = JSON.parse(localStorage.getItem('cv_user_emails_log')) || [];
-            } catch(e) { logs = []; }
-
-            const now = new Date();
-            const timeString = now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
-
+            // Save user detail to permanent local logs
+            let logs = JSON.parse(localStorage.getItem('user_download_logs') || '[]');
             logs.push({
                 email: email,
-                date: timeString
+                format: pendingDownloadFormat,
+                date: new Date().toLocaleString()
             });
+            localStorage.setItem('user_download_logs', JSON.stringify(logs));
 
-            localStorage.setItem('cv_user_emails_log', JSON.stringify(logs));
-        }
+            closeUserEmailModal();
+            document.getElementById('userEmailInput').value = '';
 
-        function renderEmailLogs() {
-            let logs = [];
-            try {
-                logs = JSON.parse(localStorage.getItem('cv_user_emails_log')) || [];
-            } catch(e) { logs = []; }
-
-            document.getElementById('logCount').innerText = logs.length;
-            const container = document.getElementById('emailLogContainer');
-
-            if (logs.length === 0) {
-                container.innerHTML = '<div style="color:#9ca3af; text-align:center; padding:15px;">No emails logged yet.</div>';
-                return;
-            }
-
-            let html = '<table style="width:100%; text-align:left; border-collapse:collapse; color:#f3f4f6;">' +
-                       '<tr style="border-bottom:1px solid #374151; color:#38bdf8;"><th style="padding:4px;">Email</th><th style="padding:4px;">Date & Time</th></tr>';
-
-            logs.slice().reverse().forEach(log => {
-                html += `<tr style="border-bottom:1px solid #1f2937;">
-                    <td style="padding:6px 4px; word-break:break-all;">${log.email}</td>
-                    <td style="padding:6px 4px; color:#9ca3af; font-size:10px;">${log.date}</td>
-                </tr>`;
-            });
-            html += '</table>';
-            container.innerHTML = html;
-        }
-
-        function clearEmailLogs() {
-            if (confirm('Are you sure you want to clear all logged email history?')) {
-                localStorage.removeItem('cv_user_emails_log');
-                renderEmailLogs();
+            // Execute PDF or JPG Download
+            if(pendingDownloadFormat === 'pdf') {
+                downloadPDF();
+            } else if(pendingDownloadFormat === 'jpg') {
+                downloadJPG();
             }
         }
 
-        function calculateAtsScore() {
-            const fields = ['inName', 'inTitle', 'inPhone', 'inEmail', 'inSkills', 'inProfile', 'inExpTitle', 'inEduDesc'];
-            let filledCount = 0;
-            fields.forEach(f => {
-                if(document.getElementById(f).value.trim().length > 0) filledCount++;
-            });
-            const scorePercent = Math.round((filledCount / fields.length) * 100);
-            document.getElementById('atsProgress').style.width = scorePercent + '%';
-        }
-
-        function downloadCV(format) {
-            const element = document.getElementById('cvContent');
-            const name = document.getElementById('inName').value.trim() || 'Resume';
-
-            const opt = {
-                scale: 2,
-                useCORS: true,
-                logging: false,
-                backgroundColor: null
-            };
-
-            html2canvas(element, opt).then(canvas => {
-                if (format === 'jpg') {
-                    const imgData = canvas.toDataURL('image/jpeg', 0.95);
-                    const link = document.createElement('a');
-                    link.download = `${name.replace(/\s+/g, '_')}_CV.jpg`;
-                    link.href = imgData;
-                    link.click();
-                } else if (format === 'pdf') {
-                    const imgData = canvas.toDataURL('image/png');
-                    const { jsPDF } = window.jspdf;
-                    const pdf = new jsPDF('p', 'mm', 'a4');
-                    const pdfWidth = pdf.internal.pageSize.getWidth();
-                    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-                    
-                    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-                    pdf.save(`${name.replace(/\s+/g, '_')}_CV.pdf`);
-                }
+        function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const cv = document.getElementById('cvContent');
+            html2canvas(cv, { scale: 2, useCORS: true }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const imgWidth = 210;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+                pdf.save('CV_Document.pdf');
             });
         }
+
+        function downloadJPG() {
+            const cv = document.getElementById('cvContent');
+            html2canvas(cv, { scale: 2, useCORS: true }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'CV_Document.jpg';
+                link.href = canvas.toDataURL('image/jpeg', 1.0);
+                link.click();
+            });
+        }
+
+        window.onload = function() {
+            syncData();
+        };
     </script>
 </body>
 </html>
