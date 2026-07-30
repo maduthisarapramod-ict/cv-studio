@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pro CV Studio - Dynamic Section Hiding</title>
+    <title>Pro CV Studio - Ultra HD Quality</title>
     
     <!-- Google Fonts & FontAwesome -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Montserrat:wght@400;600;700;800&family=Poppins:wght@300;400;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@400;600;700;800&family=Poppins:wght@300;400;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- Export Libraries -->
@@ -185,7 +185,7 @@
         .cv-paper {
             width: 794px;
             min-height: 1123px;
-            height: 100%;
+            height: auto;
             background: var(--main-bg);
             box-shadow: 0 20px 40px rgba(0,0,0,0.8);
             display: grid;
@@ -194,13 +194,17 @@
             color: var(--text-main);
             position: relative;
             transition: background 0.3s ease;
+            margin-bottom: 0;
+            box-sizing: border-box;
         }
 
+        /* Text Overlap Fixes & Ultra Crisp Formatting */
         .cv-paper, .cv-paper * {
-            letter-spacing: 0px !important;
-            word-spacing: normal !important;
+            word-wrap: break-word !important;
+            overflow-wrap: break-word !important;
             text-rendering: optimizeLegibility !important;
             -webkit-font-smoothing: antialiased !important;
+            -moz-osx-font-smoothing: grayscale !important;
         }
 
         /* Sidebar Styling */
@@ -213,12 +217,21 @@
             height: 100%;
             display: flex;
             flex-direction: column;
+            box-sizing: border-box;
         }
         
-        .cv-photo-frame { text-align: center; margin-bottom: 20px; position: relative; display: flex; justify-content: center; align-items: center; }
+        .cv-photo-frame { 
+            text-align: center; 
+            margin-bottom: 22px; 
+            position: relative; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+        }
+        
         .cv-photo-wrapper {
-            width: 130px;
-            height: 130px;
+            width: 135px;
+            height: 135px;
             border-radius: var(--photo-radius);
             border: 4px solid var(--primary);
             overflow: hidden;
@@ -227,7 +240,9 @@
             justify-content: center;
             background: #1e2937;
             flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
         }
+        
         .cv-photo-img { 
             width: 100%; 
             height: 100%; 
@@ -236,30 +251,153 @@
             display: block; 
         }
 
-        .cv-side-block { margin-bottom: 20px; }
-        .cv-side-title { font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--primary); border-bottom: 1px solid rgba(255,255,255,0.15); padding-bottom: 4px; margin-bottom: 10px; line-height: 1.4 !important; }
-        .cv-contact-item { background: rgba(255,255,255,0.06); padding: 8px; border-radius: 5px; font-size: 11px; margin-bottom: 6px; word-break: break-all; line-height: 1.4 !important; }
+        .cv-side-block { margin-bottom: 22px; }
+        
+        .cv-side-title { 
+            font-size: 12px; 
+            font-weight: 800; 
+            text-transform: uppercase; 
+            color: var(--primary); 
+            border-bottom: 1.5px solid rgba(255,255,255,0.2); 
+            padding-bottom: 5px; 
+            margin-bottom: 12px; 
+            line-height: 1.4 !important; 
+            letter-spacing: 0.5px;
+        }
+        
+        .cv-contact-item { 
+            background: rgba(255,255,255,0.06); 
+            padding: 9px 10px; 
+            border-radius: 6px; 
+            font-size: 11px; 
+            margin-bottom: 8px; 
+            word-break: break-word; 
+            line-height: 1.5 !important; 
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .cv-contact-item i { flex-shrink: 0; color: var(--primary); }
 
         /* Main Section */
-        .cv-main { padding: 35px; background: var(--main-bg); display: flex; flex-direction: column; justify-content: space-between; height: 100%; }
-        .cv-header-card { background: var(--card-bg); padding: 20px; border-radius: 8px; border-left: 5px solid var(--primary); margin-bottom: 20px; }
-        .cv-header-card h1 { font-size: 26px; font-weight: 800; text-transform: uppercase; line-height: 1.3 !important; }
-        .cv-header-card h2 { font-size: 13px; font-weight: 700; color: var(--primary); margin-top: 4px; text-transform: uppercase; line-height: 1.4 !important; }
+        .cv-main { 
+            padding: 35px; 
+            background: var(--main-bg); 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: flex-start; 
+            height: 100%; 
+            box-sizing: border-box;
+        }
+        
+        .cv-header-card { 
+            background: var(--card-bg); 
+            padding: 22px; 
+            border-radius: 8px; 
+            border-left: 5px solid var(--primary); 
+            margin-bottom: 22px; 
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+        }
+        
+        .cv-header-card h1 { 
+            font-size: 26px; 
+            font-weight: 800; 
+            text-transform: uppercase; 
+            line-height: 1.3 !important; 
+            margin-bottom: 4px;
+            letter-spacing: 0.5px;
+        }
+        
+        .cv-header-card h2 { 
+            font-size: 13px; 
+            font-weight: 700; 
+            color: var(--primary); 
+            text-transform: uppercase; 
+            line-height: 1.4 !important; 
+            letter-spacing: 0.5px;
+        }
 
-        .cv-section { margin-bottom: 18px; }
-        .cv-sec-title { font-size: 12px; font-weight: 800; text-transform: uppercase; color: var(--primary); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; line-height: 1.4 !important; }
+        .cv-section { margin-bottom: 20px; }
+        
+        .cv-sec-title { 
+            font-size: 13px; 
+            font-weight: 800; 
+            text-transform: uppercase; 
+            color: var(--primary); 
+            margin-bottom: 12px; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            line-height: 1.4 !important; 
+            letter-spacing: 0.5px;
+        }
+        
         .cv-sec-title::after { content: ''; flex: 1; height: 2px; background: var(--border-color); }
 
-        .cv-card { background: var(--card-bg); padding: 12px 15px; border-radius: 6px; border: 1px solid var(--border-color); margin-bottom: 10px; position: relative; }
-        .cv-card-title { font-weight: 700; font-size: 13px; line-height: 1.4 !important; }
-        .cv-card-badge { font-size: 10px; font-weight: 700; background: var(--primary-light); color: var(--primary); padding: 2px 8px; border-radius: 10px; float: right; }
-        .cv-card-sub { font-size: 11px; font-weight: 600; color: var(--primary); margin-bottom: 5px; line-height: 1.4 !important; }
-        .cv-card-desc { font-size: 11px; color: var(--text-muted); line-height: 1.5 !important; white-space: pre-line; }
+        .cv-card { 
+            background: var(--card-bg); 
+            padding: 14px 16px; 
+            border-radius: 6px; 
+            border: 1px solid var(--border-color); 
+            margin-bottom: 12px; 
+            position: relative; 
+            overflow: hidden;
+        }
+        
+        .cv-card-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
 
-        .timeline-card { border-left: 2px solid var(--primary); padding-left: 15px; border-radius: 0; border-top: none; border-right: none; border-bottom: none; background: transparent; }
+        .cv-card-title { 
+            font-weight: 700; 
+            font-size: 13px; 
+            line-height: 1.4 !important; 
+            flex: 1;
+        }
+        
+        .cv-card-badge { 
+            font-size: 10px; 
+            font-weight: 700; 
+            background: var(--primary-light); 
+            color: var(--primary); 
+            padding: 3px 8px; 
+            border-radius: 10px; 
+            white-space: nowrap;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+        
+        .cv-card-sub { 
+            font-size: 11px; 
+            font-weight: 600; 
+            color: var(--primary); 
+            margin-bottom: 6px; 
+            line-height: 1.4 !important; 
+        }
+        
+        .cv-card-desc { 
+            font-size: 11px; 
+            color: var(--text-muted); 
+            line-height: 1.6 !important; 
+            white-space: pre-line; 
+        }
+
+        .timeline-card { 
+            border-left: 3px solid var(--primary); 
+            padding-left: 15px; 
+            border-radius: 0; 
+            border-top: none; 
+            border-right: none; 
+            border-bottom: none; 
+            background: transparent; 
+        }
 
         /* Declaration Footer */
-        .cv-declaration { border-top: 2px solid var(--border-color); padding-top: 15px; margin-top: 15px; }
+        .cv-declaration { border-top: 2px solid var(--border-color); padding-top: 15px; margin-top: auto; }
         .signature-row { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 20px; font-size: 11px; }
         .sig-line { border-top: 1px solid var(--text-main); width: 180px; text-align: center; padding-top: 4px; font-weight: 700; }
 
@@ -310,17 +448,17 @@
             .app-container { flex-direction: column; height: auto; }
             .dashboard { width: 100%; height: auto; border-right: none; border-bottom: 1px solid #1f2937; }
             .preview-area { width: 100%; padding: 20px 5px; overflow-x: auto; min-height: auto; }
-            .cv-paper { transform: scale(0.8); transform-origin: top center; margin: 0 auto -220px auto; }
+            .cv-paper { transform: scale(0.8); transform-origin: top center; margin: 0 auto; }
         }
 
         @media (max-width: 768px) {
             .dashboard-body { max-height: 400px; }
-            .cv-paper { transform: scale(0.6); transform-origin: top center; margin: 0 auto -450px auto; }
+            .cv-paper { transform: scale(0.6); transform-origin: top center; margin: 0 auto; }
             .modal-card { width: 92% !important; margin: 15px; }
         }
 
         @media (max-width: 480px) {
-            .cv-paper { transform: scale(0.43); transform-origin: top center; margin: 0 auto -640px auto; }
+            .cv-paper { transform: scale(0.43); transform-origin: top center; margin: 0 auto; }
             .action-bar { flex-direction: row; gap: 8px; }
             .dashboard-header h2 { font-size: 13px; }
         }
@@ -499,7 +637,7 @@ hr@company.com | +94 77 000 0000</textarea>
             <div class="features-badge-bar">
                 <div class="badge-item"><i class="fa-solid fa-shield-halved"></i> 100% Secure</div>
                 <div class="badge-item"><i class="fa-solid fa-bolt"></i> ATS Friendly</div>
-                <div class="badge-item"><i class="fa-solid fa-file-export"></i> HD Print Ready</div>
+                <div class="badge-item"><i class="fa-solid fa-file-export"></i> Ultra HD Quality</div>
             </div>
 
             <!-- Footer with Cool Icons -->
@@ -537,12 +675,12 @@ hr@company.com | +94 77 000 0000</textarea>
 
                     <div class="cv-side-block" id="secSkills">
                         <div class="cv-side-title">Skills & Tools</div>
-                        <div id="cvSkills" style="font-size:11px; line-height:1.8; white-space: pre-line;"></div>
+                        <div id="cvSkills" style="font-size:11px; line-height:1.7; white-space: pre-line;"></div>
                     </div>
 
                     <div class="cv-side-block" id="secLang">
                         <div class="cv-side-title">Languages</div>
-                        <div id="cvLanguages" class="cv-contact-item" style="white-space: pre-line;"></div>
+                        <div id="cvLanguages" style="font-size:11px; line-height:1.7; white-space: pre-line;"></div>
                     </div>
                 </aside>
 
@@ -566,8 +704,10 @@ hr@company.com | +94 77 000 0000</textarea>
                         <div class="cv-section" id="secExp">
                             <div class="cv-sec-title">Work Experience</div>
                             <div class="cv-card timeline-card">
-                                <span class="cv-card-badge" id="cvExpDate"></span>
-                                <div class="cv-card-title" id="cvExpTitle"></div>
+                                <div class="cv-card-header-row">
+                                    <div class="cv-card-title" id="cvExpTitle"></div>
+                                    <span class="cv-card-badge" id="cvExpDate"></span>
+                                </div>
                                 <div class="cv-card-desc" id="cvExpDesc"></div>
                             </div>
                         </div>
@@ -576,7 +716,7 @@ hr@company.com | +94 77 000 0000</textarea>
                         <div class="cv-section" id="secProj">
                             <div class="cv-sec-title">Key Projects</div>
                             <div class="cv-card">
-                                <div class="cv-card-title" id="cvProjTitle"></div>
+                                <div class="cv-card-title" id="cvProjTitle" style="margin-bottom:6px;"></div>
                                 <div class="cv-card-desc" id="cvProjDesc"></div>
                             </div>
                         </div>
@@ -600,14 +740,14 @@ hr@company.com | +94 77 000 0000</textarea>
                         <!-- References -->
                         <div class="cv-section" id="secRef">
                             <div class="cv-sec-title">References</div>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
                                 <div class="cv-card" id="refCard1">
-                                    <strong id="cvRef1Name" style="font-size:11px;"></strong><br>
-                                    <span id="cvRef1Detail" style="font-size:10px; color:var(--text-muted); white-space: pre-line;"></span>
+                                    <strong id="cvRef1Name" style="font-size:11px; display:block; margin-bottom:4px;"></strong>
+                                    <span id="cvRef1Detail" style="font-size:10px; color:var(--text-muted); line-height:1.5; white-space: pre-line; display:block;"></span>
                                 </div>
                                 <div class="cv-card" id="refCard2">
-                                    <strong id="cvRef2Name" style="font-size:11px;"></strong><br>
-                                    <span id="cvRef2Detail" style="font-size:10px; color:var(--text-muted); white-space: pre-line;"></span>
+                                    <strong id="cvRef2Name" style="font-size:11px; display:block; margin-bottom:4px;"></strong>
+                                    <span id="cvRef2Detail" style="font-size:10px; color:var(--text-muted); line-height:1.5; white-space: pre-line; display:block;"></span>
                                 </div>
                             </div>
                         </div>
@@ -616,7 +756,7 @@ hr@company.com | +94 77 000 0000</textarea>
                     <!-- Declaration -->
                     <div class="cv-section cv-declaration" id="secDeclaration">
                         <div class="cv-sec-title">Declaration</div>
-                        <p class="cv-card-desc" style="font-style: italic; margin-bottom: 12px;">
+                        <p class="cv-card-desc" style="font-style: italic; margin-bottom: 14px;">
                             I hereby declare that all the information provided above is true, complete, and accurate to the best of my knowledge and belief.
                         </p>
                         <div class="signature-row">
@@ -763,7 +903,7 @@ hr@company.com | +94 77 000 0000</textarea>
         function updateContactItem(id, val, iconClass) {
             const el = document.getElementById(id);
             if (val && val.trim() !== "") {
-                el.innerHTML = `<i class="fa-solid ${iconClass}"></i> ${val}`;
+                el.innerHTML = `<i class="fa-solid ${iconClass}"></i> <span>${val}</span>`;
                 el.classList.remove('is-hidden');
             } else {
                 el.innerHTML = "";
@@ -854,22 +994,30 @@ hr@company.com | +94 77 000 0000</textarea>
             document.getElementById('adminModal').classList.remove('active');
         }
 
+        /* High-Definition (HD) Crisp Rendering Export Logic */
         function downloadCV(format) {
             const element = document.getElementById('cvContent');
             
-            html2canvas(element, { scale: 2, useCORS: true }).then(canvas => {
+            // Increased scale factor (3.0) for crystal clear HD rendering
+            html2canvas(element, { 
+                scale: 3, 
+                useCORS: true, 
+                logging: false,
+                allowTaint: true,
+                backgroundColor: null
+            }).then(canvas => {
                 if (format === 'pdf') {
-                    const imgData = canvas.toDataURL('image/jpeg', 1.0);
+                    const imgData = canvas.toDataURL('image/jpeg', 0.98);
                     const { jsPDF } = window.jspdf;
                     const pdf = new jsPDF('p', 'mm', 'a4');
                     const pdfWidth = pdf.internal.pageSize.getWidth();
                     const pdfHeight = pdf.internal.pageSize.getHeight();
-                    pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+                    pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight, undefined, 'FAST');
                     pdf.save('My_Professional_CV.pdf');
                 } else {
                     const link = document.createElement('a');
                     link.download = 'My_Professional_CV.jpg';
-                    link.href = canvas.toDataURL('image/jpeg', 1.0);
+                    link.href = canvas.toDataURL('image/jpeg', 0.98);
                     link.click();
                 }
             });
