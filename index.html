@@ -1,294 +1,383 @@
 <!DOCTYPE html>
-<html lang="si">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auto Verification & Download</title>
-    <!-- Automatic Receipt Reading (OCR) Library -->
-    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <title>Pro CV Studio - Dynamic Resume Builder</title>
+    
+    <!-- Google Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Montserrat:wght@400;600;700;800&family=Poppins:wght@300;400;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Export Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
     <style>
-        * {
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
+        :root {
+            --primary: #0284c7;
+            --primary-light: rgba(2, 132, 199, 0.12);
+            --sidebar-bg: #0f172a;
+            --sidebar-text: #f8fafc;
+            --main-bg: #ffffff;
+            --card-bg: #f8fafc;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --photo-radius: 50%;
+            --sidebar-clip: none;
+            --arch-radius: 0;
         }
 
-        body {
-            background-color: #f4f7f6;
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background: #090d16; color: #f3f4f6; height: 100vh; overflow: hidden; }
+
+        .app-container { display: flex; height: 100vh; }
+
+        /* Navigation / Control Sidebar */
+        .dashboard {
+            width: 450px;
+            background: #111827;
+            border-right: 1px solid #1f2937;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            z-index: 10;
+        }
+
+        .dashboard-header {
+            padding: 16px 20px;
+            background: #1f2937;
+            border-bottom: 1px solid #374151;
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            min-height: 100vh;
-            padding: 20px;
         }
+        .dashboard-header h2 { font-size: 15px; color: #38bdf8; display: flex; align-items: center; gap: 8px; }
+        .btn-admin-login { background: #374151; color: #38bdf8; border: 1px solid #38bdf8; padding: 5px 10px; border-radius: 5px; font-size: 11px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        .btn-admin-login:hover { background: #38bdf8; color: #0f172a; }
 
-        .container {
-            background: #ffffff;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 480px;
-        }
+        .dashboard-body { padding: 20px; overflow-y: auto; flex: 1; }
 
-        h2 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        .price-tag {
-            background-color: #e3f2fd;
-            color: #0d47a1;
-            padding: 12px;
-            border-radius: 8px;
-            text-align: center;
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            border: 1px solid #bbdefb;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: 600;
-            color: #555;
-        }
-
-        input[type="text"], input[type="file"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 14px;
-        }
-
-        /* Payment Selector Tabs */
-        .payment-options {
+        .form-section-divider {
+            font-size: 11px;
+            font-weight: 800;
+            color: #38bdf8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 18px 0 10px 0;
+            padding-bottom: 4px;
+            border-bottom: 1px dashed #374151;
             display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
+            align-items: center;
+            gap: 6px;
         }
 
-        .pay-option-btn {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid #007bff;
-            background: #fff;
-            color: #007bff;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
-        .pay-option-btn.active {
-            background: #007bff;
-            color: #fff;
-        }
-
-        /* Bank Details Box */
-        .bank-details {
-            background: #f8f9fa;
-            border-left: 4px solid #007bff;
-            padding: 15px;
-            border-radius: 4px;
-            margin-bottom: 15px;
-            font-size: 14px;
-            line-height: 1.6;
-        }
-
-        .qr-container {
-            text-align: center;
-            display: none;
-            margin-bottom: 15px;
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 6px;
-        }
-
-        .qr-container img {
-            width: 150px;
-            height: 150px;
-            border-radius: 6px;
-        }
-
-        .btn {
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 11px; font-weight: 700; color: #9ca3af; margin-bottom: 5px; text-transform: uppercase; }
+        .form-control {
             width: 100%;
-            background-color: #28a745;
-            color: white;
-            padding: 12px;
-            border: none;
+            padding: 9px 12px;
+            background: #1f2937;
+            border: 1px solid #374151;
             border-radius: 6px;
-            font-size: 16px;
-            font-weight: bold;
+            color: #ffffff;
+            font-size: 13px;
+            outline: none;
+        }
+        .form-control:focus { border-color: #38bdf8; }
+        textarea.form-control { resize: vertical; min-height: 60px; }
+
+        .color-picker-wrapper { display: flex; gap: 8px; align-items: center; margin-top: 6px; }
+        .color-preset { width: 24px; height: 24px; border-radius: 50%; cursor: pointer; border: 2px solid #ffffff33; transition: transform 0.2s; }
+        .color-preset:hover { transform: scale(1.2); }
+
+        .photo-upload-btn {
+            border: 2px dashed #38bdf8;
+            background: rgba(56, 189, 248, 0.05);
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
             cursor: pointer;
-            transition: 0.3s;
+            transition: 0.2s;
+        }
+        .photo-upload-btn:hover { background: rgba(56, 189, 248, 0.15); }
+
+        .btn-ai {
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            color: white; border: none; padding: 10px; border-radius: 6px;
+            font-weight: 700; font-size: 12px; cursor: pointer; width: 100%;
+            display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 15px;
+            transition: opacity 0.2s;
+        }
+        .btn-ai:hover { opacity: 0.9; }
+
+        .sidebar-widget {
+            background: rgba(56, 189, 248, 0.05);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 20px;
+        }
+        .sidebar-widget h4 { font-size: 11px; color: #38bdf8; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+        .sidebar-widget p { font-size: 10px; color: #9ca3af; line-height: 1.4; }
+        .ats-progress-bar { height: 6px; background: #1f2937; border-radius: 3px; overflow: hidden; margin-top: 8px; }
+        .ats-progress-fill { height: 100%; width: 85%; background: linear-gradient(90deg, #10b981, #38bdf8); }
+
+        .action-bar { padding: 15px; background: #1f2937; border-top: 1px solid #374151; display: flex; gap: 10px; }
+        .btn-pdf { background: #10b981; color: white; border: none; padding: 10px; border-radius: 6px; flex: 1; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        .btn-jpg { background: #f59e0b; color: white; border: none; padding: 10px; border-radius: 6px; flex: 1; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        .btn-pdf:hover { background: #059669; }
+        .btn-jpg:hover { background: #d97706; }
+
+        /* Preview Canvas Area */
+        .preview-area { 
+            flex: 1; 
+            background: #030712; 
+            overflow-y: auto; 
+            padding: 30px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
         }
 
-        .btn:hover {
-            background-color: #218838;
+        .cv-paper {
+            width: 794px;
+            min-height: 1123px;
+            height: auto;
+            background: var(--main-bg);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            color: var(--text-main);
+            position: relative;
+            transition: background 0.3s ease;
+            margin-bottom: 30px;
         }
 
-        .btn-download {
-            background-color: #007bff;
-            display: none;
-            text-decoration: none;
+        .cv-paper, .cv-paper * {
+            letter-spacing: 0px !important;
+            word-spacing: normal !important;
+            text-rendering: optimizeLegibility !important;
+            -webkit-font-smoothing: antialiased !important;
+        }
+
+        /* Sidebar Styling */
+        .cv-sidebar { 
+            background: var(--sidebar-bg); 
+            color: var(--sidebar-text); 
+            padding: 30px 20px; 
+            clip-path: var(--sidebar-clip);
+            border-radius: var(--arch-radius);
+        }
+        
+        .cv-photo-frame { text-align: center; margin-bottom: 20px; position: relative; display: flex; justify-content: center; align-items: center; }
+        .cv-photo-wrapper {
+            width: 130px;
+            height: 130px;
+            border-radius: var(--photo-radius);
+            border: 4px solid var(--primary);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #1e2937;
+            flex-shrink: 0;
+        }
+        .cv-photo-img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            object-position: center; 
+            display: block; 
+        }
+
+        .cv-side-block { margin-bottom: 20px; }
+        .cv-side-title { font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--primary); border-bottom: 1px solid rgba(255,255,255,0.15); padding-bottom: 4px; margin-bottom: 10px; line-height: 1.4 !important; }
+        .cv-contact-item { background: rgba(255,255,255,0.06); padding: 8px; border-radius: 5px; font-size: 11px; margin-bottom: 6px; word-break: break-all; line-height: 1.4 !important; }
+
+        /* Main Section Layout */
+        .cv-main { 
+            padding: 35px; 
+            background: var(--main-bg); 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: flex-start;
+            gap: 14px;
+        }
+
+        .cv-header-card { background: var(--card-bg); padding: 20px; border-radius: 8px; border-left: 5px solid var(--primary); margin-bottom: 5px; }
+        .cv-header-card h1 { font-size: 26px; font-weight: 800; text-transform: uppercase; line-height: 1.3 !important; }
+        .cv-header-card h2 { font-size: 13px; font-weight: 700; color: var(--primary); margin-top: 4px; text-transform: uppercase; line-height: 1.4 !important; }
+
+        .cv-section { margin-bottom: 0px; }
+        .cv-sec-title { font-size: 12px; font-weight: 800; text-transform: uppercase; color: var(--primary); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; line-height: 1.4 !important; }
+        .cv-sec-title::after { content: ''; flex: 1; height: 2px; background: var(--border-color); }
+
+        .cv-card { background: var(--card-bg); padding: 12px 15px; border-radius: 6px; border: 1px solid var(--border-color); margin-bottom: 8px; position: relative; }
+        .cv-card-title { font-weight: 700; font-size: 13px; line-height: 1.4 !important; }
+        .cv-card-badge { font-size: 10px; font-weight: 700; background: var(--primary-light); color: var(--primary); padding: 2px 8px; border-radius: 10px; float: right; }
+        .cv-card-sub { font-size: 11px; font-weight: 600; color: var(--primary); margin-bottom: 5px; line-height: 1.4 !important; }
+        .cv-card-desc { font-size: 11px; color: var(--text-muted); line-height: 1.5 !important; white-space: pre-line; }
+
+        .timeline-card { border-left: 2px solid var(--primary); padding-left: 15px; border-radius: 0; border-top: none; border-right: none; border-bottom: none; background: transparent; }
+
+        /* Payment QR Display Container */
+        .qr-container {
+            background: #ffffff;
+            padding: 12px;
+            border-radius: 12px;
             text-align: center;
-            margin-top: 15px;
+            margin: 12px 0;
+            border: 2px solid #38bdf8;
+        }
+        .qr-container img {
+            width: 180px;
+            height: 180px;
+            object-fit: contain;
+            border-radius: 8px;
         }
 
-        .btn-download:hover {
-            background-color: #0056b3;
-        }
-
-        .status-msg {
-            margin-top: 15px;
+        /* Payment Slip Upload Box */
+        .upload-slip-box {
+            border: 2px dashed #38bdf8;
+            background: rgba(56, 189, 248, 0.08);
+            border-radius: 8px;
+            padding: 12px;
             text-align: center;
-            font-weight: bold;
-            font-size: 14px;
-            line-height: 1.4;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.2s;
         }
+        .upload-slip-box:hover { background: rgba(56, 189, 248, 0.18); }
 
-        .status-msg.loading { color: #ff9800; }
-        .status-msg.success { color: #28a745; }
-        .status-msg.error { color: #dc3545; }
+        /* Modals */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; z-index: 100; opacity: 0; pointer-events: none; transition: 0.3s; }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .modal-card { background: #1f2937; border: 1px solid #374151; padding: 25px; border-radius: 12px; width: 440px; color: white; max-height: 85vh; overflow-y: auto; }
+        .modal-card h3 { color: #38bdf8; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+        .modal-card p { font-size: 12px; color: #9ca3af; margin-bottom: 10px; }
+        .modal-btn { background: #38bdf8; color: #0f172a; border: none; padding: 10px 15px; border-radius: 6px; font-weight: 700; width: 100%; cursor: pointer; margin-top: 10px; }
+        .modal-btn-close { background: #374151; color: #ffffff; border: none; padding: 8px 15px; border-radius: 6px; font-weight: 600; width: 100%; cursor: pointer; margin-top: 6px; }
+
+        .is-hidden { display: none !important; }
+
+        @media (max-width: 1024px) {
+            body { height: auto; overflow-x: hidden; overflow-y: auto; }
+            .app-container { flex-direction: column; height: auto; }
+            .dashboard { width: 100%; height: auto; border-right: none; border-bottom: 1px solid #1f2937; }
+            .preview-area { width: 100%; padding: 15px 10px; overflow-x: hidden; min-height: auto; }
+            .cv-paper { width: 100% !important; grid-template-columns: 1fr !important; }
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>තොරතුරු පරීක්ෂාව සහ Download</h2>
-    
-    <!-- Price Display -->
-    <div class="price-tag">
-        සේවා ගාස්තුව: රු. 200/=
-    </div>
+    <div class="app-container">
+        
+        <!-- Controls Dashboard -->
+        <div class="dashboard">
+            <div class="dashboard-header">
+                <h2><i class="fa-solid fa-wand-magic-sparkles"></i> Pro CV Studio</h2>
+                <button class="btn-admin-login" onclick="openAdminModal()"><i class="fa-solid fa-lock"></i> Owner Login</button>
+            </div>
 
-    <!-- Step 1: Basic Info -->
-    <div class="form-group">
-        <label for="referenceId">ඔබගේ විස්තර / Reference ID:</label>
-        <input type="text" id="referenceId" placeholder="මෙතැන ඇතුළත් කරන්න">
-    </div>
+            <div class="dashboard-body">
+                <button class="btn-ai" onclick="runAiEnhancer()"><i class="fa-solid fa-brain"></i> AI Polish & Auto-Fix Content</button>
 
-    <!-- Step 2: Select Payment Method -->
-    <label>ගෙවීම් ක්‍රමය තෝරන්න:</label>
-    <div class="payment-options">
-        <button type="button" class="pay-option-btn active" onclick="switchPayment('bank')">Bank Transfer</button>
-        <button type="button" class="pay-option-btn" onclick="switchPayment('qr')">QR Scan</button>
-    </div>
+                <!-- Template Selector -->
+                <div class="form-group">
+                    <label><i class="fa-solid fa-layer-group"></i> Choose CV Layout Template (15 Styles)</label>
+                    <select class="form-control" id="tplSelect" onchange="changeTemplateLayout(this.value)">
+                        <option value="tpl-nina">1. Nina Lane (Yellow/Charcoal Accent)</option>
+                        <option value="tpl-radhika">2. Radhika Kumari (Terracotta Warm)</option>
+                        <option value="tpl-vikram">3. Vikram Malhotra (Slate Grey Banner)</option>
+                        <option value="tpl-jonathan">4. Jonathan Patterson (Arch Top Frame)</option>
+                        <option value="tpl-arrow">5. Arrow Accent Corporate</option>
+                        <option value="tpl-dark">6. Cyber Dark Mode</option>
+                        <option value="tpl-minimal">7. Minimalist Clean White</option>
+                        <option value="tpl-modern-split">8. Modern Split 50/50 Dual Tone</option>
+                        <option value="tpl-executive">9. Executive Classic Serif</option>
+                        <option value="tpl-right-sidebar">10. Elegant Right Sidebar</option>
+                        <option value="tpl-compact">11. Compact Technical One-Pager</option>
+                        <option value="tpl-bold-header">12. Bold Header Banner</option>
+                        <option value="tpl-creative-grid">13. Creative Two-Column Grid</option>
+                        <option value="tpl-border-frame">14. Framed Border Elegance</option>
+                        <option value="tpl-gradient-glow">15. Vibrant Gradient Glow</option>
+                    </select>
+                </div>
 
-    <!-- Bank Details Section -->
-    <div id="bankDetails" class="bank-details">
-        <strong>Bank Details:</strong><br>
-        <strong>Bank:</strong> Bank of Ceylon (BOC)<br>
-        <strong>Account Number:</strong> 0004821779<br>
-        <strong>Account Holder:</strong> MR S S P MADUTHISARA
-    </div>
+                <!-- Custom Color Picker -->
+                <div class="form-group">
+                    <label><i class="fa-solid fa-palette"></i> Customize Accent Color</label>
+                    <div class="color-picker-wrapper">
+                        <input type="color" id="colorPicker" value="#0284c7" onchange="applyCustomColor(this.value)" style="border:none; width:35px; height:35px; cursor:pointer; background:none;">
+                        <div class="color-preset" style="background:#0284c7;" onclick="applyCustomColor('#0284c7')"></div>
+                        <div class="color-preset" style="background:#10b981;" onclick="applyCustomColor('#10b981')"></div>
+                        <div class="color-preset" style="background:#f59e0b;" onclick="applyCustomColor('#f59e0b')"></div>
+                        <div class="color-preset" style="background:#8b5cf6;" onclick="applyCustomColor('#8b5cf6')"></div>
+                        <div class="color-preset" style="background:#ec4899;" onclick="applyCustomColor('#ec4899')"></div>
+                    </div>
+                </div>
 
-    <!-- QR Section -->
-    <div id="qrDetails" class="qr-container">
-        <p style="margin-bottom: 8px; font-weight: 600;">QR එක Scan කර රු. 200 ගෙවන්න:</p>
-        <img src="https://via.placeholder.com/150?text=BOC+QR+Code" alt="BOC QR Code">
-        <p style="font-size: 12px; color: #666; margin-top: 5px;">Bank of Ceylon - MR S S P MADUTHISARA</p>
-    </div>
+                <!-- Profile Photo Upload -->
+                <div class="form-section-divider"><i class="fa-solid fa-image"></i> Photo Upload</div>
+                <div class="photo-upload-btn" onclick="document.getElementById('photoInput').click()">
+                    <i class="fa-solid fa-cloud-arrow-up" style="font-size:20px; color:#38bdf8;"></i>
+                    <p style="font-size:11px; margin-top:5px; color:#cbd5e1;">Click to Upload Profile Photo</p>
+                    <input type="file" id="photoInput" accept="image/*" class="is-hidden" onchange="handlePhotoUpload(this)">
+                </div>
 
-    <!-- Step 3: Upload Proof -->
-    <div class="form-group">
-        <label for="proof">Payment Receipt / Screenshot Upload කරන්න:</label>
-        <input type="file" id="proof" accept="image/*">
-    </div>
+                <!-- Personal Information -->
+                <div class="form-section-divider"><i class="fa-solid fa-user"></i> Personal Details</div>
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="inName" class="form-control" value="Saman Perera" oninput="liveUpdate()">
+                </div>
+                <div class="form-group">
+                    <label>Job Title</label>
+                    <input type="text" id="inTitle" class="form-control" value="Senior Software Engineer" oninput="liveUpdate()">
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="inEmail" class="form-control" value="saman.perera@email.com" oninput="liveUpdate()">
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="text" id="inPhone" class="form-control" value="+94 77 123 4567" oninput="liveUpdate()">
+                </div>
+                <div class="form-group">
+                    <label>Location / Address</label>
+                    <input type="text" id="inAddress" class="form-control" value="Colombo, Sri Lanka" oninput="liveUpdate()">
+                </div>
 
-    <!-- Submit Button -->
-    <button class="btn" onclick="processVerification()">ගෙවීම පරීක්ෂා කරන්න (Auto Check)</button>
+                <!-- Professional Summary -->
+                <div class="form-section-divider"><i class="fa-solid fa-file-lines"></i> About Me / Summary</div>
+                <div class="form-group">
+                    <textarea id="inSummary" class="form-control" oninput="liveUpdate()">Experienced Software Engineer with 5+ years of background in full-stack web application development, cloud solutions, and team leadership.</textarea>
+                </div>
 
-    <!-- Status Message -->
-    <div id="statusMsg" class="status-msg"></div>
+                <!-- Work Experience -->
+                <div class="form-section-divider"><i class="fa-solid fa-briefcase"></i> Experience</div>
+                <div class="form-group">
+                    <label>Role & Company</label>
+                    <input type="text" id="inExpTitle" class="form-control" value="Lead Developer - TechSys Lanka" oninput="liveUpdate()">
+                </div>
+                <div class="form-group">
+                    <label>Duration / Period</label>
+                    <input type="text" id="inExpPeriod" class="form-control" value="2021 - Present" oninput="liveUpdate()">
+                </div>
+                <div class="form-group">
+                    <label>Key Responsibilities</label>
+                    <textarea id="inExpDesc" class="form-control" oninput="liveUpdate()">• Architected scalable web services serving 100k+ monthly active users.
+• Led a cross-functional development team of 6 engineers.</textarea>
+                </div>
 
-    <!-- Auto Download Link -->
-    <a id="downloadBtn" href="#" download="Your_File.pdf" class="btn btn-download">File එක Download කරගන්න</a>
-</div>
+                <!-- Skills -->
+                <div class="form-section-divider"><i class="fa-solid fa-code"></i> Skills</div>
+                <div class="form-group">
+                    <textarea id="inSkills" class="form-control" oninput="liveUpdate()">JavaScript, React, Node.js, Python, SQL, Cloud Architecture, Git, Docker</textarea>
+                </div>
 
-<script>
-    // Payment Method Switch Logic
-    function switchPayment(type) {
-        const bankBox = document.getElementById('bankDetails');
-        const qrBox = document.getElementById('qrDetails');
-        const buttons = document.querySelectorAll('.pay-option-btn');
-
-        if (type === 'bank') {
-            bankBox.style.display = 'block';
-            qrBox.style.display = 'none';
-            buttons[0].classList.add('active');
-            buttons[1].classList.remove('active');
-        } else {
-            bankBox.style.display = 'none';
-            qrBox.style.display = 'block';
-            buttons[0].classList.remove('active');
-            buttons[1].classList.add('active');
-        }
-    }
-
-    // Payment Verification Logic
-    async function processVerification() {
-        const refInput = document.getElementById('referenceId').value;
-        const proofInput = document.getElementById('proof').files;
-        const statusMsg = document.getElementById('statusMsg');
-        const downloadBtn = document.getElementById('downloadBtn');
-
-        // Reset display
-        statusMsg.className = 'status-msg';
-        statusMsg.innerText = '';
-        downloadBtn.style.display = 'none';
-
-        if (!refInput) {
-            statusMsg.className = 'status-msg error';
-            statusMsg.innerText = 'කරුණාකර ඔබගේ විස්තර/Reference ID එක ඇතුළත් කරන්න.';
-            return;
-        }
-
-        if (proofInput.length === 0) {
-            statusMsg.className = 'status-msg error';
-            statusMsg.innerText = 'කරුණාකර Payment Receipt එක Upload කරන්න.';
-            return;
-        }
-
-        const file = proofInput[0];
-
-        statusMsg.className = 'status-msg loading';
-        statusMsg.innerText = 'ගෙවීම් Receipt එක පද්ධතිය මගින් පරීක්ෂා වෙමින් පවතී...';
-
-        try {
-            // Receipt එකෙන් Text කියවීම (OCR Scanning)
-            const result = await Tesseract.recognize(file, 'eng');
-            const scannedText = result.data.text.toLowerCase();
-
-            // Receipt එකේ '200' හෝ Account Number එක තිබේදැයි පරීක්ෂා කිරීම
-            const hasAmount = scannedText.includes('200');
-            const hasAccount = scannedText.includes('0004821779') || scannedText.includes('maduthisara') || scannedText.includes('boc');
-
-            if (hasAmount || hasAccount) {
-                statusMsg.className = 'status-msg success';
-                statusMsg.innerText = 'ගෙවීම සාර්ථකව තහවුරු විය! ඔබගේ File එක Download කරගත හැක.';
-                downloadBtn.style.display = 'block';
-            } else {
-                statusMsg.className = 'status-msg error';
-                statusMsg.innerText = 'ගෙවීම තහවුරු කිරීමට නොහැකි විය. Receipt එකෙහි රු. 200/= මුදල හෝ 0004821779 ගිණුම් අංකය පැහැදිලිව තිබේදැයි පරීක්ෂා කරන්න.';
-            }
-        } catch (error) {
-            // Error වුවහොත් fallback Verification එකක් සිදු වේ
-            statusMsg.className = 'status-msg success';
-            statusMsg.innerText = 'ගෙවීම සාර්ථකයි! ඔබගේ File එක Download කරගත හැක.';
-            downloadBtn.style.display = 'block';
-        }
-    }
-</script>
-
-</body>
-</html>
+                <div class="sidebar-widget">
+                    <h4><i class="fa-solid fa-circle-check"></i> ATS Optimizer Active</h4>
+                    <p>Your resume matches over 85% of sta
