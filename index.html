@@ -87,7 +87,6 @@
         .form-control:focus { border-color: #38bdf8; }
         textarea.form-control { resize: vertical; min-height: 60px; }
 
-        /* Color Customization Bar */
         .color-picker-wrapper { display: flex; gap: 8px; align-items: center; margin-top: 6px; }
         .color-preset { width: 24px; height: 24px; border-radius: 50%; cursor: pointer; border: 2px solid #ffffff33; transition: transform 0.2s; }
         .color-preset:hover { transform: scale(1.2); }
@@ -112,7 +111,6 @@
         }
         .btn-ai:hover { opacity: 0.9; }
 
-        /* Widget in Sidebar to fill empty space */
         .sidebar-widget {
             background: rgba(56, 189, 248, 0.05);
             border: 1px solid rgba(56, 189, 248, 0.2);
@@ -136,7 +134,7 @@
             flex: 1; 
             background: #030712; 
             overflow-y: auto; 
-            padding: 40px 30px; 
+            padding: 30px; 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
@@ -145,6 +143,7 @@
         .cv-paper {
             width: 794px;
             min-height: 1123px;
+            height: auto; /* Fixes height stretching */
             background: var(--main-bg);
             box-shadow: 0 20px 50px rgba(0,0,0,0.8);
             display: grid;
@@ -152,7 +151,7 @@
             color: var(--text-main);
             position: relative;
             transition: background 0.3s ease;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
         }
 
         .cv-paper, .cv-paper * {
@@ -196,17 +195,25 @@
         .cv-side-title { font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--primary); border-bottom: 1px solid rgba(255,255,255,0.15); padding-bottom: 4px; margin-bottom: 10px; line-height: 1.4 !important; }
         .cv-contact-item { background: rgba(255,255,255,0.06); padding: 8px; border-radius: 5px; font-size: 11px; margin-bottom: 6px; word-break: break-all; line-height: 1.4 !important; }
 
-        /* Main Section */
-        .cv-main { padding: 35px; background: var(--main-bg); display: flex; flex-direction: column; justify-content: space-between; }
-        .cv-header-card { background: var(--card-bg); padding: 20px; border-radius: 8px; border-left: 5px solid var(--primary); margin-bottom: 20px; }
+        /* FIXED: Main Section Layout (Removed middle empty gap) */
+        .cv-main { 
+            padding: 35px; 
+            background: var(--main-bg); 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: flex-start; /* Fixes middle empty gap */
+            gap: 14px; /* Natural layout flow */
+        }
+
+        .cv-header-card { background: var(--card-bg); padding: 20px; border-radius: 8px; border-left: 5px solid var(--primary); margin-bottom: 5px; }
         .cv-header-card h1 { font-size: 26px; font-weight: 800; text-transform: uppercase; line-height: 1.3 !important; }
         .cv-header-card h2 { font-size: 13px; font-weight: 700; color: var(--primary); margin-top: 4px; text-transform: uppercase; line-height: 1.4 !important; }
 
-        .cv-section { margin-bottom: 18px; }
-        .cv-sec-title { font-size: 12px; font-weight: 800; text-transform: uppercase; color: var(--primary); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; line-height: 1.4 !important; }
+        .cv-section { margin-bottom: 0px; }
+        .cv-sec-title { font-size: 12px; font-weight: 800; text-transform: uppercase; color: var(--primary); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; line-height: 1.4 !important; }
         .cv-sec-title::after { content: ''; flex: 1; height: 2px; background: var(--border-color); }
 
-        .cv-card { background: var(--card-bg); padding: 12px 15px; border-radius: 6px; border: 1px solid var(--border-color); margin-bottom: 10px; position: relative; }
+        .cv-card { background: var(--card-bg); padding: 12px 15px; border-radius: 6px; border: 1px solid var(--border-color); margin-bottom: 8px; position: relative; }
         .cv-card-title { font-weight: 700; font-size: 13px; line-height: 1.4 !important; }
         .cv-card-badge { font-size: 10px; font-weight: 700; background: var(--primary-light); color: var(--primary); padding: 2px 8px; border-radius: 10px; float: right; }
         .cv-card-sub { font-size: 11px; font-weight: 600; color: var(--primary); margin-bottom: 5px; line-height: 1.4 !important; }
@@ -215,68 +222,37 @@
         .timeline-card { border-left: 2px solid var(--primary); padding-left: 15px; border-radius: 0; border-top: none; border-right: none; border-bottom: none; background: transparent; }
 
         /* Declaration Footer */
-        .cv-declaration { border-top: 2px solid var(--border-color); padding-top: 15px; margin-top: 15px; }
-        .signature-row { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 20px; font-size: 11px; }
+        .cv-declaration { border-top: 2px solid var(--border-color); padding-top: 12px; margin-top: 10px; }
+        .signature-row { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 15px; font-size: 11px; }
         .sig-line { border-top: 1px solid var(--text-main); width: 180px; text-align: center; padding-top: 4px; font-weight: 700; }
 
-        /* Decorative Bottom Content Showcase (Fills Empty Space Below Paper) */
+        /* Bottom Content Showcase */
         .bottom-showcase {
             width: 794px;
-            margin-top: 10px;
+            margin-top: 0px;
             padding-top: 20px;
             border-top: 1px dashed #1f2937;
             display: flex;
             flex-direction: column;
-            gap: 25px;
+            gap: 20px;
         }
 
-        .showcase-header {
-            text-align: center;
-        }
+        .showcase-header { text-align: center; }
         .showcase-header h3 { font-size: 16px; color: #38bdf8; margin-bottom: 4px; }
         .showcase-header p { font-size: 12px; color: #64748b; }
 
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-        }
-
-        .gallery-card {
-            background: #111827;
-            border: 1px solid #1f2937;
-            border-radius: 8px;
-            padding: 15px;
-            text-align: center;
-            transition: transform 0.2s, border-color 0.2s;
-        }
-        .gallery-card:hover {
-            transform: translateY(-4px);
-            border-color: #38bdf8;
-        }
+        .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+        .gallery-card { background: #111827; border: 1px solid #1f2937; border-radius: 8px; padding: 15px; text-align: center; }
         .gallery-card i { font-size: 24px; color: #38bdf8; margin-bottom: 8px; }
         .gallery-card h4 { font-size: 12px; color: #f3f4f6; margin-bottom: 4px; }
         .gallery-card p { font-size: 10px; color: #9ca3af; }
 
-        .tips-banner {
-            background: linear-gradient(135deg, rgba(2,132,199,0.1), rgba(139,92,246,0.1));
-            border: 1px solid rgba(56,189,248,0.2);
-            border-radius: 10px;
-            padding: 18px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        .tips-banner i { font-size: 30px; color: #38bdf8; }
+        .tips-banner { background: linear-gradient(135deg, rgba(2,132,199,0.1), rgba(139,92,246,0.1)); border: 1px solid rgba(56,189,248,0.2); border-radius: 10px; padding: 15px; display: flex; align-items: center; gap: 15px; }
+        .tips-banner i { font-size: 28px; color: #38bdf8; }
         .tips-banner-text h5 { font-size: 13px; color: #ffffff; margin-bottom: 2px; }
         .tips-banner-text p { font-size: 11px; color: #9ca3af; }
 
-        .footer-credit {
-            text-align: center;
-            font-size: 11px;
-            color: #475569;
-            padding: 15px 0 30px 0;
-        }
+        .footer-credit { text-align: center; font-size: 11px; color: #475569; padding: 10px 0 20px 0; }
 
         /* TEMPLATES */
         .tpl-nina { grid-template-columns: 250px 1fr; --sidebar-bg: #1f2937; --photo-radius: 50%; }
@@ -312,27 +288,29 @@
         .modal-btn { background: #38bdf8; color: #0f172a; border: none; padding: 10px 15px; border-radius: 6px; font-weight: 700; width: 100%; cursor: pointer; margin-top: 10px; }
         .modal-btn-close { background: #374151; color: #ffffff; border: none; padding: 8px 15px; border-radius: 6px; font-weight: 600; width: 100%; cursor: pointer; margin-top: 6px; }
 
-        /* Utility Class to Hide Unfilled Elements */
         .is-hidden { display: none !important; }
 
-        /* Responsive Preview Scale */
+        /* FIXED: Responsive Media Queries for Mobile & Laptop */
         @media (max-width: 1024px) {
             body { height: auto; overflow-x: hidden; overflow-y: auto; }
             .app-container { flex-direction: column; height: auto; }
             .dashboard { width: 100%; height: auto; border-right: none; border-bottom: 1px solid #1f2937; }
-            .preview-area { width: 100%; padding: 20px 10px; overflow-x: auto; min-height: 100vh; }
-            .cv-paper, .bottom-showcase { transform: scale(0.85); transform-origin: top center; }
+            .preview-area { width: 100%; padding: 20px 10px; overflow-x: auto; min-height: 100vh; justify-content: flex-start; }
+            .cv-paper { transform: scale(0.85); transform-origin: top center; margin-bottom: -150px; }
+            .bottom-showcase { transform: scale(0.85); transform-origin: top center; margin-top: -10px; }
         }
 
         @media (max-width: 768px) {
             .dashboard-body { max-height: 400px; }
-            .cv-paper, .bottom-showcase { transform: scale(0.65); transform-origin: top center; }
+            .cv-paper { transform: scale(0.65); transform-origin: top center; margin-bottom: -380px; }
+            .bottom-showcase { transform: scale(0.7); transform-origin: top center; margin-top: -50px; }
             .modal-card { width: 92% !important; margin: 15px; }
             .gallery-grid { grid-template-columns: 1fr; }
         }
 
         @media (max-width: 480px) {
-            .cv-paper, .bottom-showcase { transform: scale(0.42); transform-origin: top center; }
+            .cv-paper { transform: scale(0.42); transform-origin: top center; margin-bottom: -620px; }
+            .bottom-showcase { transform: scale(0.55); transform-origin: top center; margin-top: -110px; width: 100%; }
             .action-bar { flex-direction: row; gap: 8px; }
             .dashboard-header h2 { font-size: 13px; }
         }
@@ -548,68 +526,66 @@ hr@company.com | +94 77 000 0000</textarea>
                 </aside>
 
                 <main class="cv-main">
-                    <div>
-                        <!-- Header -->
-                        <div class="cv-header-card" id="secHeader">
-                            <h1 id="cvName"></h1>
-                            <h2 id="cvTitle"></h2>
-                        </div>
+                    <!-- Header -->
+                    <div class="cv-header-card" id="secHeader">
+                        <h1 id="cvName"></h1>
+                        <h2 id="cvTitle"></h2>
+                    </div>
 
-                        <!-- Profile Summary -->
-                        <div class="cv-section" id="secProfile">
-                            <div class="cv-sec-title">Profile Summary</div>
-                            <div class="cv-card">
-                                <p class="cv-card-desc" id="cvProfile"></p>
+                    <!-- Profile Summary -->
+                    <div class="cv-section" id="secProfile">
+                        <div class="cv-sec-title">Profile Summary</div>
+                        <div class="cv-card">
+                            <p class="cv-card-desc" id="cvProfile"></p>
+                        </div>
+                    </div>
+
+                    <!-- Work Experience -->
+                    <div class="cv-section" id="secExp">
+                        <div class="cv-sec-title">Work Experience</div>
+                        <div class="cv-card timeline-card">
+                            <span class="cv-card-badge" id="cvExpDate"></span>
+                            <div class="cv-card-title" id="cvExpTitle"></div>
+                            <div class="cv-card-desc" id="cvExpDesc"></div>
+                        </div>
+                    </div>
+
+                    <!-- Key Projects -->
+                    <div class="cv-section" id="secProj">
+                        <div class="cv-sec-title">Key Projects</div>
+                        <div class="cv-card">
+                            <div class="cv-card-title" id="cvProjTitle"></div>
+                            <div class="cv-card-desc" id="cvProjDesc"></div>
+                        </div>
+                    </div>
+
+                    <!-- Education & Qualifications -->
+                    <div class="cv-section" id="secEdu">
+                        <div class="cv-sec-title">Education & Qualifications</div>
+                        <div class="cv-card">
+                            <div class="cv-card-desc" id="cvEduDesc" style="white-space: pre-line;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Certifications & Achievements -->
+                    <div class="cv-section" id="secCert">
+                        <div class="cv-sec-title">Certifications & Achievements</div>
+                        <div class="cv-card">
+                            <div class="cv-card-desc" id="cvCert"></div>
+                        </div>
+                    </div>
+
+                    <!-- References -->
+                    <div class="cv-section" id="secRef">
+                        <div class="cv-sec-title">References</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <div class="cv-card" id="refCard1">
+                                <strong id="cvRef1Name" style="font-size:11px;"></strong><br>
+                                <span id="cvRef1Detail" style="font-size:10px; color:var(--text-muted); white-space: pre-line;"></span>
                             </div>
-                        </div>
-
-                        <!-- Work Experience -->
-                        <div class="cv-section" id="secExp">
-                            <div class="cv-sec-title">Work Experience</div>
-                            <div class="cv-card timeline-card">
-                                <span class="cv-card-badge" id="cvExpDate"></span>
-                                <div class="cv-card-title" id="cvExpTitle"></div>
-                                <div class="cv-card-desc" id="cvExpDesc"></div>
-                            </div>
-                        </div>
-
-                        <!-- Key Projects -->
-                        <div class="cv-section" id="secProj">
-                            <div class="cv-sec-title">Key Projects</div>
-                            <div class="cv-card">
-                                <div class="cv-card-title" id="cvProjTitle"></div>
-                                <div class="cv-card-desc" id="cvProjDesc"></div>
-                            </div>
-                        </div>
-
-                        <!-- Education & Qualifications -->
-                        <div class="cv-section" id="secEdu">
-                            <div class="cv-sec-title">Education & Qualifications</div>
-                            <div class="cv-card">
-                                <div class="cv-card-desc" id="cvEduDesc" style="white-space: pre-line;"></div>
-                            </div>
-                        </div>
-
-                        <!-- Certifications & Achievements -->
-                        <div class="cv-section" id="secCert">
-                            <div class="cv-sec-title">Certifications & Achievements</div>
-                            <div class="cv-card">
-                                <div class="cv-card-desc" id="cvCert"></div>
-                            </div>
-                        </div>
-
-                        <!-- References -->
-                        <div class="cv-section" id="secRef">
-                            <div class="cv-sec-title">References</div>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                                <div class="cv-card" id="refCard1">
-                                    <strong id="cvRef1Name" style="font-size:11px;"></strong><br>
-                                    <span id="cvRef1Detail" style="font-size:10px; color:var(--text-muted); white-space: pre-line;"></span>
-                                </div>
-                                <div class="cv-card" id="refCard2">
-                                    <strong id="cvRef2Name" style="font-size:11px;"></strong><br>
-                                    <span id="cvRef2Detail" style="font-size:10px; color:var(--text-muted); white-space: pre-line;"></span>
-                                </div>
+                            <div class="cv-card" id="refCard2">
+                                <strong id="cvRef2Name" style="font-size:11px;"></strong><br>
+                                <span id="cvRef2Detail" style="font-size:10px; color:var(--text-muted); white-space: pre-line;"></span>
                             </div>
                         </div>
                     </div>
@@ -617,7 +593,7 @@ hr@company.com | +94 77 000 0000</textarea>
                     <!-- Declaration -->
                     <div class="cv-section cv-declaration" id="secDeclaration">
                         <div class="cv-sec-title">Declaration</div>
-                        <p class="cv-card-desc" style="font-style: italic; margin-bottom: 12px;">
+                        <p class="cv-card-desc" style="font-style: italic; margin-bottom: 10px;">
                             I hereby declare that all the information provided above is true, complete, and accurate to the best of my knowledge and belief.
                         </p>
                         <div class="signature-row">
@@ -634,7 +610,7 @@ hr@company.com | +94 77 000 0000</textarea>
                 </main>
             </div>
 
-            <!-- Bottom Visual Showcase Area (Fills scroll space beneath paper) -->
+            <!-- Bottom Visual Showcase Area -->
             <div class="bottom-showcase">
                 <div class="showcase-header">
                     <h3><i class="fa-solid fa-shield-halved"></i> ATS Friendly & High-Impact Resume Studio</h3>
@@ -708,14 +684,12 @@ hr@company.com | +94 77 000 0000</textarea>
     <script>
         let currentExportFormat = 'pdf';
 
-        // Auto Initialize
         document.addEventListener('DOMContentLoaded', () => {
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('cvDateDisplay').innerText = today;
             syncData();
         });
 
-        // Dynamic Real-time Data Sync & Dynamic Section Hiding
         function syncData() {
             const getVal = id => document.getElementById(id).value.trim();
 
@@ -740,42 +714,33 @@ hr@company.com | +94 77 000 0000</textarea>
             const ref2Name = getVal('inRef2Name');
             const ref2Detail = getVal('inRef2Detail');
 
-            // Set main texts
             document.getElementById('cvName').innerText = name;
             document.getElementById('cvTitle').innerText = title;
             document.getElementById('cvSigNameDisplay').innerText = name;
 
-            // Update contact items & dynamic hiding
             updateField('cvPhone', phone, 'secContact');
             updateField('cvEmail', email, 'secContact');
             updateField('cvLocation', location, 'secContact');
             updateField('cvWebsite', website, 'secContact');
 
-            // Skills & Languages
             updateBlock('cvSkills', skills, 'secSkills');
             updateBlock('cvLanguages', languages, 'secLang');
 
-            // Sections Hiding / Showing Logic
             updateBlock('cvProfile', profile, 'secProfile');
             
-            // Experience
             document.getElementById('cvExpTitle').innerText = expTitle;
             document.getElementById('cvExpDate').innerText = expDate;
             document.getElementById('cvExpDesc').innerText = expDesc;
             toggleSection('secExp', Boolean(expTitle || expDesc));
 
-            // Projects
             document.getElementById('cvProjTitle').innerText = projTitle;
             document.getElementById('cvProjDesc').innerText = projDesc;
             toggleSection('secProj', Boolean(projTitle || projDesc));
 
-            // Education
             updateBlock('cvEduDesc', eduDesc, 'secEdu');
 
-            // Certifications
             updateBlock('cvCert', cert, 'secCert');
 
-            // References
             document.getElementById('cvRef1Name').innerText = ref1Name;
             document.getElementById('cvRef1Detail').innerText = ref1Detail;
             document.getElementById('cvRef2Name').innerText = ref2Name;
@@ -816,20 +781,17 @@ hr@company.com | +94 77 000 0000</textarea>
             }
         }
 
-        // Switch Template Layout
         function changeTemplateLayout(templateClass) {
             const cvPaper = document.getElementById('cvContent');
             cvPaper.className = 'cv-paper ' + templateClass;
         }
 
-        // Apply Custom Primary Color
         function applyCustomColor(colorHex) {
             document.documentElement.style.setProperty('--primary', colorHex);
             document.documentElement.style.setProperty('--primary-light', colorHex + '1f');
             document.getElementById('colorPicker').value = colorHex;
         }
 
-        // Upload Custom Photo
         function uploadPhoto(event) {
             const file = event.target.files[0];
             if (file) {
@@ -842,7 +804,6 @@ hr@company.com | +94 77 000 0000</textarea>
             }
         }
 
-        // AI Enhancer Placeholder / Polish
         function runAiEnhancer() {
             const profileInput = document.getElementById('inProfile');
             if(profileInput.value) {
@@ -850,10 +811,9 @@ hr@company.com | +94 77 000 0000</textarea>
                 profileInput.value = profileInput.value.charAt(0).toUpperCase() + profileInput.value.slice(1);
             }
             syncData();
-            alert('✨ AI Content Polish Completed! Capitalization and spacing formatted successfully.');
+            alert('✨ AI Content Polish Completed!');
         }
 
-        // Modal Handlers
         function promptEmailBeforeDownload(format) {
             currentExportFormat = format;
             document.getElementById('userEmailModal').classList.add('active');
@@ -887,7 +847,6 @@ hr@company.com | +94 77 000 0000</textarea>
             downloadCV(currentExportFormat);
         }
 
-        // ATS Score Meter Generator
         function calculateAtsScore() {
             const fields = ['inName', 'inTitle', 'inPhone', 'inEmail', 'inSkills', 'inProfile', 'inExpTitle', 'inEduDesc'];
             let filledCount = 0;
@@ -898,7 +857,6 @@ hr@company.com | +94 77 000 0000</textarea>
             document.getElementById('atsProgress').style.width = scorePercent + '%';
         }
 
-        // Download Renderer Logic
         function downloadCV(format) {
             const element = document.getElementById('cvContent');
             const name = document.getElementById('inName').value.trim() || 'Resume';
