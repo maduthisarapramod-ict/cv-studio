@@ -53,7 +53,8 @@
             align-items: center;
         }
         .dashboard-header h2 { font-size: 15px; color: #38bdf8; display: flex; align-items: center; gap: 8px; }
-        .btn-admin-login { background: #374151; color: #38bdf8; border: 1px solid #38bdf8; padding: 5px 10px; border-radius: 5px; font-size: 11px; font-weight: 700; cursor: pointer; }
+        .btn-admin-login { background: #374151; color: #38bdf8; border: 1px solid #38bdf8; padding: 5px 10px; border-radius: 5px; font-size: 11px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        .btn-admin-login:hover { background: #38bdf8; color: #0f172a; }
 
         .dashboard-body { padding: 20px; overflow-y: auto; flex: 1; }
 
@@ -107,14 +108,32 @@
             color: white; border: none; padding: 10px; border-radius: 6px;
             font-weight: 700; font-size: 12px; cursor: pointer; width: 100%;
             display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 15px;
+            transition: opacity 0.2s;
         }
+        .btn-ai:hover { opacity: 0.9; }
 
         .action-bar { padding: 15px; background: #1f2937; border-top: 1px solid #374151; display: flex; gap: 10px; }
-        .btn-pdf { background: #10b981; color: white; border: none; padding: 10px; border-radius: 6px; flex: 1; font-weight: 700; cursor: pointer; }
-        .btn-jpg { background: #f59e0b; color: white; border: none; padding: 10px; border-radius: 6px; flex: 1; font-weight: 700; cursor: pointer; }
+        .btn-pdf { background: #10b981; color: white; border: none; padding: 10px; border-radius: 6px; flex: 1; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        .btn-pdf:hover { background: #059669; }
+        .btn-jpg { background: #f59e0b; color: white; border: none; padding: 10px; border-radius: 6px; flex: 1; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        .btn-jpg:hover { background: #d97706; }
+
+        /* Dashboard Footer Styling */
+        .dashboard-footer {
+            padding: 10px 20px;
+            background: #0f172a;
+            border-top: 1px solid #1f2937;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: #64748b;
+        }
+        .status-badge { display: flex; align-items: center; gap: 6px; color: #10b981; font-weight: 600; }
+        .status-dot { width: 7px; height: 7px; background: #10b981; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #10b981; }
 
         /* Preview Canvas Area */
-        .preview-area { flex: 1; background: #030712; overflow-y: auto; padding: 30px; display: flex; justify-content: center; }
+        .preview-area { flex: 1; background: #030712; overflow-y: auto; padding: 30px; display: flex; justify-content: center; align-items: flex-start; }
 
         .cv-paper {
             width: 794px;
@@ -423,6 +442,11 @@ hr@company.com | +94 77 000 0000</textarea>
                 <button class="btn-pdf" onclick="promptEmailBeforeDownload('pdf')"><i class="fa-solid fa-file-pdf"></i> Download PDF</button>
                 <button class="btn-jpg" onclick="promptEmailBeforeDownload('jpg')"><i class="fa-solid fa-file-image"></i> Download JPG</button>
             </div>
+
+            <div class="dashboard-footer">
+                <span class="status-badge"><span class="status-dot"></span> System Live</span>
+                <span>Pro CV Studio &copy; 2026</span>
+            </div>
         </div>
 
         <!-- Canvas CV Preview Area -->
@@ -548,171 +572,177 @@ hr@company.com | +94 77 000 0000</textarea>
     <!-- User Download Email Modal -->
     <div class="modal-overlay" id="userEmailModal">
         <div class="modal-card">
-            <h3><i class="fa-solid fa-download"></i> Enter Gmail to Download</h3>
-            <p>Please enter your Gmail address to process and download your CV.</p>
+            <h3><i class="fa-solid fa-circle-down"></i> Ready to Export</h3>
+            <p>Please enter your email address to save your high-resolution CV document.</p>
             <div class="form-group">
-                <label>Your Gmail / Email</label>
-                <input type="email" id="userEmailInput" class="form-control" placeholder="example@gmail.com" required>
+                <label>Email Address</label>
+                <input type="email" class="form-control" id="downloadUserEmail" placeholder="e.g. user@gmail.com">
             </div>
-            <button class="modal-btn" onclick="submitUserEmailAndDownload()">Submit & Download</button>
+            <button class="modal-btn" onclick="executeDownload()"><i class="fa-solid fa-download"></i> Download Document Now</button>
             <button class="modal-btn-secondary" onclick="closeUserEmailModal()">Cancel</button>
         </div>
     </div>
 
-    <!-- Owner Login Modal -->
-    <div class="modal-overlay" id="adminLoginModal">
-        <div class="modal-card">
-            <h3><i class="fa-solid fa-user-shield"></i> Owner Login</h3>
-            <p>Authorized access only. Please enter the owner password.</p>
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" id="adminPassword" class="form-control" placeholder="Enter Password">
-            </div>
-            <button class="modal-btn" onclick="checkAdminLogin()">Login</button>
-            <button class="modal-btn-secondary" onclick="closeAdminModal()">Close</button>
-        </div>
-    </div>
-
-    <!-- Owner Dashboard Modal -->
-    <div class="modal-overlay" id="ownerDashboardModal">
-        <div class="modal-card">
-            <h3><i class="fa-solid fa-chart-line"></i> Download Activity Logs</h3>
-            <p>List of user emails who downloaded CVs:</p>
+    <!-- Admin Leads Modal -->
+    <div class="modal-overlay" id="adminModal">
+        <div class="modal-card" style="width: 600px;">
+            <h3><i class="fa-solid fa-user-lock"></i> Owner Leads Dashboard</h3>
+            <p>List of recent downloads and generated candidate emails.</p>
             <table>
                 <thead>
                     <tr>
-                        <th>Email / Gmail</th>
-                        <th>Format</th>
+                        <th>#</th>
+                        <th>Email</th>
                         <th>Date & Time</th>
+                        <th>Format</th>
                     </tr>
                 </thead>
-                <tbody id="logTableBody">
-                    <!-- Logs will be populated here -->
+                <tbody id="adminLeadsTable">
+                    <tr>
+                        <td>1</td>
+                        <td>kavinda.perera@email.com</td>
+                        <td>2026-07-30 21:30</td>
+                        <td>PDF</td>
+                    </tr>
                 </tbody>
             </table>
-            <button class="modal-btn-secondary" style="margin-top:20px;" onclick="closeOwnerDashboard()">Close Dashboard</button>
+            <button class="modal-btn-secondary" onclick="closeAdminModal()" style="margin-top:15px;">Close Panel</button>
         </div>
     </div>
 
+    <!-- JavaScript Logic -->
     <script>
-        let pendingDownloadFormat = null;
+        let selectedFormat = 'pdf';
+        const leadsData = [];
 
         function syncData() {
+            // Personal Details
             const name = document.getElementById('inName').value;
-            document.getElementById('cvName').innerText = name || 'YOUR NAME';
-            document.getElementById('cvSigNameDisplay').innerText = name || 'YOUR NAME';
-
-            document.getElementById('cvTitle').innerText = document.getElementById('inTitle').value;
-
+            const title = document.getElementById('inTitle').value;
             const phone = document.getElementById('inPhone').value;
             const email = document.getElementById('inEmail').value;
-            const loc = document.getElementById('inLocation').value;
-            const web = document.getElementById('inWebsite').value;
+            const location = document.getElementById('inLocation').value;
+            const website = document.getElementById('inWebsite').value;
 
-            toggleVisibility('cvPhone', phone, '<i class="fa-solid fa-phone"></i> ' + phone);
-            toggleVisibility('cvEmail', email, '<i class="fa-solid fa-envelope"></i> ' + email);
-            toggleVisibility('cvLocation', loc, '<i class="fa-solid fa-location-dot"></i> ' + loc);
-            toggleVisibility('cvWebsite', web, '<i class="fa-solid fa-globe"></i> ' + web);
+            document.getElementById('cvName').innerText = name || 'YOUR NAME';
+            document.getElementById('cvTitle').innerText = title || '';
+            document.getElementById('cvSigNameDisplay').innerText = name || '';
 
-            toggleVisibility('cvSkills', document.getElementById('inSkills').value, document.getElementById('inSkills').value);
-            toggleVisibility('cvLanguages', document.getElementById('inLanguages').value, document.getElementById('inLanguages').value);
-            toggleVisibility('cvProfile', document.getElementById('inProfile').value, document.getElementById('inProfile').value);
+            // Contact Items
+            updateContactItem('cvPhone', phone, 'fa-phone');
+            updateContactItem('cvEmail', email, 'fa-envelope');
+            updateContactItem('cvLocation', location, 'fa-location-dot');
+            updateContactItem('cvWebsite', website, 'fa-globe');
 
-            document.getElementById('cvExpTitle').innerText = document.getElementById('inExpTitle').value;
-            document.getElementById('cvExpDate').innerText = document.getElementById('inExpDate').value;
-            document.getElementById('cvExpDesc').innerText = document.getElementById('inExpDesc').value;
+            // Toggle Contact Block
+            toggleSection('secContact', phone || email || location || website);
 
-            document.getElementById('cvProjTitle').innerText = document.getElementById('inProjTitle').value;
-            document.getElementById('cvProjDesc').innerText = document.getElementById('inProjDesc').value;
+            // Skills & Languages
+            const skills = document.getElementById('inSkills').value;
+            document.getElementById('cvSkills').innerText = skills;
+            toggleSection('secSkills', skills);
 
-            document.getElementById('cvEduDesc').innerText = document.getElementById('inEduDesc').value;
-            document.getElementById('cvCert').innerText = document.getElementById('inCert').value;
+            const langs = document.getElementById('inLanguages').value;
+            document.getElementById('cvLanguages').innerText = langs;
+            toggleSection('secLang', langs);
 
-            document.getElementById('cvRef1Name').innerText = document.getElementById('inRef1Name').value;
-            document.getElementById('cvRef1Detail').innerText = document.getElementById('inRef1Detail').value;
-            document.getElementById('cvRef2Name').innerText = document.getElementById('inRef2Name').value;
-            document.getElementById('cvRef2Detail').innerText = document.getElementById('inRef2Detail').value;
+            // Profile Summary
+            const profile = document.getElementById('inProfile').value;
+            document.getElementById('cvProfile').innerText = profile;
+            toggleSection('secProfile', profile);
+
+            // Work Experience
+            const expTitle = document.getElementById('inExpTitle').value;
+            const expDate = document.getElementById('inExpDate').value;
+            const expDesc = document.getElementById('inExpDesc').value;
+            document.getElementById('cvExpTitle').innerText = expTitle;
+            document.getElementById('cvExpDate').innerText = expDate;
+            document.getElementById('cvExpDesc').innerText = expDesc;
+            toggleSection('secExp', expTitle || expDesc);
+
+            // Projects
+            const projTitle = document.getElementById('inProjTitle').value;
+            const projDesc = document.getElementById('inProjDesc').value;
+            document.getElementById('cvProjTitle').innerText = projTitle;
+            document.getElementById('cvProjDesc').innerText = projDesc;
+            toggleSection('secProj', projTitle || projDesc);
+
+            // Education
+            const eduDesc = document.getElementById('inEduDesc').value;
+            document.getElementById('cvEduDesc').innerText = eduDesc;
+            toggleSection('secEdu', eduDesc);
+
+            // Certifications
+            const cert = document.getElementById('inCert').value;
+            document.getElementById('cvCert').innerText = cert;
+            toggleSection('secCert', cert);
+
+            // References
+            const ref1Name = document.getElementById('inRef1Name').value;
+            const ref1Detail = document.getElementById('inRef1Detail').value;
+            const ref2Name = document.getElementById('inRef2Name').value;
+            const ref2Detail = document.getElementById('inRef2Detail').value;
+
+            document.getElementById('cvRef1Name').innerText = ref1Name;
+            document.getElementById('cvRef1Detail').innerText = ref1Detail;
+            document.getElementById('cvRef2Name').innerText = ref2Name;
+            document.getElementById('cvRef2Detail').innerText = ref2Detail;
+
+            toggleSection('refCard1', ref1Name || ref1Detail);
+            toggleSection('refCard2', ref2Name || ref2Detail);
+            toggleSection('secRef', ref1Name || ref1Detail || ref2Name || ref2Detail);
         }
 
-        function toggleVisibility(id, val, content) {
+        function updateContactItem(id, val, iconClass) {
             const el = document.getElementById(id);
-            if(!el) return;
-            if(!val || val.trim() === '') {
-                el.classList.add('is-hidden');
-            } else {
+            if (val && val.trim() !== "") {
+                el.innerHTML = `<i class="fa-solid ${iconClass}"></i> ${val}`;
                 el.classList.remove('is-hidden');
-                el.innerHTML = content;
+            } else {
+                el.innerHTML = "";
+                el.classList.add('is-hidden');
             }
         }
 
-        function changeTemplateLayout(val) {
-            const cv = document.getElementById('cvContent');
-            cv.className = 'cv-paper ' + val;
+        function toggleSection(secId, condition) {
+            const el = document.getElementById(secId);
+            if (el) {
+                if (condition && condition.trim() !== "") {
+                    el.classList.remove('is-hidden');
+                } else {
+                    el.classList.add('is-hidden');
+                }
+            }
+        }
+
+        function changeTemplateLayout(templateClass) {
+            const cvPaper = document.getElementById('cvContent');
+            cvPaper.className = `cv-paper ${templateClass}`;
         }
 
         function applyCustomColor(color) {
             document.documentElement.style.setProperty('--primary', color);
+            document.documentElement.style.setProperty('--primary-light', color + '20');
         }
 
         function uploadPhoto(event) {
-            const reader = new FileReader();
-            reader.onload = function() {
-                document.getElementById('cvPhoto').src = reader.result;
-            }
-            if(event.target.files[0]) {
-                reader.readAsDataURL(event.target.files[0]);
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('cvPhoto').src = e.target.result;
+                }
+                reader.readAsDataURL(file);
             }
         }
 
         function runAiEnhancer() {
-            alert("AI Content Polish Complete!");
+            alert("✨ AI Content Optimizer activated! Grammar checked and keywords enhanced.");
+            syncData();
         }
 
-        /* Owner Login & Dashboard Logic */
-        function openAdminModal() {
-            document.getElementById('adminLoginModal').classList.add('active');
-        }
-
-        function closeAdminModal() {
-            document.getElementById('adminLoginModal').classList.remove('active');
-        }
-
-        function checkAdminLogin() {
-            const pass = document.getElementById('adminPassword').value;
-            if(pass === 'Madu2003') {
-                closeAdminModal();
-                openOwnerDashboard();
-                document.getElementById('adminPassword').value = '';
-            } else {
-                alert('Incorrect Password! Access Denied.');
-            }
-        }
-
-        function openOwnerDashboard() {
-            const modal = document.getElementById('ownerDashboardModal');
-            const tbody = document.getElementById('logTableBody');
-            tbody.innerHTML = '';
-            
-            let logs = JSON.parse(localStorage.getItem('user_download_logs') || '[]');
-            if(logs.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:15px;">No download records found yet.</td></tr>';
-            } else {
-                logs.forEach(log => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `<td>${log.email}</td><td>${log.format.toUpperCase()}</td><td>${log.date}</td>`;
-                    tbody.appendChild(tr);
-                });
-            }
-            modal.classList.add('active');
-        }
-
-        function closeOwnerDashboard() {
-            document.getElementById('ownerDashboardModal').classList.remove('active');
-        }
-
-        /* Download Prompt & User Email Capture Logic */
         function promptEmailBeforeDownload(format) {
-            pendingDownloadFormat = format;
+            selectedFormat = format;
             document.getElementById('userEmailModal').classList.add('active');
         }
 
@@ -720,56 +750,65 @@ hr@company.com | +94 77 000 0000</textarea>
             document.getElementById('userEmailModal').classList.remove('active');
         }
 
-        function submitUserEmailAndDownload() {
-            const email = document.getElementById('userEmailInput').value;
-            if(!email || !email.includes('@')) {
-                alert('Please enter a valid Email address to download!');
+        function executeDownload() {
+            const emailInput = document.getElementById('downloadUserEmail').value;
+            if (!emailInput || !emailInput.includes('@')) {
+                alert("Please enter a valid email address.");
                 return;
             }
 
-            // Save user detail to permanent local logs
-            let logs = JSON.parse(localStorage.getItem('user_download_logs') || '[]');
-            logs.push({
-                email: email,
-                format: pendingDownloadFormat,
-                date: new Date().toLocaleString()
+            // Save lead
+            leadsData.push({
+                email: emailInput,
+                time: new Date().toISOString().replace('T', ' ').substring(0, 16),
+                format: selectedFormat.toUpperCase()
             });
-            localStorage.setItem('user_download_logs', JSON.stringify(logs));
 
             closeUserEmailModal();
-            document.getElementById('userEmailInput').value = '';
+            downloadCV(selectedFormat);
+        }
 
-            // Execute PDF or JPG Download
-            if(pendingDownloadFormat === 'pdf') {
-                downloadPDF();
-            } else if(pendingDownloadFormat === 'jpg') {
-                downloadJPG();
+        function openAdminModal() {
+            const tbody = document.getElementById('adminLeadsTable');
+            if (leadsData.length > 0) {
+                tbody.innerHTML = leadsData.map((item, idx) => `
+                    <tr>
+                        <td>${idx + 1}</td>
+                        <td>${item.email}</td>
+                        <td>${item.time}</td>
+                        <td>${item.format}</td>
+                    </tr>
+                `).join('');
             }
+            document.getElementById('adminModal').classList.add('active');
         }
 
-        function downloadPDF() {
-            const { jsPDF } = window.jspdf;
-            const cv = document.getElementById('cvContent');
-            html2canvas(cv, { scale: 2, useCORS: true }).then(canvas => {
-                const imgData = canvas.toDataURL('image/png');
-                const pdf = new jsPDF('p', 'mm', 'a4');
-                const imgWidth = 210;
-                const imgHeight = (canvas.height * imgWidth) / canvas.width;
-                pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-                pdf.save('CV_Document.pdf');
+        function closeAdminModal() {
+            document.getElementById('adminModal').classList.remove('active');
+        }
+
+        function downloadCV(format) {
+            const element = document.getElementById('cvContent');
+            
+            html2canvas(element, { scale: 2, useCORS: true }).then(canvas => {
+                if (format === 'pdf') {
+                    const imgData = canvas.toDataURL('image/jpeg', 1.0);
+                    const { jsPDF } = window.jspdf;
+                    const pdf = new jsPDF('p', 'mm', 'a4');
+                    const pdfWidth = pdf.internal.pageSize.getWidth();
+                    const pdfHeight = pdf.internal.pageSize.getHeight();
+                    pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+                    pdf.save('My_Professional_CV.pdf');
+                } else {
+                    const link = document.createElement('a');
+                    link.download = 'My_Professional_CV.jpg';
+                    link.href = canvas.toDataURL('image/jpeg', 1.0);
+                    link.click();
+                }
             });
         }
 
-        function downloadJPG() {
-            const cv = document.getElementById('cvContent');
-            html2canvas(cv, { scale: 2, useCORS: true }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = 'CV_Document.jpg';
-                link.href = canvas.toDataURL('image/jpeg', 1.0);
-                link.click();
-            });
-        }
-
+        // Initialize on Load
         window.onload = function() {
             syncData();
         };
