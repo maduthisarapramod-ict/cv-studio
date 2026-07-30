@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pro CV Studio - Fixed PDF/JPG Download</title>
+    <title>Pro CV Studio - Professional CV Builder</title>
     
     <!-- Google Fonts & FontAwesome -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Montserrat:wght@400;600;700;800&family=Poppins:wght@300;400;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@400;600;700;800&family=Poppins:wght@300;400;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- Export Libraries -->
@@ -30,9 +30,15 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Inter', sans-serif; background: #090d16; color: #f3f4f6; height: 100vh; overflow: hidden; }
+        body { font-family: 'Inter', sans-serif; background: #090d16; color: #f3f4f6; height: 100vh; overflow-x: hidden; }
 
-        .app-container { display: flex; height: 100vh; }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #38bdf8; }
+
+        .app-container { display: flex; height: 100vh; width: 100vw; overflow: hidden; }
 
         /* Navigation / Control Sidebar */
         .dashboard {
@@ -42,18 +48,21 @@
             display: flex;
             flex-direction: column;
             z-index: 10;
+            box-shadow: 5px 0 25px rgba(0,0,0,0.5);
+            flex-shrink: 0;
         }
 
         .dashboard-header {
-            padding: 16px 20px;
+            padding: 18px 20px;
             background: #1f2937;
             border-bottom: 1px solid #374151;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        .dashboard-header h2 { font-size: 15px; color: #38bdf8; display: flex; align-items: center; gap: 8px; }
-        .btn-admin-login { background: #374151; color: #38bdf8; border: 1px solid #38bdf8; padding: 5px 10px; border-radius: 5px; font-size: 11px; font-weight: 700; cursor: pointer; }
+        .dashboard-header h2 { font-size: 16px; color: #38bdf8; display: flex; align-items: center; gap: 10px; font-weight: 800; letter-spacing: 0.5px; }
+        .btn-admin-login { background: #374151; color: #38bdf8; border: 1px solid #38bdf8; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        .btn-admin-login:hover { background: #38bdf8; color: #0f172a; }
 
         .dashboard-body { padding: 20px; overflow-y: auto; flex: 1; }
 
@@ -62,79 +71,88 @@
             font-weight: 800;
             color: #38bdf8;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin: 18px 0 10px 0;
-            padding-bottom: 4px;
+            letter-spacing: 0.8px;
+            margin: 20px 0 12px 0;
+            padding-bottom: 6px;
             border-bottom: 1px dashed #374151;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
 
-        .form-group { margin-bottom: 12px; }
-        .form-group label { display: block; font-size: 11px; font-weight: 700; color: #9ca3af; margin-bottom: 5px; text-transform: uppercase; }
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-size: 11px; font-weight: 700; color: #9ca3af; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
         .form-control {
             width: 100%;
-            padding: 9px 12px;
+            padding: 10px 12px;
             background: #1f2937;
             border: 1px solid #374151;
             border-radius: 6px;
             color: #ffffff;
             font-size: 13px;
             outline: none;
+            transition: border-color 0.2s;
         }
-        .form-control:focus { border-color: #38bdf8; }
-        textarea.form-control { resize: vertical; min-height: 60px; }
+        .form-control:focus { border-color: #38bdf8; box-shadow: 0 0 8px rgba(56, 189, 248, 0.2); }
+        textarea.form-control { resize: vertical; min-height: 65px; }
 
         /* Color Customization Bar */
-        .color-picker-wrapper { display: flex; gap: 8px; align-items: center; margin-top: 6px; }
-        .color-preset { width: 24px; height: 24px; border-radius: 50%; cursor: pointer; border: 2px solid #ffffff33; transition: transform 0.2s; }
+        .color-picker-wrapper { display: flex; gap: 10px; align-items: center; margin-top: 6px; }
+        .color-preset { width: 26px; height: 26px; border-radius: 50%; cursor: pointer; border: 2px solid #ffffff33; transition: transform 0.2s; }
         .color-preset:hover { transform: scale(1.2); }
 
         .photo-upload-btn {
             border: 2px dashed #38bdf8;
             background: rgba(56, 189, 248, 0.05);
             border-radius: 8px;
-            padding: 10px;
+            padding: 12px;
             text-align: center;
             cursor: pointer;
             transition: 0.2s;
         }
-        .photo-upload-btn:hover { background: rgba(56, 189, 248, 0.15); }
+        .photo-upload-btn:hover { background: rgba(56, 189, 248, 0.15); border-color: #7dd3fc; }
 
         .btn-ai {
             background: linear-gradient(135deg, #6366f1, #a855f7);
-            color: white; border: none; padding: 10px; border-radius: 6px;
+            color: white; border: none; padding: 12px; border-radius: 8px;
             font-weight: 700; font-size: 12px; cursor: pointer; width: 100%;
-            display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 15px;
+            display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 18px;
+            box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
+        .btn-ai:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(168, 85, 247, 0.4); }
 
-        .action-bar { padding: 15px; background: #1f2937; border-top: 1px solid #374151; display: flex; gap: 10px; }
-        .btn-pdf { background: #10b981; color: white; border: none; padding: 10px; border-radius: 6px; flex: 1; font-weight: 700; cursor: pointer; }
-        .btn-jpg { background: #f59e0b; color: white; border: none; padding: 10px; border-radius: 6px; flex: 1; font-weight: 700; cursor: pointer; }
+        .action-bar { padding: 16px; background: #1f2937; border-top: 1px solid #374151; display: flex; gap: 12px; }
+        .btn-pdf { background: #10b981; color: white; border: none; padding: 12px; border-radius: 6px; flex: 1; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        .btn-pdf:hover { background: #059669; }
+        .btn-jpg { background: #f59e0b; color: white; border: none; padding: 12px; border-radius: 6px; flex: 1; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        .btn-jpg:hover { background: #d97706; }
 
         /* Preview Canvas Area */
         .preview-area { 
             flex: 1; 
             background: #030712; 
             overflow-y: auto; 
-            padding: 30px 20px; 
+            overflow-x: hidden;
+            padding: 40px 20px; 
             display: flex; 
             flex-direction: column;
             align-items: center;
-            justify-content: space-between;
+            justify-content: flex-start;
+            width: 100%;
         }
 
         .cv-paper {
             width: 794px;
             min-height: 1123px;
             background: var(--main-bg);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7);
             display: grid;
             grid-template-columns: 260px 1fr;
             color: var(--text-main);
             position: relative;
-            transition: background 0.3s ease;
+            transition: background 0.3s ease, border-radius 0.3s ease;
+            flex-shrink: 0;
         }
 
         .cv-paper, .cv-paper * {
@@ -158,8 +176,8 @@
         
         .cv-photo-frame { text-align: center; margin-bottom: 20px; position: relative; display: flex; justify-content: center; align-items: center; }
         .cv-photo-wrapper {
-            width: 130px;
-            height: 130px;
+            width: 135px;
+            height: 135px;
             border-radius: var(--photo-radius);
             border: 4px solid var(--primary);
             overflow: hidden;
@@ -168,6 +186,7 @@
             justify-content: center;
             background: #1e2937;
             flex-shrink: 0;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
         }
         .cv-photo-img { 
             width: 100%; 
@@ -183,7 +202,7 @@
 
         /* Main Section */
         .cv-main { padding: 35px; background: var(--main-bg); display: flex; flex-direction: column; justify-content: space-between; }
-        .cv-header-card { background: var(--card-bg); padding: 20px; border-radius: 8px; border-left: 5px solid var(--primary); margin-bottom: 20px; }
+        .cv-header-card { background: var(--card-bg); padding: 22px; border-radius: 8px; border-left: 5px solid var(--primary); margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
         .cv-header-card h1 { font-size: 26px; font-weight: 800; text-transform: uppercase; line-height: 1.3 !important; }
         .cv-header-card h2 { font-size: 13px; font-weight: 700; color: var(--primary); margin-top: 4px; text-transform: uppercase; line-height: 1.4 !important; }
 
@@ -208,8 +227,8 @@
         .site-footer {
             width: 100%;
             max-width: 794px;
-            margin-top: 25px;
-            padding: 15px 20px;
+            margin-top: 30px;
+            padding: 16px 20px;
             background: #111827;
             border: 1px solid #1f2937;
             border-radius: 10px;
@@ -220,12 +239,15 @@
             flex-direction: column;
             align-items: center;
             gap: 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            flex-shrink: 0;
         }
         .site-footer-links {
             display: flex;
-            gap: 15px;
+            gap: 20px;
             font-size: 11px;
             color: #38bdf8;
+            font-weight: 600;
         }
 
         /* TEMPLATES */
@@ -254,38 +276,39 @@
         .tpl-gradient-glow .cv-header-card h2 { color: #e0e7ff; }
 
         /* Modals */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; z-index: 100; opacity: 0; pointer-events: none; transition: 0.3s; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(4px); display: flex; justify-content: center; align-items: center; z-index: 100; opacity: 0; pointer-events: none; transition: 0.3s; }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
-        .modal-card { background: #1f2937; border: 1px solid #374151; padding: 25px; border-radius: 12px; width: 480px; color: white; max-height: 80vh; overflow-y: auto; }
-        .modal-card h3 { color: #38bdf8; margin-bottom: 10px; }
-        .modal-card p { font-size: 12px; color: #9ca3af; margin-bottom: 15px; }
-        .modal-btn { background: #38bdf8; color: #0f172a; border: none; padding: 10px 15px; border-radius: 6px; font-weight: 700; width: 100%; cursor: pointer; margin-top: 10px; }
-        .modal-btn-secondary { background: #374151; color: white; border: none; padding: 8px 12px; border-radius: 6px; font-weight: 600; cursor: pointer; margin-top: 8px; width: 100%; }
+        .modal-card { background: #1f2937; border: 1px solid #374151; padding: 28px; border-radius: 14px; width: 480px; color: white; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.8); }
+        .modal-card h3 { color: #38bdf8; margin-bottom: 10px; font-size: 18px; }
+        .modal-card p { font-size: 13px; color: #9ca3af; margin-bottom: 16px; }
+        .modal-btn { background: #38bdf8; color: #0f172a; border: none; padding: 11px 16px; border-radius: 6px; font-weight: 700; width: 100%; cursor: pointer; margin-top: 10px; font-size: 13px; transition: 0.2s; }
+        .modal-btn:hover { background: #7dd3fc; }
+        .modal-btn-secondary { background: #374151; color: white; border: none; padding: 9px 14px; border-radius: 6px; font-weight: 600; cursor: pointer; margin-top: 8px; width: 100%; font-size: 12px; }
 
         table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 12px; }
-        th, td { padding: 8px; text-align: left; border-bottom: 1px solid #374151; word-break: break-all; }
+        th, td { padding: 9px; text-align: left; border-bottom: 1px solid #374151; word-break: break-all; }
         th { color: #38bdf8; }
 
-        /* Dynamic Section Hiding Utility Class */
         .is-hidden { display: none !important; }
 
-        /* Responsive Preview Scale Adjustments (Fixing scale layout gap) */
+        /* Responsive Preview Scale Adjustments */
         @media (max-width: 1024px) {
             body { height: auto; overflow-x: hidden; overflow-y: auto; }
-            .app-container { flex-direction: column; height: auto; }
+            .app-container { flex-direction: column; height: auto; width: 100%; overflow: visible; }
             .dashboard { width: 100%; height: auto; border-right: none; border-bottom: 1px solid #1f2937; }
-            .preview-area { width: 100%; padding: 20px 10px; overflow-x: auto; min-height: 100vh; }
+            .preview-area { width: 100%; padding: 20px 0; overflow-x: hidden; min-height: auto; align-items: center; }
             .cv-paper { transform: scale(0.8); transform-origin: top center; margin: 0 auto -220px auto; }
+            .site-footer { margin-top: 20px; width: 95%; }
         }
 
         @media (max-width: 768px) {
             .dashboard-body { max-height: 400px; }
-            .cv-paper { transform: scale(0.6); transform-origin: top center; margin: 0 auto -450px auto; }
+            .cv-paper { transform: scale(0.58); transform-origin: top center; margin: 0 auto -460px auto; }
             .modal-card { width: 92% !important; margin: 15px; }
         }
 
         @media (max-width: 480px) {
-            .cv-paper { transform: scale(0.42); transform-origin: top center; margin: 0 auto -650px auto; }
+            .cv-paper { transform: scale(0.40); transform-origin: top center; margin: 0 auto -670px auto; }
             .action-bar { flex-direction: row; gap: 8px; }
             .dashboard-header h2 { font-size: 13px; }
         }
@@ -346,8 +369,8 @@
                 <div class="form-group">
                     <label><i class="fa-solid fa-image"></i> Profile Photo Upload</label>
                     <div class="photo-upload-btn" onclick="document.getElementById('photoInput').click()">
-                        <i class="fa-solid fa-cloud-arrow-up" style="font-size:20px; color:#38bdf8;"></i>
-                        <div style="font-size:11px; margin-top:4px;">Click to select profile photo</div>
+                        <i class="fa-solid fa-cloud-arrow-up" style="font-size:22px; color:#38bdf8;"></i>
+                        <div style="font-size:11px; margin-top:5px; font-weight:600;">Click to upload your own photo</div>
                     </div>
                     <input type="file" id="photoInput" accept="image/*" style="display:none;" onchange="uploadPhoto(event)">
                 </div>
@@ -478,8 +501,7 @@ hr@company.com | +94 77 000 0000</textarea>
                     <div>
                         <div class="cv-photo-frame" id="secPhoto">
                             <div class="cv-photo-wrapper">
-                                <!-- SVG Placeholder to avoid CORS security block when generating canvas -->
-                                <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 24 24' fill='%2364748b'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>" id="cvPhoto" class="cv-photo-img" alt="User Photo">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80" crossorigin="anonymous" id="cvPhoto" class="cv-photo-img" alt="Professional Profile Photo">
                             </div>
                         </div>
 
@@ -507,7 +529,6 @@ hr@company.com | +94 77 000 0000</textarea>
                         </div>
                     </div>
 
-                    <!-- Sidebar Bottom Verified Badge Accent -->
                     <div style="text-align: center; border-top: 1px dashed rgba(255,255,255,0.2); padding-top: 15px; margin-top: 20px; font-size: 10px; opacity: 0.85;">
                         <i class="fa-solid fa-circle-check" style="color: var(--primary); font-size: 18px; margin-bottom: 5px; display:block;"></i>
                         <span style="font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;">Verified Profile</span>
@@ -540,7 +561,7 @@ hr@company.com | +94 77 000 0000</textarea>
                             </div>
                         </div>
 
-                        <!-- Key Projects -->
+                        <!-- Projects -->
                         <div class="cv-section" id="secProj">
                             <div class="cv-sec-title">Key Projects</div>
                             <div class="cv-card">
@@ -549,17 +570,17 @@ hr@company.com | +94 77 000 0000</textarea>
                             </div>
                         </div>
 
-                        <!-- Education & Qualifications -->
+                        <!-- Education -->
                         <div class="cv-section" id="secEdu">
                             <div class="cv-sec-title">Education & Qualifications</div>
                             <div class="cv-card">
-                                <div class="cv-card-desc" id="cvEduDesc" style="white-space: pre-line;"></div>
+                                <div class="cv-card-desc" id="cvEduDesc"></div>
                             </div>
                         </div>
 
-                        <!-- Certifications & Achievements -->
+                        <!-- Certifications -->
                         <div class="cv-section" id="secCert">
-                            <div class="cv-sec-title">Certifications & Achievements</div>
+                            <div class="cv-sec-title">Certifications</div>
                             <div class="cv-card">
                                 <div class="cv-card-desc" id="cvCert"></div>
                             </div>
@@ -568,393 +589,179 @@ hr@company.com | +94 77 000 0000</textarea>
                         <!-- References -->
                         <div class="cv-section" id="secRef">
                             <div class="cv-sec-title">References</div>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                                <div class="cv-card" id="refCard1">
-                                    <strong id="cvRef1Name" style="font-size:11px;"></strong><br>
-                                    <span id="cvRef1Detail" style="font-size:10px; color:var(--text-muted); white-space: pre-line;"></span>
+                            <div style="display: flex; gap: 10px;">
+                                <div class="cv-card" style="flex: 1;">
+                                    <div class="cv-card-title" id="cvRef1Name"></div>
+                                    <div class="cv-card-desc" id="cvRef1Detail"></div>
                                 </div>
-                                <div class="cv-card" id="refCard2">
-                                    <strong id="cvRef2Name" style="font-size:11px;"></strong><br>
-                                    <span id="cvRef2Detail" style="font-size:10px; color:var(--text-muted); white-space: pre-line;"></span>
+                                <div class="cv-card" style="flex: 1;">
+                                    <div class="cv-card-title" id="cvRef2Name"></div>
+                                    <div class="cv-card-desc" id="cvRef2Detail"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Declaration -->
-                    <div class="cv-section cv-declaration" id="secDeclaration">
-                        <div class="cv-sec-title">Declaration</div>
-                        <p class="cv-card-desc" style="font-style: italic; margin-bottom: 12px;">
-                            I hereby declare that all the information provided above is true, complete, and accurate to the best of my knowledge and belief.
-                        </p>
+                    <!-- Declaration Footer -->
+                    <div class="cv-declaration">
+                        <p style="font-size: 10px; color: var(--text-muted);">I hereby declare that all the information provided above is true and complete to the best of my knowledge.</p>
                         <div class="signature-row">
-                            <div>
-                                <strong>Date:</strong> <span id="cvDateDisplay"></span>
-                            </div>
-                            <div style="text-align: right;">
-                                <div class="sig-line" id="cvSigNameDisplay"></div>
-                                <span style="font-size:10px; color:var(--text-muted);">Applicant Signature</span>
-                            </div>
+                            <div>Date: <span id="cvDateToday"></span></div>
+                            <div class="sig-line">Signature</div>
                         </div>
                     </div>
-
                 </main>
             </div>
 
-            <!-- Website Bottom Footer (Fixed Null / Blank Area) -->
+            <!-- Website Bottom Footer -->
             <footer class="site-footer">
-                <div>
-                    <strong>Pro CV Studio Builder</strong> &copy; 2026 — All Rights Reserved.
-                </div>
+                <div>© 2026 Pro CV Studio — All Rights Reserved</div>
                 <div class="site-footer-links">
-                    <span><i class="fa-solid fa-shield-halved"></i> Privacy Protected</span>
-                    <span><i class="fa-solid fa-bolt"></i> Fast Render</span>
-                    <span><i class="fa-solid fa-circle-check"></i> High Quality PDF/JPG</span>
+                    <span>Privacy Policy</span> • <span>Terms of Service</span> • <span>Support</span>
                 </div>
             </footer>
         </div>
-
     </div>
 
-    <!-- User Download Email Modal -->
-    <div class="modal-overlay" id="userEmailModal">
+    <!-- Email Modal -->
+    <div class="modal-overlay" id="emailModal">
         <div class="modal-card">
-            <h3><i class="fa-solid fa-download"></i> Enter Email to Download</h3>
-            <p>Please enter your Email address to proceed with downloading your formatted CV.</p>
+            <h3><i class="fa-solid fa-envelope"></i> Enter Email to Download</h3>
+            <p>Please enter your email address to receive your generated resume and download the high-resolution file directly.</p>
             <div class="form-group">
-                <label>Email Address</label>
-                <input type="email" id="downloadUserEmail" class="form-control" placeholder="yourname@gmail.com">
+                <input type="email" class="form-control" id="userEmailPrompt" placeholder="name@example.com">
             </div>
-            <button class="modal-btn" onclick="executeDownload()"><i class="fa-solid fa-file-arrow-down"></i> Proceed & Download</button>
-            <button class="modal-btn-secondary" onclick="closeUserEmailModal()">Cancel</button>
+            <button class="modal-btn" onclick="executeDownload()">Confirm & Download Now</button>
+            <button class="modal-btn-secondary" onclick="closeModal('emailModal')">Cancel</button>
         </div>
     </div>
 
-    <!-- Admin / Owner Modal -->
+    <!-- Admin Modal -->
     <div class="modal-overlay" id="adminModal">
-        <div class="modal-card" style="width: 550px;">
-            <h3><i class="fa-solid fa-user-shield"></i> Owner Dashboard</h3>
-            
-            <div id="adminLoginForm">
-                <p>Enter owner password to view collected email leads and download statistics:</p>
-                <div class="form-group">
-                    <input type="password" id="adminPassword" class="form-control" placeholder="Enter password (default: admin123)">
-                </div>
-                <button class="modal-btn" onclick="verifyAdmin()">Login</button>
+        <div class="modal-card">
+            <h3><i class="fa-solid fa-lock"></i> Owner Dashboard Login</h3>
+            <p>Authorized access only.</p>
+            <div class="form-group">
+                <input type="password" class="form-control" id="adminPass" placeholder="Enter Owner Key">
             </div>
-
-            <div id="adminDataArea" style="display:none;">
-                <p style="color:#10b981; font-weight:700;"><i class="fa-solid fa-circle-check"></i> Authenticated Access Granted</p>
-                <div style="max-height: 250px; overflow-y: auto; margin-top: 10px;">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>User Email</th>
-                                <th>Date & Time</th>
-                                <th>Format</th>
-                            </tr>
-                        </thead>
-                        <tbody id="leadsTableBody"></tbody>
-                    </table>
-                </div>
-                <button class="modal-btn-secondary" onclick="clearLeads()" style="background:#ef4444; color:white; margin-top:12px;">Clear All Recorded Leads</button>
-            </div>
-
-            <button class="modal-btn-secondary" onclick="closeAdminModal()">Close</button>
+            <button class="modal-btn" onclick="checkAdminKey()">Login to Dashboard</button>
+            <button class="modal-btn-secondary" onclick="closeModal('adminModal')">Cancel</button>
         </div>
     </div>
 
-    <!-- JavaScript Logic -->
     <script>
-        let currentDownloadFormat = 'pdf';
+        let pendingFormat = 'pdf';
 
-        // Helper function to check and hide empty sections dynamically
-        function toggleVisibility(elementId, hasContent) {
-            const el = document.getElementById(elementId);
-            if (!el) return;
-            if (hasContent) {
-                el.classList.remove('is-hidden');
-            } else {
-                el.classList.add('is-hidden');
-            }
-        }
-
-        // Live Data Sync & Dynamic Section Hiding
         function syncData() {
-            // Personal
-            const nameVal = document.getElementById('inName').value.trim();
-            const titleVal = document.getElementById('inTitle').value.trim();
-            const phoneVal = document.getElementById('inPhone').value.trim();
-            const emailVal = document.getElementById('inEmail').value.trim();
-            const locVal = document.getElementById('inLocation').value.trim();
-            const webVal = document.getElementById('inWebsite').value.trim();
+            document.getElementById('cvName').innerText = document.getElementById('inName').value;
+            document.getElementById('cvTitle').innerText = document.getElementById('inTitle').value;
+            document.getElementById('cvPhone').innerHTML = '<i class="fa-solid fa-phone"></i> ' + document.getElementById('inPhone').value;
+            document.getElementById('cvEmail').innerHTML = '<i class="fa-solid fa-envelope"></i> ' + document.getElementById('inEmail').value;
+            document.getElementById('cvLocation').innerHTML = '<i class="fa-solid fa-location-dot"></i> ' + document.getElementById('inLocation').value;
+            document.getElementById('cvWebsite').innerHTML = '<i class="fa-solid fa-globe"></i> ' + document.getElementById('inWebsite').value;
+            
+            document.getElementById('cvSkills').innerText = document.getElementById('inSkills').value;
+            document.getElementById('cvLanguages').innerText = document.getElementById('inLanguages').value;
+            document.getElementById('cvHobbies').innerText = document.getElementById('inHobbies').value;
+            document.getElementById('cvProfile').innerText = document.getElementById('inProfile').value;
 
-            document.getElementById('cvName').textContent = nameVal;
-            document.getElementById('cvTitle').textContent = titleVal;
-            toggleVisibility('secHeader', nameVal || titleVal);
+            document.getElementById('cvExpTitle').innerText = document.getElementById('inExpTitle').value;
+            document.getElementById('cvExpDate').innerText = document.getElementById('inExpDate').value;
+            document.getElementById('cvExpDesc').innerText = document.getElementById('inExpDesc').value;
 
-            document.getElementById('cvPhone').textContent = phoneVal;
-            toggleVisibility('cvPhone', phoneVal);
+            document.getElementById('cvProjTitle').innerText = document.getElementById('inProjTitle').value;
+            document.getElementById('cvProjDesc').innerText = document.getElementById('inProjDesc').value;
 
-            document.getElementById('cvEmail').textContent = emailVal;
-            toggleVisibility('cvEmail', emailVal);
+            document.getElementById('cvEduDesc').innerText = document.getElementById('inEduDesc').value;
+            document.getElementById('cvCert').innerText = document.getElementById('inCert').value;
 
-            document.getElementById('cvLocation').textContent = locVal;
-            toggleVisibility('cvLocation', locVal);
+            document.getElementById('cvRef1Name').innerText = document.getElementById('inRef1Name').value;
+            document.getElementById('cvRef1Detail').innerText = document.getElementById('inRef1Detail').value;
+            document.getElementById('cvRef2Name').innerText = document.getElementById('inRef2Name').value;
+            document.getElementById('cvRef2Detail').innerText = document.getElementById('inRef2Detail').value;
 
-            document.getElementById('cvWebsite').textContent = webVal;
-            toggleVisibility('cvWebsite', webVal);
-
-            // Hide Contact Side block if all fields inside are empty
-            toggleVisibility('secContact', phoneVal || emailVal || locVal || webVal);
-
-            // Skills & Languages
-            const skillsVal = document.getElementById('inSkills').value.trim();
-            document.getElementById('cvSkills').textContent = skillsVal;
-            toggleVisibility('secSkills', skillsVal);
-
-            const langVal = document.getElementById('inLanguages').value.trim();
-            document.getElementById('cvLanguages').textContent = langVal;
-            toggleVisibility('secLang', langVal);
-
-            // Hobbies & Interests
-            const hobbiesVal = document.getElementById('inHobbies').value.trim();
-            document.getElementById('cvHobbies').textContent = hobbiesVal;
-            toggleVisibility('secHobbies', hobbiesVal);
-
-            // Profile Summary
-            const profVal = document.getElementById('inProfile').value.trim();
-            document.getElementById('cvProfile').textContent = profVal;
-            toggleVisibility('secProfile', profVal);
-
-            // Experience
-            const expTitle = document.getElementById('inExpTitle').value.trim();
-            const expDate = document.getElementById('inExpDate').value.trim();
-            const expDesc = document.getElementById('inExpDesc').value.trim();
-            document.getElementById('cvExpTitle').textContent = expTitle;
-            document.getElementById('cvExpDate').textContent = expDate;
-            document.getElementById('cvExpDesc').textContent = expDesc;
-            toggleVisibility('secExp', expTitle || expDate || expDesc);
-
-            // Projects
-            const projTitle = document.getElementById('inProjTitle').value.trim();
-            const projDesc = document.getElementById('inProjDesc').value.trim();
-            document.getElementById('cvProjTitle').textContent = projTitle;
-            document.getElementById('cvProjDesc').textContent = projDesc;
-            toggleVisibility('secProj', projTitle || projDesc);
-
-            // Education
-            const eduVal = document.getElementById('inEduDesc').value.trim();
-            document.getElementById('cvEduDesc').textContent = eduVal;
-            toggleVisibility('secEdu', eduVal);
-
-            // Certifications
-            const certVal = document.getElementById('inCert').value.trim();
-            document.getElementById('cvCert').textContent = certVal;
-            toggleVisibility('secCert', certVal);
-
-            // References
-            const ref1Name = document.getElementById('inRef1Name').value.trim();
-            const ref1Detail = document.getElementById('inRef1Detail').value.trim();
-            const ref2Name = document.getElementById('inRef2Name').value.trim();
-            const ref2Detail = document.getElementById('inRef2Detail').value.trim();
-
-            document.getElementById('cvRef1Name').textContent = ref1Name;
-            document.getElementById('cvRef1Detail').textContent = ref1Detail;
-            toggleVisibility('refCard1', ref1Name || ref1Detail);
-
-            document.getElementById('cvRef2Name').textContent = ref2Name;
-            document.getElementById('cvRef2Detail').textContent = ref2Detail;
-            toggleVisibility('refCard2', ref2Name || ref2Detail);
-
-            toggleVisibility('secRef', (ref1Name || ref1Detail || ref2Name || ref2Detail));
-
-            // Declaration Section
-            document.getElementById('cvSigNameDisplay').textContent = nameVal || 'Applicant Signature';
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('cvDateDisplay').textContent = today;
+            const today = new Date();
+            document.getElementById('cvDateToday').innerText = today.toLocaleDateString();
         }
 
-        // Image Photo Upload Handler
+        function changeTemplateLayout(className) {
+            const paper = document.getElementById('cvContent');
+            paper.className = 'cv-paper ' + className;
+        }
+
+        function applyCustomColor(colorHex) {
+            document.documentElement.style.setProperty('--primary', colorHex);
+            document.documentElement.style.setProperty('--primary-light', colorHex + '1f');
+        }
+
         function uploadPhoto(event) {
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     document.getElementById('cvPhoto').src = e.target.result;
-                    toggleVisibility('secPhoto', true);
                 };
                 reader.readAsDataURL(file);
             }
         }
 
-        // Switch Template Layout
-        function changeTemplateLayout(tplName) {
-            const paper = document.getElementById('cvContent');
-            paper.className = 'cv-paper ' + tplName;
-        }
-
-        // Apply Custom Primary Color Accent
-        function applyCustomColor(colorHex) {
-            const root = document.documentElement;
-            root.style.setProperty('--primary', colorHex);
-            root.style.setProperty('--primary-light', colorHex + '20');
-        }
-
-        // AI Polish & Auto-Fix Simulation
         function runAiEnhancer() {
-            const nameIn = document.getElementById('inName');
-            if (nameIn.value) nameIn.value = nameIn.value.toUpperCase();
-
-            const titleIn = document.getElementById('inTitle');
-            if (titleIn.value) titleIn.value = titleIn.value.toUpperCase();
-
-            const formatBullets = (id) => {
-                const el = document.getElementById(id);
-                if (!el.value) return;
-                let lines = el.value.split('\n');
-                lines = lines.map(l => {
-                    let cleaned = l.replace(/^[\s•\-\*]+/, '').trim();
-                    return cleaned ? '• ' + cleaned : '';
-                }).filter(l => l !== '');
-                el.value = lines.join('\n');
-            };
-
-            formatBullets('inSkills');
-            formatBullets('inLanguages');
-            formatBullets('inHobbies');
-            formatBullets('inExpDesc');
-            formatBullets('inProjDesc');
-            formatBullets('inEduDesc');
-            formatBullets('inCert');
-
+            document.getElementById('inProfile').value = "Results-driven Senior Software Engineer with a proven track record of designing high-performance cloud applications and optimizing technical workflows for scalable growth.";
             syncData();
-            alert("✨ AI Content Enhancer: Formatted bullet points and corrected text spacing!");
+            alert("AI Optimization Applied Successfully!");
         }
 
-        // Download Handling & Email Prompt
         function promptEmailBeforeDownload(format) {
-            currentDownloadFormat = format;
-            document.getElementById('userEmailModal').classList.add('active');
+            pendingFormat = format;
+            document.getElementById('emailModal').classList.add('active');
         }
 
-        function closeUserEmailModal() {
-            document.getElementById('userEmailModal').classList.remove('active');
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
         }
 
-        // DOWNLOAD EXECUTION FUNCTION
         function executeDownload() {
-            const emailInput = document.getElementById('downloadUserEmail').value.trim();
-            if (!emailInput || !emailInput.includes('@')) {
+            const email = document.getElementById('userEmailPrompt').value;
+            if(!email || !email.includes('@')) {
                 alert('Please enter a valid email address.');
                 return;
             }
+            closeModal('emailModal');
 
-            // Save lead in localStorage
-            saveLeadData(emailInput, currentDownloadFormat);
-            closeUserEmailModal();
-
-            const cvElement = document.getElementById('cvContent');
-
-            // Render CV canvas safely
-            html2canvas(cvElement, {
-                scale: 2,
-                useCORS: true,
-                allowTaint: true,
-                logging: false
-            }).then(canvas => {
-                if (currentDownloadFormat === 'pdf') {
-                    const imgData = canvas.toDataURL('image/jpeg', 0.98);
+            const element = document.getElementById('cvContent');
+            
+            html2canvas(element, { scale: 2, useCORS: true }).then(canvas => {
+                if (pendingFormat === 'pdf') {
                     const { jsPDF } = window.jspdf;
                     const pdf = new jsPDF('p', 'mm', 'a4');
-                    const pdfWidth = pdf.internal.pageSize.getWidth();
-                    const pdfHeight = pdf.internal.pageSize.getHeight();
-
-                    pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
-                    pdf.save('My_CV_Document.pdf');
-                } else if (currentDownloadFormat === 'jpg') {
-                    const imgData = canvas.toDataURL('image/jpeg', 0.98);
+                    const imgData = canvas.toDataURL('image/jpeg', 1.0);
+                    pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297);
+                    pdf.save('Resume_' + document.getElementById('inName').value.replace(/\s+/g, '_') + '.pdf');
+                } else {
                     const link = document.createElement('a');
-                    link.download = 'My_CV_Image.jpg';
-                    link.href = imgData;
-                    document.body.appendChild(link);
+                    link.download = 'Resume_' + document.getElementById('inName').value.replace(/\s+/g, '_') + '.jpg';
+                    link.href = canvas.toDataURL('image/jpeg', 1.0);
                     link.click();
-                    document.body.removeChild(link);
                 }
-            }).catch(err => {
-                console.error("Export Error:", err);
-                alert("Download Error: " + err.message);
             });
         }
 
-        // Lead Data Local Storage Management
-        function saveLeadData(email, format) {
-            let leads = JSON.parse(localStorage.getItem('cv_studio_leads') || '[]');
-            leads.push({
-                email: email,
-                date: new Date().toLocaleString(),
-                format: format.toUpperCase()
-            });
-            localStorage.setItem('cv_studio_leads', JSON.stringify(leads));
-        }
-
-        // Owner/Admin Panel Functions
         function openAdminModal() {
             document.getElementById('adminModal').classList.add('active');
         }
 
-        function closeAdminModal() {
-            document.getElementById('adminModal').classList.remove('active');
-            document.getElementById('adminLoginForm').style.display = 'block';
-            document.getElementById('adminDataArea').style.display = 'none';
-            document.getElementById('adminPassword').value = '';
-        }
-
-        function verifyAdmin() {
-            const pass = document.getElementById('adminPassword').value;
-            if (pass === 'admin123') { // Default owner password
-                document.getElementById('adminLoginForm').style.display = 'none';
-                document.getElementById('adminDataArea').style.display = 'block';
-                loadLeadsTable();
+        function checkAdminKey() {
+            const key = document.getElementById('adminPass').value;
+            if(key === 'admin123') {
+                alert('Welcome Admin!');
+                closeModal('adminModal');
             } else {
-                alert('Invalid Owner Password! (Default is: admin123)');
+                alert('Invalid Security Password!');
             }
         }
 
-        function loadLeadsTable() {
-            const tbody = document.getElementById('leadsTableBody');
-            tbody.innerHTML = '';
-            let leads = JSON.parse(localStorage.getItem('cv_studio_leads') || '[]');
-            
-            if (leads.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#9ca3af;">No lead records found yet.</td></tr>';
-                return;
-            }
-
-            leads.forEach((item, index) => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${index + 1}</td>
-                    <td>${item.email}</td>
-                    <td>${item.date}</td>
-                    <td><strong>${item.format}</strong></td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        function clearLeads() {
-            if (confirm("Are you sure you want to clear all collected lead records?")) {
-                localStorage.removeItem('cv_studio_leads');
-                loadLeadsTable();
-            }
-        }
-
-        // Initialize preview on load
-        window.onload = function() {
-            syncData();
-        };
+        // Initialize Data on Load
+        window.onload = syncData;
     </script>
 </body>
 </html>
