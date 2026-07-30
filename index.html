@@ -183,6 +183,13 @@
             background: #1e2937;
             flex-shrink: 0;
         }
+        .cv-photo-img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            object-position: center; 
+            display: block; 
+        }
 
         .cv-side-block { margin-bottom: 20px; }
         .cv-side-title { font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--primary); border-bottom: 1px solid rgba(255,255,255,0.15); padding-bottom: 4px; margin-bottom: 10px; line-height: 1.4 !important; }
@@ -365,4 +372,605 @@
                         <div class="color-preset" style="background:#0284c7;" onclick="applyCustomColor('#0284c7')"></div>
                         <div class="color-preset" style="background:#10b981;" onclick="applyCustomColor('#10b981')"></div>
                         <div class="color-preset" style="background:#8b5cf6;" onclick="applyCustomColor('#8b5cf6')"></div>
-                        <div class="color-preset" style="background:#f59e0b;" onclick="applyCustomCo
+                        <div class="color-preset" style="background:#ef4444;" onclick="applyCustomColor('#ef4444')"></div>
+                        <div class="color-preset" style="background:#f59e0b;" onclick="applyCustomColor('#f59e0b')"></div>
+                        <div class="color-preset" style="background:#0d9488;" onclick="applyCustomColor('#0d9488')"></div>
+                        <div class="color-preset" style="background:#334155;" onclick="applyCustomColor('#334155')"></div>
+                    </div>
+                </div>
+
+                <!-- Profile Photo Upload -->
+                <div class="form-group">
+                    <label><i class="fa-solid fa-image"></i> Profile Photo Upload</label>
+                    <div class="photo-upload-btn" onclick="document.getElementById('photoInput').click()">
+                        <i class="fa-solid fa-cloud-arrow-up" style="font-size:20px; color:#38bdf8;"></i>
+                        <div style="font-size:11px; margin-top:4px;">Click to select profile photo</div>
+                    </div>
+                    <input type="file" id="photoInput" accept="image/*" style="display:none;" onchange="uploadPhoto(event)">
+                </div>
+
+                <!-- Comprehensive Inputs -->
+                <div class="form-section-divider"><i class="fa-solid fa-user"></i> Personal Information</div>
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" class="form-control" id="inName" value="KAVINDA PERERA" oninput="syncData()">
+                </div>
+                <div class="form-group">
+                    <label>Job Title</label>
+                    <input type="text" class="form-control" id="inTitle" value="SENIOR SOFTWARE ENGINEER" oninput="syncData()">
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="text" class="form-control" id="inPhone" value="+94 77 123 4567" oninput="syncData()">
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="text" class="form-control" id="inEmail" value="kavinda.perera@email.com" oninput="syncData()">
+                </div>
+                <div class="form-group">
+                    <label>Address / Location</label>
+                    <input type="text" class="form-control" id="inLocation" value="Colombo, Sri Lanka" oninput="syncData()">
+                </div>
+                <div class="form-group">
+                    <label>LinkedIn / Portfolio Website</label>
+                    <input type="text" class="form-control" id="inWebsite" value="linkedin.com/in/kavindaperera" oninput="syncData()">
+                </div>
+
+                <div class="form-section-divider"><i class="fa-solid fa-gears"></i> Skills & Languages</div>
+                <div class="form-group">
+                    <label>Skills & Tools (Line by Line)</label>
+                    <textarea class="form-control" id="inSkills" style="min-height:75px;" oninput="syncData()">• JavaScript / ReactJS
+• Node.js & Python
+• Cloud Architecture (AWS)
+• REST API Development
+• UI/UX Design & Figma</textarea>
+                </div>
+                <div class="form-group">
+                    <label>Languages Known</label>
+                    <textarea class="form-control" id="inLanguages" style="min-height:50px;" oninput="syncData()">• English — Fluent
+• Sinhala — Native</textarea>
+                </div>
+
+                <div class="form-section-divider"><i class="fa-solid fa-file-lines"></i> Profile Summary</div>
+                <div class="form-group">
+                    <label>Summary Statement</label>
+                    <textarea class="form-control" id="inProfile" oninput="syncData()">Passionate Senior Software Engineer with 5+ years of experience in building scalable cloud architectures, web applications, and intuitive digital solutions. Proven track record of delivering clean, efficient code.</textarea>
+                </div>
+
+                <div class="form-section-divider"><i class="fa-solid fa-briefcase"></i> Work Experience</div>
+                <div class="form-group">
+                    <label>Company & Designation</label>
+                    <input type="text" class="form-control" id="inExpTitle" value="Lead Software Architect — Virtusa" oninput="syncData()">
+                    <label style="margin-top:6px;">Duration / Years</label>
+                    <input type="text" class="form-control" id="inExpDate" value="2021 - PRESENT" oninput="syncData()">
+                    <label style="margin-top:6px;">Key Responsibilities</label>
+                    <textarea class="form-control" id="inExpDesc" style="margin-top:2px;" oninput="syncData()">• Led a team of 6 engineers developing cloud microservices.
+• Optimized application performance, reducing latency by 35%.
+• Architected RESTful APIs used by over 500k monthly users.</textarea>
+                </div>
+
+                <div class="form-section-divider"><i class="fa-solid fa-diagram-project"></i> Key Projects</div>
+                <div class="form-group">
+                    <label>Project Name / Title</label>
+                    <input type="text" class="form-control" id="inProjTitle" value="E-Commerce Microservices Engine" oninput="syncData()">
+                    <label style="margin-top:6px;">Project Description</label>
+                    <textarea class="form-control" id="inProjDesc" style="margin-top:2px;" oninput="syncData()">• Designed dynamic payment processing gateway with React and Node.js.
+• Handled 10,000+ daily orders with 99.9% uptime.</textarea>
+                </div>
+
+                <div class="form-section-divider"><i class="fa-solid fa-graduation-cap"></i> Education & Qualifications</div>
+                <div class="form-group">
+                    <label>Degree, A/L, O/L Details</label>
+                    <textarea class="form-control" id="inEduDesc" style="min-height:85px;" oninput="syncData()">• B.Sc. (Hons) in Computer Science — UCSC (2016 - 2020)
+• G.C.E. Advanced Level (A/L) — Physical Science Stream (2015)
+• G.C.E. Ordinary Level (O/L) — 9 As (2012)</textarea>
+                </div>
+
+                <div class="form-section-divider"><i class="fa-solid fa-award"></i> Certifications</div>
+                <div class="form-group">
+                    <label>Certifications & Achievements</label>
+                    <textarea class="form-control" id="inCert" oninput="syncData()">• AWS Certified Solutions Architect (2023)
+• Certified Scrum Master (CSM)</textarea>
+                </div>
+
+                <div class="form-section-divider"><i class="fa-solid fa-users"></i> Non-Related References</div>
+                <div class="form-group">
+                    <label>Reference 1 - Name</label>
+                    <input type="text" class="form-control" id="inRef1Name" value="Dr. Anura Jayawardena" oninput="syncData()">
+                    <label style="margin-top:6px;">Reference 1 - Designation & Contact</label>
+                    <textarea class="form-control" id="inRef1Detail" style="min-height:45px;" oninput="syncData()">Senior Tech Director
+email@virtusa.com | +94 71 000 0000</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Reference 2 - Name</label>
+                    <input type="text" class="form-control" id="inRef2Name" value="Mahesh Samarasinghe" oninput="syncData()">
+                    <label style="margin-top:6px;">Reference 2 - Designation & Contact</label>
+                    <textarea class="form-control" id="inRef2Detail" style="min-height:45px;" oninput="syncData()">Engineering Manager
+hr@company.com | +94 77 000 0000</textarea>
+                </div>
+
+                <!-- Live ATS Meter Widget -->
+                <div class="sidebar-widget">
+                    <h4><i class="fa-solid fa-chart-line"></i> Resume Completion Meter</h4>
+                    <p>Fills as you complete all fields. High completeness ensures maximum ATS compatibility.</p>
+                    <div class="ats-progress-bar">
+                        <div class="ats-progress-fill" id="atsProgress"></div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="action-bar">
+                <button class="btn-pdf" onclick="promptEmailBeforeDownload('pdf')"><i class="fa-solid fa-file-pdf"></i> Download PDF</button>
+                <button class="btn-jpg" onclick="promptEmailBeforeDownload('jpg')"><i class="fa-solid fa-file-image"></i> Download JPG</button>
+            </div>
+        </div>
+
+        <!-- Canvas CV Preview Area -->
+        <div class="preview-area">
+            <div class="cv-paper tpl-nina" id="cvContent">
+                
+                <aside class="cv-sidebar">
+                    <div class="cv-photo-frame" id="secPhoto">
+                        <div class="cv-photo-wrapper">
+                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300" id="cvPhoto" class="cv-photo-img" crossorigin="anonymous" alt="User Photo">
+                        </div>
+                    </div>
+
+                    <div class="cv-side-block" id="secContact">
+                        <div class="cv-side-title">Contact</div>
+                        <div class="cv-contact-item" id="cvPhone"></div>
+                        <div class="cv-contact-item" id="cvEmail"></div>
+                        <div class="cv-contact-item" id="cvLocation"></div>
+                        <div class="cv-contact-item" id="cvWebsite"></div>
+                    </div>
+
+                    <div class="cv-side-block" id="secSkills">
+                        <div class="cv-side-title">Skills & Tools</div>
+                        <div id="cvSkills" style="font-size:11px; line-height:1.8; white-space: pre-line;"></div>
+                    </div>
+
+                    <div class="cv-side-block" id="secLang">
+                        <div class="cv-side-title">Languages</div>
+                        <div id="cvLanguages" class="cv-contact-item" style="white-space: pre-line;"></div>
+                    </div>
+                </aside>
+
+                <main class="cv-main">
+                    <!-- Header -->
+                    <div class="cv-header-card" id="secHeader">
+                        <h1 id="cvName"></h1>
+                        <h2 id="cvTitle"></h2>
+                    </div>
+
+                    <!-- Profile Summary -->
+                    <div class="cv-section" id="secProfile">
+                        <div class="cv-sec-title">Profile Summary</div>
+                        <div class="cv-card">
+                            <p class="cv-card-desc" id="cvProfile"></p>
+                        </div>
+                    </div>
+
+                    <!-- Work Experience -->
+                    <div class="cv-section" id="secExp">
+                        <div class="cv-sec-title">Work Experience</div>
+                        <div class="cv-card timeline-card">
+                            <span class="cv-card-badge" id="cvExpDate"></span>
+                            <div class="cv-card-title" id="cvExpTitle"></div>
+                            <div class="cv-card-desc" id="cvExpDesc"></div>
+                        </div>
+                    </div>
+
+                    <!-- Key Projects -->
+                    <div class="cv-section" id="secProj">
+                        <div class="cv-sec-title">Key Projects</div>
+                        <div class="cv-card">
+                            <div class="cv-card-title" id="cvProjTitle"></div>
+                            <div class="cv-card-desc" id="cvProjDesc"></div>
+                        </div>
+                    </div>
+
+                    <!-- Education & Qualifications -->
+                    <div class="cv-section" id="secEdu">
+                        <div class="cv-sec-title">Education & Qualifications</div>
+                        <div class="cv-card">
+                            <div class="cv-card-desc" id="cvEduDesc" style="white-space: pre-line;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Certifications & Achievements -->
+                    <div class="cv-section" id="secCert">
+                        <div class="cv-sec-title">Certifications & Achievements</div>
+                        <div class="cv-card">
+                            <div class="cv-card-desc" id="cvCert"></div>
+                        </div>
+                    </div>
+
+                    <!-- References -->
+                    <div class="cv-section" id="secRef">
+                        <div class="cv-sec-title">References</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <div class="cv-card" id="refCard1">
+                                <strong id="cvRef1Name" style="font-size:11px;"></strong><br>
+                                <span id="cvRef1Detail" style="font-size:10px; color:var(--text-muted); white-space: pre-line;"></span>
+                            </div>
+                            <div class="cv-card" id="refCard2">
+                                <strong id="cvRef2Name" style="font-size:11px;"></strong><br>
+                                <span id="cvRef2Detail" style="font-size:10px; color:var(--text-muted); white-space: pre-line;"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Declaration -->
+                    <div class="cv-section cv-declaration" id="secDeclaration">
+                        <div class="cv-sec-title">Declaration</div>
+                        <p class="cv-card-desc" style="font-style: italic; margin-bottom: 10px;">
+                            I hereby declare that all the information provided above is true, complete, and accurate to the best of my knowledge and belief.
+                        </p>
+                        <div class="signature-row">
+                            <div>
+                                <strong>Date:</strong> <span id="cvDateDisplay"></span>
+                            </div>
+                            <div style="text-align: right;">
+                                <div class="sig-line" id="cvSigNameDisplay"></div>
+                                <span style="font-size:10px; color:var(--text-muted);">Applicant Signature</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </main>
+            </div>
+
+            <!-- Bottom Visual Showcase Area -->
+            <div class="bottom-showcase">
+                <div class="showcase-header">
+                    <h3><i class="fa-solid fa-shield-halved"></i> ATS Friendly & High-Impact Resume Studio</h3>
+                    <p>Designed to help job seekers stand out with recruiter-approved layout templates</p>
+                </div>
+
+                <div class="gallery-grid">
+                    <div class="gallery-card">
+                        <i class="fa-solid fa-file-contract"></i>
+                        <h4>100% ATS Parsing Rate</h4>
+                        <p>Text hierarchy designed to pass Applicant Tracking Systems effortlessly.</p>
+                    </div>
+                    <div class="gallery-card">
+                        <i class="fa-solid fa-bolt"></i>
+                        <h4>Instant Export Engine</h4>
+                        <p>High-resolution vector PDF and ultra-sharp JPG graphics rendering.</p>
+                    </div>
+                    <div class="gallery-card">
+                        <i class="fa-solid fa-paint-roller"></i>
+                        <h4>Dynamic Layout Switcher</h4>
+                        <p>Switch between 15 curated corporate design styles instantly without losing data.</p>
+                    </div>
+                </div>
+
+                <div class="tips-banner">
+                    <i class="fa-solid fa-lightbulb"></i>
+                    <div class="tips-banner-text">
+                        <h5>Pro Tip for High Callbacks</h5>
+                        <p>Use active power verbs (e.g., "Architected", "Spearheaded", "Optimized") and quantify achievements with numbers or percentages.</p>
+                    </div>
+                </div>
+
+                <div class="footer-credit">
+                    <i class="fa-solid fa-code"></i> Pro CV Studio Platform &bull; Professional Dynamic Resume Builder
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Modal Form for Download Confirmation -->
+    <div class="modal-overlay" id="userEmailModal">
+        <div class="modal-card">
+            <h3><i class="fa-solid fa-download"></i> Ready to Export Your CV</h3>
+            <p>Enter your primary email address below to finalize and generate your document download.</p>
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" id="modalUserEmail" class="form-control" placeholder="name@example.com">
+            </div>
+            <button class="modal-btn" onclick="executeDownload()"><i class="fa-solid fa-check"></i> Continue Download</button>
+            <button class="modal-btn-close" onclick="closeModal('userEmailModal')">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Admin / Owner Modal with Secured Password Protection -->
+    <div class="modal-overlay" id="adminModal">
+        <div class="modal-card">
+            <h3><i class="fa-solid fa-user-gear"></i> Owner Dashboard</h3>
+            
+            <div id="adminLoginForm">
+                <p>Enter owner passcode key to view saved email history.</p>
+                <div class="form-group">
+                    <label>Passcode Key</label>
+                    <input type="password" id="adminPassKey" class="form-control" placeholder="••••••••">
+                </div>
+                <button class="modal-btn" onclick="verifyAdminKey()"><i class="fa-solid fa-key"></i> Authenticate</button>
+            </div>
+
+            <div id="adminLogView" class="is-hidden" style="margin-top: 10px;">
+                <p style="font-size:11px; color:#10b981; margin-bottom:10px;"><i class="fa-solid fa-circle-check"></i> Authenticated as Owner</p>
+                <h4 style="font-size:12px; color:#38bdf8; margin-bottom:8px; text-transform:uppercase;"><i class="fa-solid fa-clock-rotate-left"></i> User Email History (<span id="logCount">0</span>)</h4>
+                
+                <div id="emailLogContainer" style="max-height:220px; overflow-y:auto; background:#111827; padding:10px; border-radius:6px; font-size:11px; border:1px solid #374151;">
+                    <!-- Email Log Table Appears Here -->
+                </div>
+                
+                <button class="modal-btn" style="background:#ef4444; color:white; margin-top:12px;" onclick="clearEmailLogs()"><i class="fa-solid fa-trash"></i> Clear History</button>
+            </div>
+
+            <button class="modal-btn-close" onclick="closeModal('adminModal')">Cancel</button>
+        </div>
+    </div>
+
+    <!-- JavaScript Engine -->
+    <script>
+        let currentExportFormat = 'pdf';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('cvDateDisplay').innerText = today;
+            syncData();
+        });
+
+        function syncData() {
+            const getVal = id => document.getElementById(id).value.trim();
+
+            const name = getVal('inName');
+            const title = getVal('inTitle');
+            const phone = getVal('inPhone');
+            const email = getVal('inEmail');
+            const location = getVal('inLocation');
+            const website = getVal('inWebsite');
+            const skills = getVal('inSkills');
+            const languages = getVal('inLanguages');
+            const profile = getVal('inProfile');
+            const expTitle = getVal('inExpTitle');
+            const expDate = getVal('inExpDate');
+            const expDesc = getVal('inExpDesc');
+            const projTitle = getVal('inProjTitle');
+            const projDesc = getVal('inProjDesc');
+            const eduDesc = getVal('inEduDesc');
+            const cert = getVal('inCert');
+            const ref1Name = getVal('inRef1Name');
+            const ref1Detail = getVal('inRef1Detail');
+            const ref2Name = getVal('inRef2Name');
+            const ref2Detail = getVal('inRef2Detail');
+
+            document.getElementById('cvName').innerText = name;
+            document.getElementById('cvTitle').innerText = title;
+            document.getElementById('cvSigNameDisplay').innerText = name;
+
+            updateField('cvPhone', phone, 'secContact');
+            updateField('cvEmail', email, 'secContact');
+            updateField('cvLocation', location, 'secContact');
+            updateField('cvWebsite', website, 'secContact');
+
+            updateBlock('cvSkills', skills, 'secSkills');
+            updateBlock('cvLanguages', languages, 'secLang');
+
+            updateBlock('cvProfile', profile, 'secProfile');
+            
+            document.getElementById('cvExpTitle').innerText = expTitle;
+            document.getElementById('cvExpDate').innerText = expDate;
+            document.getElementById('cvExpDesc').innerText = expDesc;
+            toggleSection('secExp', Boolean(expTitle || expDesc));
+
+            document.getElementById('cvProjTitle').innerText = projTitle;
+            document.getElementById('cvProjDesc').innerText = projDesc;
+            toggleSection('secProj', Boolean(projTitle || projDesc));
+
+            updateBlock('cvEduDesc', eduDesc, 'secEdu');
+
+            updateBlock('cvCert', cert, 'secCert');
+
+            document.getElementById('cvRef1Name').innerText = ref1Name;
+            document.getElementById('cvRef1Detail').innerText = ref1Detail;
+            document.getElementById('cvRef2Name').innerText = ref2Name;
+            document.getElementById('cvRef2Detail').innerText = ref2Detail;
+
+            toggleSection('refCard1', Boolean(ref1Name || ref1Detail));
+            toggleSection('refCard2', Boolean(ref2Name || ref2Detail));
+            toggleSection('secRef', Boolean(ref1Name || ref1Detail || ref2Name || ref2Detail));
+
+            calculateAtsScore();
+        }
+
+        function updateField(elementId, textValue, sectionId) {
+            const el = document.getElementById(elementId);
+            if (textValue) {
+                el.innerText = textValue;
+                el.classList.remove('is-hidden');
+            } else {
+                el.classList.add('is-hidden');
+            }
+        }
+
+        function updateBlock(elementId, textValue, sectionId) {
+            const el = document.getElementById(elementId);
+            if (textValue) {
+                el.innerText = textValue;
+                toggleSection(sectionId, true);
+            } else {
+                toggleSection(sectionId, false);
+            }
+        }
+
+        function toggleSection(sectionId, show) {
+            const sec = document.getElementById(sectionId);
+            if (sec) {
+                if (show) sec.classList.remove('is-hidden');
+                else sec.classList.add('is-hidden');
+            }
+        }
+
+        function changeTemplateLayout(templateClass) {
+            const cvPaper = document.getElementById('cvContent');
+            cvPaper.className = 'cv-paper ' + templateClass;
+        }
+
+        function applyCustomColor(colorHex) {
+            document.documentElement.style.setProperty('--primary', colorHex);
+            document.documentElement.style.setProperty('--primary-light', colorHex + '1f');
+            document.getElementById('colorPicker').value = colorHex;
+        }
+
+        function uploadPhoto(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('cvPhoto').src = e.target.result;
+                    toggleSection('secPhoto', true);
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function runAiEnhancer() {
+            const profileInput = document.getElementById('inProfile');
+            if(profileInput.value) {
+                profileInput.value = profileInput.value.replace(/\s+/g, ' ').trim();
+                profileInput.value = profileInput.value.charAt(0).toUpperCase() + profileInput.value.slice(1);
+            }
+            syncData();
+            alert('✨ AI Content Polish Completed!');
+        }
+
+        function promptEmailBeforeDownload(format) {
+            currentExportFormat = format;
+            document.getElementById('userEmailModal').classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function openAdminModal() {
+            document.getElementById('adminModal').classList.add('active');
+        }
+
+        /* Owner Password Authentication - Secured with Madu2003 */
+        function verifyAdminKey() {
+            const key = document.getElementById('adminPassKey').value;
+            if(key === 'Madu2003') {
+                document.getElementById('adminLoginForm').classList.add('is-hidden');
+                document.getElementById('adminLogView').classList.remove('is-hidden');
+                renderEmailLogs();
+            } else {
+                alert('Invalid Owner Key. Access Denied.');
+            }
+        }
+
+        /* Lifetime Email Storage Functions */
+        function executeDownload() {
+            const email = document.getElementById('modalUserEmail').value.trim();
+            if(!email || !email.includes('@')) {
+                alert('Please provide a valid email address to proceed.');
+                return;
+            }
+
+            saveUserEmailLog(email);
+
+            closeModal('userEmailModal');
+            downloadCV(currentExportFormat);
+        }
+
+        function saveUserEmailLog(email) {
+            let logs = [];
+            try {
+                logs = JSON.parse(localStorage.getItem('cv_user_emails_log')) || [];
+            } catch(e) { logs = []; }
+
+            const now = new Date();
+            const timeString = now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
+
+            logs.push({
+                email: email,
+                date: timeString
+            });
+
+            localStorage.setItem('cv_user_emails_log', JSON.stringify(logs));
+        }
+
+        function renderEmailLogs() {
+            let logs = [];
+            try {
+                logs = JSON.parse(localStorage.getItem('cv_user_emails_log')) || [];
+            } catch(e) { logs = []; }
+
+            document.getElementById('logCount').innerText = logs.length;
+            const container = document.getElementById('emailLogContainer');
+
+            if (logs.length === 0) {
+                container.innerHTML = '<div style="color:#9ca3af; text-align:center; padding:15px;">No emails logged yet.</div>';
+                return;
+            }
+
+            let html = '<table style="width:100%; text-align:left; border-collapse:collapse; color:#f3f4f6;">' +
+                       '<tr style="border-bottom:1px solid #374151; color:#38bdf8;"><th style="padding:4px;">Email</th><th style="padding:4px;">Date & Time</th></tr>';
+
+            logs.slice().reverse().forEach(log => {
+                html += `<tr style="border-bottom:1px solid #1f2937;">
+                    <td style="padding:6px 4px; word-break:break-all;">${log.email}</td>
+                    <td style="padding:6px 4px; color:#9ca3af; font-size:10px;">${log.date}</td>
+                </tr>`;
+            });
+            html += '</table>';
+            container.innerHTML = html;
+        }
+
+        function clearEmailLogs() {
+            if (confirm('Are you sure you want to clear all logged email history?')) {
+                localStorage.removeItem('cv_user_emails_log');
+                renderEmailLogs();
+            }
+        }
+
+        function calculateAtsScore() {
+            const fields = ['inName', 'inTitle', 'inPhone', 'inEmail', 'inSkills', 'inProfile', 'inExpTitle', 'inEduDesc'];
+            let filledCount = 0;
+            fields.forEach(f => {
+                if(document.getElementById(f).value.trim().length > 0) filledCount++;
+            });
+            const scorePercent = Math.round((filledCount / fields.length) * 100);
+            document.getElementById('atsProgress').style.width = scorePercent + '%';
+        }
+
+        function downloadCV(format) {
+            const element = document.getElementById('cvContent');
+            const name = document.getElementById('inName').value.trim() || 'Resume';
+
+            const opt = {
+                scale: 2,
+                useCORS: true,
+                logging: false,
+                backgroundColor: null
+            };
+
+            html2canvas(element, opt).then(canvas => {
+                if (format === 'jpg') {
+                    const imgData = canvas.toDataURL('image/jpeg', 0.95);
+                    const link = document.createElement('a');
+                    link.download = `${name.replace(/\s+/g, '_')}_CV.jpg`;
+                    link.href = imgData;
+                    link.click();
+                } else if (format === 'pdf') {
+                    const imgData = canvas.toDataURL('image/png');
+                    const { jsPDF } = window.jspdf;
+                    const pdf = new jsPDF('p', 'mm', 'a4');
+                    const pdfWidth = pdf.internal.pageSize.getWidth();
+                    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+                    
+                    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+                    pdf.save(`${name.replace(/\s+/g, '_')}_CV.pdf`);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
