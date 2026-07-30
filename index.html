@@ -156,6 +156,21 @@
         .status-badge { display: flex; align-items: center; gap: 6px; color: #10b981; font-weight: 600; }
         .status-dot { width: 7px; height: 7px; background: #10b981; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #10b981; }
 
+        .footer-icons-row {
+            display: flex;
+            gap: 12px;
+            font-size: 13px;
+            color: #38bdf8;
+        }
+        .footer-icons-row i {
+            transition: transform 0.2s, color 0.2s;
+            cursor: pointer;
+        }
+        .footer-icons-row i:hover {
+            transform: scale(1.25);
+            color: #10b981;
+        }
+
         /* Preview Canvas Area */
         .preview-area { 
             flex: 1; 
@@ -487,8 +502,16 @@ hr@company.com | +94 77 000 0000</textarea>
                 <div class="badge-item"><i class="fa-solid fa-file-export"></i> HD Print Ready</div>
             </div>
 
+            <!-- Footer with Cool Icons -->
             <div class="dashboard-footer">
                 <span class="status-badge"><span class="status-dot"></span> System Live v2.4</span>
+                <div class="footer-icons-row">
+                    <i class="fa-solid fa-shield-halved" title="Privacy Protected"></i>
+                    <i class="fa-solid fa-bolt" title="Fast Engine"></i>
+                    <i class="fa-solid fa-file-pdf" title="PDF Ready"></i>
+                    <i class="fa-solid fa-cloud-arrow-down" title="Cloud Download"></i>
+                    <i class="fa-solid fa-code" title="Clean Code"></i>
+                </div>
                 <span>Pro CV Studio &copy; 2026</span>
             </div>
         </div>
