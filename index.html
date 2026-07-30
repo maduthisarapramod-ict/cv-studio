@@ -118,6 +118,30 @@
         .btn-jpg { background: #f59e0b; color: white; border: none; padding: 10px; border-radius: 6px; flex: 1; font-weight: 700; cursor: pointer; transition: 0.2s; }
         .btn-jpg:hover { background: #d97706; }
 
+        /* Bottom Feature Highlights Bar */
+        .features-badge-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #0b1120;
+            border-top: 1px solid #1f2937;
+            padding: 8px 15px;
+            font-size: 10px;
+            color: #9ca3af;
+        }
+        .badge-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: #1e293b;
+            padding: 4px 8px;
+            border-radius: 12px;
+            border: 1px solid #334155;
+            font-weight: 600;
+            color: #cbd5e1;
+        }
+        .badge-item i { color: #38bdf8; }
+
         /* Dashboard Footer Styling */
         .dashboard-footer {
             padding: 10px 20px;
@@ -456,8 +480,15 @@ hr@company.com | +94 77 000 0000</textarea>
                 <button class="btn-jpg" onclick="promptEmailBeforeDownload('jpg')"><i class="fa-solid fa-file-image"></i> Download JPG</button>
             </div>
 
+            <!-- Features Trust Badges Strip -->
+            <div class="features-badge-bar">
+                <div class="badge-item"><i class="fa-solid fa-shield-halved"></i> 100% Secure</div>
+                <div class="badge-item"><i class="fa-solid fa-bolt"></i> ATS Friendly</div>
+                <div class="badge-item"><i class="fa-solid fa-file-export"></i> HD Print Ready</div>
+            </div>
+
             <div class="dashboard-footer">
-                <span class="status-badge"><span class="status-dot"></span> System Live</span>
+                <span class="status-badge"><span class="status-dot"></span> System Live v2.4</span>
                 <span>Pro CV Studio &copy; 2026</span>
             </div>
         </div>
