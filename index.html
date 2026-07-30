@@ -143,7 +143,7 @@
         .cv-paper {
             width: 794px;
             min-height: 1123px;
-            height: auto; /* Fixes height stretching */
+            height: auto;
             background: var(--main-bg);
             box-shadow: 0 20px 50px rgba(0,0,0,0.8);
             display: grid;
@@ -195,14 +195,14 @@
         .cv-side-title { font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--primary); border-bottom: 1px solid rgba(255,255,255,0.15); padding-bottom: 4px; margin-bottom: 10px; line-height: 1.4 !important; }
         .cv-contact-item { background: rgba(255,255,255,0.06); padding: 8px; border-radius: 5px; font-size: 11px; margin-bottom: 6px; word-break: break-all; line-height: 1.4 !important; }
 
-        /* FIXED: Main Section Layout (Removed middle empty gap) */
+        /* Main Section Layout */
         .cv-main { 
             padding: 35px; 
             background: var(--main-bg); 
             display: flex; 
             flex-direction: column; 
-            justify-content: flex-start; /* Fixes middle empty gap */
-            gap: 14px; /* Natural layout flow */
+            justify-content: flex-start;
+            gap: 14px;
         }
 
         .cv-header-card { background: var(--card-bg); padding: 20px; border-radius: 8px; border-left: 5px solid var(--primary); margin-bottom: 5px; }
@@ -282,7 +282,7 @@
         /* Modals */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; z-index: 100; opacity: 0; pointer-events: none; transition: 0.3s; }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
-        .modal-card { background: #1f2937; border: 1px solid #374151; padding: 25px; border-radius: 12px; width: 440px; color: white; }
+        .modal-card { background: #1f2937; border: 1px solid #374151; padding: 25px; border-radius: 12px; width: 440px; color: white; max-height: 85vh; overflow-y: auto; }
         .modal-card h3 { color: #38bdf8; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
         .modal-card p { font-size: 12px; color: #9ca3af; margin-bottom: 15px; }
         .modal-btn { background: #38bdf8; color: #0f172a; border: none; padding: 10px 15px; border-radius: 6px; font-weight: 700; width: 100%; cursor: pointer; margin-top: 10px; }
@@ -290,27 +290,39 @@
 
         .is-hidden { display: none !important; }
 
-        /* FIXED: Responsive Media Queries for Mobile & Laptop */
+        /* Auto-Adjust Mobile View */
         @media (max-width: 1024px) {
             body { height: auto; overflow-x: hidden; overflow-y: auto; }
             .app-container { flex-direction: column; height: auto; }
             .dashboard { width: 100%; height: auto; border-right: none; border-bottom: 1px solid #1f2937; }
-            .preview-area { width: 100%; padding: 20px 10px; overflow-x: auto; min-height: 100vh; justify-content: flex-start; }
-            .cv-paper { transform: scale(0.85); transform-origin: top center; margin-bottom: -150px; }
-            .bottom-showcase { transform: scale(0.85); transform-origin: top center; margin-top: -10px; }
+            .preview-area { width: 100%; padding: 15px 10px; overflow-x: hidden; min-height: auto; }
+            
+            .cv-paper {
+                width: 100% !important;
+                max-width: 100% !important;
+                min-height: auto !important;
+                height: auto !important;
+                transform: none !important;
+                margin-bottom: 20px !important;
+                grid-template-columns: 1fr !important;
+            }
+
+            .bottom-showcase {
+                width: 100% !important;
+                transform: none !important;
+                margin-top: 10px !important;
+            }
         }
 
         @media (max-width: 768px) {
             .dashboard-body { max-height: 400px; }
-            .cv-paper { transform: scale(0.65); transform-origin: top center; margin-bottom: -380px; }
-            .bottom-showcase { transform: scale(0.7); transform-origin: top center; margin-top: -50px; }
             .modal-card { width: 92% !important; margin: 15px; }
             .gallery-grid { grid-template-columns: 1fr; }
+            .cv-main { padding: 20px 15px; }
+            .cv-sidebar { padding: 20px 15px; border-radius: 0; }
         }
 
         @media (max-width: 480px) {
-            .cv-paper { transform: scale(0.42); transform-origin: top center; margin-bottom: -620px; }
-            .bottom-showcase { transform: scale(0.55); transform-origin: top center; margin-top: -110px; width: 100%; }
             .action-bar { flex-direction: row; gap: 8px; }
             .dashboard-header h2 { font-size: 13px; }
         }
@@ -666,16 +678,31 @@ hr@company.com | +94 77 000 0000</textarea>
         </div>
     </div>
 
-    <!-- Admin Modal -->
+    <!-- Admin / Owner Modal with Secured Password Protection -->
     <div class="modal-overlay" id="adminModal">
         <div class="modal-card">
-            <h3><i class="fa-solid fa-user-gear"></i> Owner / Admin Login</h3>
-            <p>Enter owner key to access administrative customization controls.</p>
-            <div class="form-group">
-                <label>Passcode Key</label>
-                <input type="password" id="adminPassKey" class="form-control" placeholder="••••••••">
+            <h3><i class="fa-solid fa-user-gear"></i> Owner Dashboard</h3>
+            
+            <div id="adminLoginForm">
+                <p>Enter owner passcode key to view saved email history.</p>
+                <div class="form-group">
+                    <label>Passcode Key</label>
+                    <input type="password" id="adminPassKey" class="form-control" placeholder="••••••••">
+                </div>
+                <button class="modal-btn" onclick="verifyAdminKey()"><i class="fa-solid fa-key"></i> Authenticate</button>
             </div>
-            <button class="modal-btn" onclick="verifyAdminKey()"><i class="fa-solid fa-key"></i> Authenticate</button>
+
+            <div id="adminLogView" class="is-hidden" style="margin-top: 10px;">
+                <p style="font-size:11px; color:#10b981; margin-bottom:10px;"><i class="fa-solid fa-circle-check"></i> Authenticated as Owner</p>
+                <h4 style="font-size:12px; color:#38bdf8; margin-bottom:8px; text-transform:uppercase;"><i class="fa-solid fa-clock-rotate-left"></i> User Email History (<span id="logCount">0</span>)</h4>
+                
+                <div id="emailLogContainer" style="max-height:220px; overflow-y:auto; background:#111827; padding:10px; border-radius:6px; font-size:11px; border:1px solid #374151;">
+                    <!-- Email Log Table Appears Here -->
+                </div>
+                
+                <button class="modal-btn" style="background:#ef4444; color:white; margin-top:12px;" onclick="clearEmailLogs()"><i class="fa-solid fa-trash"></i> Clear History</button>
+            </div>
+
             <button class="modal-btn-close" onclick="closeModal('adminModal')">Cancel</button>
         </div>
     </div>
@@ -827,24 +854,81 @@ hr@company.com | +94 77 000 0000</textarea>
             document.getElementById('adminModal').classList.add('active');
         }
 
+        /* Owner Password Authentication - Secured with Madu2003 */
         function verifyAdminKey() {
             const key = document.getElementById('adminPassKey').value;
-            if(key === 'admin123' || key === '1234') {
-                alert('Success: Owner Admin Mode Unlocked!');
-                closeModal('adminModal');
+            if(key === 'Madu2003') {
+                document.getElementById('adminLoginForm').classList.add('is-hidden');
+                document.getElementById('adminLogView').classList.remove('is-hidden');
+                renderEmailLogs();
             } else {
-                alert('Invalid Owner Key. Try again.');
+                alert('Invalid Owner Key. Access Denied.');
             }
         }
 
+        /* Lifetime Email Storage Functions */
         function executeDownload() {
-            const email = document.getElementById('modalUserEmail').value;
+            const email = document.getElementById('modalUserEmail').value.trim();
             if(!email || !email.includes('@')) {
                 alert('Please provide a valid email address to proceed.');
                 return;
             }
+
+            saveUserEmailLog(email);
+
             closeModal('userEmailModal');
             downloadCV(currentExportFormat);
+        }
+
+        function saveUserEmailLog(email) {
+            let logs = [];
+            try {
+                logs = JSON.parse(localStorage.getItem('cv_user_emails_log')) || [];
+            } catch(e) { logs = []; }
+
+            const now = new Date();
+            const timeString = now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
+
+            logs.push({
+                email: email,
+                date: timeString
+            });
+
+            localStorage.setItem('cv_user_emails_log', JSON.stringify(logs));
+        }
+
+        function renderEmailLogs() {
+            let logs = [];
+            try {
+                logs = JSON.parse(localStorage.getItem('cv_user_emails_log')) || [];
+            } catch(e) { logs = []; }
+
+            document.getElementById('logCount').innerText = logs.length;
+            const container = document.getElementById('emailLogContainer');
+
+            if (logs.length === 0) {
+                container.innerHTML = '<div style="color:#9ca3af; text-align:center; padding:15px;">No emails logged yet.</div>';
+                return;
+            }
+
+            let html = '<table style="width:100%; text-align:left; border-collapse:collapse; color:#f3f4f6;">' +
+                       '<tr style="border-bottom:1px solid #374151; color:#38bdf8;"><th style="padding:4px;">Email</th><th style="padding:4px;">Date & Time</th></tr>';
+
+            logs.slice().reverse().forEach(log => {
+                html += `<tr style="border-bottom:1px solid #1f2937;">
+                    <td style="padding:6px 4px; word-break:break-all;">${log.email}</td>
+                    <td style="padding:6px 4px; color:#9ca3af; font-size:10px;">${log.date}</td>
+                </tr>`;
+            });
+            html += '</table>';
+            container.innerHTML = html;
+        }
+
+        function clearEmailLogs() {
+            if (confirm('Are you sure you want to clear all logged email history?')) {
+                localStorage.removeItem('cv_user_emails_log');
+                renderEmailLogs();
+            }
         }
 
         function calculateAtsScore() {
