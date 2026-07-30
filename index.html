@@ -183,13 +183,6 @@
             background: #1e2937;
             flex-shrink: 0;
         }
-        .cv-photo-img { 
-            width: 100%; 
-            height: 100%; 
-            object-fit: cover; 
-            object-position: center; 
-            display: block; 
-        }
 
         .cv-side-block { margin-bottom: 20px; }
         .cv-side-title { font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--primary); border-bottom: 1px solid rgba(255,255,255,0.15); padding-bottom: 4px; margin-bottom: 10px; line-height: 1.4 !important; }
@@ -221,52 +214,110 @@
 
         .timeline-card { border-left: 2px solid var(--primary); padding-left: 15px; border-radius: 0; border-top: none; border-right: none; border-bottom: none; background: transparent; }
 
-        /* Payment QR Display Container */
-        .qr-container {
-            background: #ffffff;
-            padding: 12px;
-            border-radius: 12px;
-            text-align: center;
-            margin: 12px 0;
-            border: 2px solid #38bdf8;
-        }
-        .qr-container img {
-            width: 180px;
-            height: 180px;
-            object-fit: contain;
-            border-radius: 8px;
+        /* Declaration Footer */
+        .cv-declaration { border-top: 2px solid var(--border-color); padding-top: 12px; margin-top: 10px; }
+        .signature-row { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 15px; font-size: 11px; }
+        .sig-line { border-top: 1px solid var(--text-main); width: 180px; text-align: center; padding-top: 4px; font-weight: 700; }
+
+        /* Bottom Content Showcase */
+        .bottom-showcase {
+            width: 794px;
+            margin-top: 0px;
+            padding-top: 20px;
+            border-top: 1px dashed #1f2937;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
 
-        /* Payment Slip Upload Box */
-        .upload-slip-box {
-            border: 2px dashed #38bdf8;
-            background: rgba(56, 189, 248, 0.08);
-            border-radius: 8px;
-            padding: 12px;
-            text-align: center;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: 0.2s;
-        }
-        .upload-slip-box:hover { background: rgba(56, 189, 248, 0.18); }
+        .showcase-header { text-align: center; }
+        .showcase-header h3 { font-size: 16px; color: #38bdf8; margin-bottom: 4px; }
+        .showcase-header p { font-size: 12px; color: #64748b; }
+
+        .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+        .gallery-card { background: #111827; border: 1px solid #1f2937; border-radius: 8px; padding: 15px; text-align: center; }
+        .gallery-card i { font-size: 24px; color: #38bdf8; margin-bottom: 8px; }
+        .gallery-card h4 { font-size: 12px; color: #f3f4f6; margin-bottom: 4px; }
+        .gallery-card p { font-size: 10px; color: #9ca3af; }
+
+        .tips-banner { background: linear-gradient(135deg, rgba(2,132,199,0.1), rgba(139,92,246,0.1)); border: 1px solid rgba(56,189,248,0.2); border-radius: 10px; padding: 15px; display: flex; align-items: center; gap: 15px; }
+        .tips-banner i { font-size: 28px; color: #38bdf8; }
+        .tips-banner-text h5 { font-size: 13px; color: #ffffff; margin-bottom: 2px; }
+        .tips-banner-text p { font-size: 11px; color: #9ca3af; }
+
+        .footer-credit { text-align: center; font-size: 11px; color: #475569; padding: 10px 0 20px 0; }
+
+        /* TEMPLATES */
+        .tpl-nina { grid-template-columns: 250px 1fr; --sidebar-bg: #1f2937; --photo-radius: 50%; }
+        .tpl-radhika { grid-template-columns: 240px 1fr; --sidebar-bg: #fdf6f0; --sidebar-text: #2d3748; --main-bg: #ffffff; --card-bg: #fffbf9; --border-color: #f3e8e2; }
+        .tpl-vikram { grid-template-columns: 260px 1fr; --sidebar-bg: #334155; --photo-radius: 50%; }
+        .tpl-jonathan { grid-template-columns: 240px 1fr; --sidebar-bg: #e5e5e5; --sidebar-text: #171717; --arch-radius: 120px 120px 0 0; }
+        .tpl-arrow { grid-template-columns: 250px 1fr; --sidebar-bg: #1e293b; --sidebar-clip: polygon(0 0, 100% 0, 100% 88%, 50% 95%, 0 88%); }
+        .tpl-dark { grid-template-columns: 250px 1fr; --sidebar-bg: #090d16; --main-bg: #0f172a; --card-bg: #1e2937; --text-main: #f8fafc; --text-muted: #9ca3af; --border-color: #374151; }
+        .tpl-minimal { grid-template-columns: 1fr; padding: 20px; }
+        .tpl-minimal .cv-sidebar { display: flex; gap: 20px; background: transparent; color: var(--text-main); padding: 0 0 20px 0; border-bottom: 2px solid var(--border-color); }
+        .tpl-modern-split { grid-template-columns: 1fr 1fr; }
+        .tpl-executive { font-family: 'Georgia', serif; grid-template-columns: 270px 1fr; --sidebar-bg: #0c1524; }
+        .tpl-right-sidebar { grid-template-columns: 1fr 250px; }
+        .tpl-right-sidebar .cv-sidebar { grid-column: 2; grid-row: 1; }
+        .tpl-right-sidebar .cv-main { grid-column: 1; grid-row: 1; }
+        .tpl-compact { grid-template-columns: 220px 1fr; }
+        .tpl-compact .cv-main { padding: 20px; }
+        .tpl-bold-header { grid-template-columns: 1fr; }
+        .tpl-bold-header .cv-header-card { background: var(--primary); color: white; margin: -35px -35px 20px -35px; padding: 35px; border-radius: 0; }
+        .tpl-bold-header .cv-header-card h2 { color: #f8fafc; }
+        .tpl-creative-grid { grid-template-columns: 280px 1fr; --sidebar-bg: #18181b; }
+        .tpl-border-frame { grid-template-columns: 240px 1fr; border: 12px solid var(--primary); }
+        .tpl-gradient-glow { grid-template-columns: 250px 1fr; }
+        .tpl-gradient-glow .cv-header-card { background: linear-gradient(135deg, var(--primary), #8b5cf6); color: white; }
+        .tpl-gradient-glow .cv-header-card h2 { color: #e0e7ff; }
 
         /* Modals */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; z-index: 100; opacity: 0; pointer-events: none; transition: 0.3s; }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
         .modal-card { background: #1f2937; border: 1px solid #374151; padding: 25px; border-radius: 12px; width: 440px; color: white; max-height: 85vh; overflow-y: auto; }
         .modal-card h3 { color: #38bdf8; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
-        .modal-card p { font-size: 12px; color: #9ca3af; margin-bottom: 10px; }
+        .modal-card p { font-size: 12px; color: #9ca3af; margin-bottom: 15px; }
         .modal-btn { background: #38bdf8; color: #0f172a; border: none; padding: 10px 15px; border-radius: 6px; font-weight: 700; width: 100%; cursor: pointer; margin-top: 10px; }
         .modal-btn-close { background: #374151; color: #ffffff; border: none; padding: 8px 15px; border-radius: 6px; font-weight: 600; width: 100%; cursor: pointer; margin-top: 6px; }
 
         .is-hidden { display: none !important; }
 
+        /* Auto-Adjust Mobile View */
         @media (max-width: 1024px) {
             body { height: auto; overflow-x: hidden; overflow-y: auto; }
             .app-container { flex-direction: column; height: auto; }
             .dashboard { width: 100%; height: auto; border-right: none; border-bottom: 1px solid #1f2937; }
             .preview-area { width: 100%; padding: 15px 10px; overflow-x: hidden; min-height: auto; }
-            .cv-paper { width: 100% !important; grid-template-columns: 1fr !important; }
+            
+            .cv-paper {
+                width: 100% !important;
+                max-width: 100% !important;
+                min-height: auto !important;
+                height: auto !important;
+                transform: none !important;
+                margin-bottom: 20px !important;
+                grid-template-columns: 1fr !important;
+            }
+
+            .bottom-showcase {
+                width: 100% !important;
+                transform: none !important;
+                margin-top: 10px !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-body { max-height: 400px; }
+            .modal-card { width: 92% !important; margin: 15px; }
+            .gallery-grid { grid-template-columns: 1fr; }
+            .cv-main { padding: 20px 15px; }
+            .cv-sidebar { padding: 20px 15px; border-radius: 0; }
+        }
+
+        @media (max-width: 480px) {
+            .action-bar { flex-direction: row; gap: 8px; }
+            .dashboard-header h2 { font-size: 13px; }
         }
     </style>
 </head>
@@ -313,71 +364,5 @@
                         <input type="color" id="colorPicker" value="#0284c7" onchange="applyCustomColor(this.value)" style="border:none; width:35px; height:35px; cursor:pointer; background:none;">
                         <div class="color-preset" style="background:#0284c7;" onclick="applyCustomColor('#0284c7')"></div>
                         <div class="color-preset" style="background:#10b981;" onclick="applyCustomColor('#10b981')"></div>
-                        <div class="color-preset" style="background:#f59e0b;" onclick="applyCustomColor('#f59e0b')"></div>
                         <div class="color-preset" style="background:#8b5cf6;" onclick="applyCustomColor('#8b5cf6')"></div>
-                        <div class="color-preset" style="background:#ec4899;" onclick="applyCustomColor('#ec4899')"></div>
-                    </div>
-                </div>
-
-                <!-- Profile Photo Upload -->
-                <div class="form-section-divider"><i class="fa-solid fa-image"></i> Photo Upload</div>
-                <div class="photo-upload-btn" onclick="document.getElementById('photoInput').click()">
-                    <i class="fa-solid fa-cloud-arrow-up" style="font-size:20px; color:#38bdf8;"></i>
-                    <p style="font-size:11px; margin-top:5px; color:#cbd5e1;">Click to Upload Profile Photo</p>
-                    <input type="file" id="photoInput" accept="image/*" class="is-hidden" onchange="handlePhotoUpload(this)">
-                </div>
-
-                <!-- Personal Information -->
-                <div class="form-section-divider"><i class="fa-solid fa-user"></i> Personal Details</div>
-                <div class="form-group">
-                    <label>Full Name</label>
-                    <input type="text" id="inName" class="form-control" value="Saman Perera" oninput="liveUpdate()">
-                </div>
-                <div class="form-group">
-                    <label>Job Title</label>
-                    <input type="text" id="inTitle" class="form-control" value="Senior Software Engineer" oninput="liveUpdate()">
-                </div>
-                <div class="form-group">
-                    <label>Email Address</label>
-                    <input type="email" id="inEmail" class="form-control" value="saman.perera@email.com" oninput="liveUpdate()">
-                </div>
-                <div class="form-group">
-                    <label>Phone Number</label>
-                    <input type="text" id="inPhone" class="form-control" value="+94 77 123 4567" oninput="liveUpdate()">
-                </div>
-                <div class="form-group">
-                    <label>Location / Address</label>
-                    <input type="text" id="inAddress" class="form-control" value="Colombo, Sri Lanka" oninput="liveUpdate()">
-                </div>
-
-                <!-- Professional Summary -->
-                <div class="form-section-divider"><i class="fa-solid fa-file-lines"></i> About Me / Summary</div>
-                <div class="form-group">
-                    <textarea id="inSummary" class="form-control" oninput="liveUpdate()">Experienced Software Engineer with 5+ years of background in full-stack web application development, cloud solutions, and team leadership.</textarea>
-                </div>
-
-                <!-- Work Experience -->
-                <div class="form-section-divider"><i class="fa-solid fa-briefcase"></i> Experience</div>
-                <div class="form-group">
-                    <label>Role & Company</label>
-                    <input type="text" id="inExpTitle" class="form-control" value="Lead Developer - TechSys Lanka" oninput="liveUpdate()">
-                </div>
-                <div class="form-group">
-                    <label>Duration / Period</label>
-                    <input type="text" id="inExpPeriod" class="form-control" value="2021 - Present" oninput="liveUpdate()">
-                </div>
-                <div class="form-group">
-                    <label>Key Responsibilities</label>
-                    <textarea id="inExpDesc" class="form-control" oninput="liveUpdate()">• Architected scalable web services serving 100k+ monthly active users.
-• Led a cross-functional development team of 6 engineers.</textarea>
-                </div>
-
-                <!-- Skills -->
-                <div class="form-section-divider"><i class="fa-solid fa-code"></i> Skills</div>
-                <div class="form-group">
-                    <textarea id="inSkills" class="form-control" oninput="liveUpdate()">JavaScript, React, Node.js, Python, SQL, Cloud Architecture, Git, Docker</textarea>
-                </div>
-
-                <div class="sidebar-widget">
-                    <h4><i class="fa-solid fa-circle-check"></i> ATS Optimizer Active</h4>
-                    <p>Your resume matches over 85% of sta
+                        <div class="color-preset" style="background:#f59e0b;" onclick="applyCustomCo
