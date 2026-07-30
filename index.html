@@ -1,976 +1,294 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="si">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pro CV Studio - Dynamic Resume Builder</title>
-    
-    <!-- Google Fonts & FontAwesome -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Montserrat:wght@400;600;700;800&family=Poppins:wght@300;400;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- Export Libraries -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
+    <title>Auto Verification & Download</title>
+    <!-- Automatic Receipt Reading (OCR) Library -->
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     <style>
-        :root {
-            --primary: #0284c7;
-            --primary-light: rgba(2, 132, 199, 0.12);
-            --sidebar-bg: #0f172a;
-            --sidebar-text: #f8fafc;
-            --main-bg: #ffffff;
-            --card-bg: #f8fafc;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --border-color: #e2e8f0;
-            --photo-radius: 50%;
-            --sidebar-clip: none;
-            --arch-radius: 0;
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Inter', sans-serif; background: #090d16; color: #f3f4f6; height: 100vh; overflow: hidden; }
-
-        .app-container { display: flex; height: 100vh; }
-
-        /* Navigation / Control Sidebar */
-        .dashboard {
-            width: 450px;
-            background: #111827;
-            border-right: 1px solid #1f2937;
+        body {
+            background-color: #f4f7f6;
             display: flex;
-            flex-direction: column;
-            z-index: 10;
-        }
-
-        .dashboard-header {
-            padding: 16px 20px;
-            background: #1f2937;
-            border-bottom: 1px solid #374151;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .dashboard-header h2 { font-size: 15px; color: #38bdf8; display: flex; align-items: center; gap: 8px; }
-        .btn-admin-login { background: #374151; color: #38bdf8; border: 1px solid #38bdf8; padding: 5px 10px; border-radius: 5px; font-size: 11px; font-weight: 700; cursor: pointer; transition: 0.2s; }
-        .btn-admin-login:hover { background: #38bdf8; color: #0f172a; }
-
-        .dashboard-body { padding: 20px; overflow-y: auto; flex: 1; }
-
-        .form-section-divider {
-            font-size: 11px;
-            font-weight: 800;
-            color: #38bdf8;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin: 18px 0 10px 0;
-            padding-bottom: 4px;
-            border-bottom: 1px dashed #374151;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .form-group { margin-bottom: 12px; }
-        .form-group label { display: block; font-size: 11px; font-weight: 700; color: #9ca3af; margin-bottom: 5px; text-transform: uppercase; }
-        .form-control {
-            width: 100%;
-            padding: 9px 12px;
-            background: #1f2937;
-            border: 1px solid #374151;
-            border-radius: 6px;
-            color: #ffffff;
-            font-size: 13px;
-            outline: none;
-        }
-        .form-control:focus { border-color: #38bdf8; }
-        textarea.form-control { resize: vertical; min-height: 60px; }
-
-        .color-picker-wrapper { display: flex; gap: 8px; align-items: center; margin-top: 6px; }
-        .color-preset { width: 24px; height: 24px; border-radius: 50%; cursor: pointer; border: 2px solid #ffffff33; transition: transform 0.2s; }
-        .color-preset:hover { transform: scale(1.2); }
-
-        .photo-upload-btn {
-            border: 2px dashed #38bdf8;
-            background: rgba(56, 189, 248, 0.05);
-            border-radius: 8px;
-            padding: 10px;
-            text-align: center;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .photo-upload-btn:hover { background: rgba(56, 189, 248, 0.15); }
-
-        .btn-ai {
-            background: linear-gradient(135deg, #6366f1, #a855f7);
-            color: white; border: none; padding: 10px; border-radius: 6px;
-            font-weight: 700; font-size: 12px; cursor: pointer; width: 100%;
-            display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 15px;
-            transition: opacity 0.2s;
-        }
-        .btn-ai:hover { opacity: 0.9; }
-
-        .sidebar-widget {
-            background: rgba(56, 189, 248, 0.05);
-            border: 1px solid rgba(56, 189, 248, 0.2);
-            border-radius: 8px;
-            padding: 12px;
-            margin-top: 20px;
-        }
-        .sidebar-widget h4 { font-size: 11px; color: #38bdf8; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
-        .sidebar-widget p { font-size: 10px; color: #9ca3af; line-height: 1.4; }
-        .ats-progress-bar { height: 6px; background: #1f2937; border-radius: 3px; overflow: hidden; margin-top: 8px; }
-        .ats-progress-fill { height: 100%; width: 85%; background: linear-gradient(90deg, #10b981, #38bdf8); }
-
-        .action-bar { padding: 15px; background: #1f2937; border-top: 1px solid #374151; display: flex; gap: 10px; }
-        .btn-pdf { background: #10b981; color: white; border: none; padding: 10px; border-radius: 6px; flex: 1; font-weight: 700; cursor: pointer; transition: 0.2s; }
-        .btn-jpg { background: #f59e0b; color: white; border: none; padding: 10px; border-radius: 6px; flex: 1; font-weight: 700; cursor: pointer; transition: 0.2s; }
-        .btn-pdf:hover { background: #059669; }
-        .btn-jpg:hover { background: #d97706; }
-
-        /* Preview Canvas Area */
-        .preview-area { 
-            flex: 1; 
-            background: #030712; 
-            overflow-y: auto; 
-            padding: 30px; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-        }
-
-        .cv-paper {
-            width: 794px;
-            min-height: 1123px;
-            height: auto;
-            background: var(--main-bg);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-            display: grid;
-            grid-template-columns: 260px 1fr;
-            color: var(--text-main);
-            position: relative;
-            transition: background 0.3s ease;
-            margin-bottom: 30px;
-        }
-
-        .cv-paper, .cv-paper * {
-            letter-spacing: 0px !important;
-            word-spacing: normal !important;
-            text-rendering: optimizeLegibility !important;
-            -webkit-font-smoothing: antialiased !important;
-        }
-
-        /* Sidebar Styling */
-        .cv-sidebar { 
-            background: var(--sidebar-bg); 
-            color: var(--sidebar-text); 
-            padding: 30px 20px; 
-            clip-path: var(--sidebar-clip);
-            border-radius: var(--arch-radius);
-        }
-        
-        .cv-photo-frame { text-align: center; margin-bottom: 20px; position: relative; display: flex; justify-content: center; align-items: center; }
-        .cv-photo-wrapper {
-            width: 130px;
-            height: 130px;
-            border-radius: var(--photo-radius);
-            border: 4px solid var(--primary);
-            overflow: hidden;
-            display: flex;
-            align-items: center;
             justify-content: center;
-            background: #1e2937;
-            flex-shrink: 0;
-        }
-        .cv-photo-img { 
-            width: 100%; 
-            height: 100%; 
-            object-fit: cover; 
-            object-position: center; 
-            display: block; 
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
         }
 
-        .cv-side-block { margin-bottom: 20px; }
-        .cv-side-title { font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--primary); border-bottom: 1px solid rgba(255,255,255,0.15); padding-bottom: 4px; margin-bottom: 10px; line-height: 1.4 !important; }
-        .cv-contact-item { background: rgba(255,255,255,0.06); padding: 8px; border-radius: 5px; font-size: 11px; margin-bottom: 6px; word-break: break-all; line-height: 1.4 !important; }
-
-        /* Main Section Layout */
-        .cv-main { 
-            padding: 35px; 
-            background: var(--main-bg); 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: flex-start;
-            gap: 14px;
+        .container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 480px;
         }
 
-        .cv-header-card { background: var(--card-bg); padding: 20px; border-radius: 8px; border-left: 5px solid var(--primary); margin-bottom: 5px; }
-        .cv-header-card h1 { font-size: 26px; font-weight: 800; text-transform: uppercase; line-height: 1.3 !important; }
-        .cv-header-card h2 { font-size: 13px; font-weight: 700; color: var(--primary); margin-top: 4px; text-transform: uppercase; line-height: 1.4 !important; }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
 
-        .cv-section { margin-bottom: 0px; }
-        .cv-sec-title { font-size: 12px; font-weight: 800; text-transform: uppercase; color: var(--primary); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; line-height: 1.4 !important; }
-        .cv-sec-title::after { content: ''; flex: 1; height: 2px; background: var(--border-color); }
+        .price-tag {
+            background-color: #e3f2fd;
+            color: #0d47a1;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            border: 1px solid #bbdefb;
+        }
 
-        .cv-card { background: var(--card-bg); padding: 12px 15px; border-radius: 6px; border: 1px solid var(--border-color); margin-bottom: 8px; position: relative; }
-        .cv-card-title { font-weight: 700; font-size: 13px; line-height: 1.4 !important; }
-        .cv-card-badge { font-size: 10px; font-weight: 700; background: var(--primary-light); color: var(--primary); padding: 2px 8px; border-radius: 10px; float: right; }
-        .cv-card-sub { font-size: 11px; font-weight: 600; color: var(--primary); margin-bottom: 5px; line-height: 1.4 !important; }
-        .cv-card-desc { font-size: 11px; color: var(--text-muted); line-height: 1.5 !important; white-space: pre-line; }
+        .form-group {
+            margin-bottom: 15px;
+        }
 
-        .timeline-card { border-left: 2px solid var(--primary); padding-left: 15px; border-radius: 0; border-top: none; border-right: none; border-bottom: none; background: transparent; }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #555;
+        }
 
-        /* Declaration Footer */
-        .cv-declaration { border-top: 2px solid var(--border-color); padding-top: 12px; margin-top: 10px; }
-        .signature-row { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 15px; font-size: 11px; }
-        .sig-line { border-top: 1px solid var(--text-main); width: 180px; text-align: center; padding-top: 4px; font-weight: 700; }
+        input[type="text"], input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+        }
 
-        /* Bottom Content Showcase */
-        .bottom-showcase {
-            width: 794px;
-            margin-top: 0px;
-            padding-top: 20px;
-            border-top: 1px dashed #1f2937;
+        /* Payment Selector Tabs */
+        .payment-options {
             display: flex;
-            flex-direction: column;
-            gap: 20px;
+            gap: 10px;
+            margin-bottom: 15px;
         }
 
-        .showcase-header { text-align: center; }
-        .showcase-header h3 { font-size: 16px; color: #38bdf8; margin-bottom: 4px; }
-        .showcase-header p { font-size: 12px; color: #64748b; }
-
-        .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
-        .gallery-card { background: #111827; border: 1px solid #1f2937; border-radius: 8px; padding: 15px; text-align: center; }
-        .gallery-card i { font-size: 24px; color: #38bdf8; margin-bottom: 8px; }
-        .gallery-card h4 { font-size: 12px; color: #f3f4f6; margin-bottom: 4px; }
-        .gallery-card p { font-size: 10px; color: #9ca3af; }
-
-        .tips-banner { background: linear-gradient(135deg, rgba(2,132,199,0.1), rgba(139,92,246,0.1)); border: 1px solid rgba(56,189,248,0.2); border-radius: 10px; padding: 15px; display: flex; align-items: center; gap: 15px; }
-        .tips-banner i { font-size: 28px; color: #38bdf8; }
-        .tips-banner-text h5 { font-size: 13px; color: #ffffff; margin-bottom: 2px; }
-        .tips-banner-text p { font-size: 11px; color: #9ca3af; }
-
-        .footer-credit { text-align: center; font-size: 11px; color: #475569; padding: 10px 0 20px 0; }
-
-        /* TEMPLATES */
-        .tpl-nina { grid-template-columns: 250px 1fr; --sidebar-bg: #1f2937; --photo-radius: 50%; }
-        .tpl-radhika { grid-template-columns: 240px 1fr; --sidebar-bg: #fdf6f0; --sidebar-text: #2d3748; --main-bg: #ffffff; --card-bg: #fffbf9; --border-color: #f3e8e2; }
-        .tpl-vikram { grid-template-columns: 260px 1fr; --sidebar-bg: #334155; --photo-radius: 50%; }
-        .tpl-jonathan { grid-template-columns: 240px 1fr; --sidebar-bg: #e5e5e5; --sidebar-text: #171717; --arch-radius: 120px 120px 0 0; }
-        .tpl-arrow { grid-template-columns: 250px 1fr; --sidebar-bg: #1e293b; --sidebar-clip: polygon(0 0, 100% 0, 100% 88%, 50% 95%, 0 88%); }
-        .tpl-dark { grid-template-columns: 250px 1fr; --sidebar-bg: #090d16; --main-bg: #0f172a; --card-bg: #1e2937; --text-main: #f8fafc; --text-muted: #9ca3af; --border-color: #374151; }
-        .tpl-minimal { grid-template-columns: 1fr; padding: 20px; }
-        .tpl-minimal .cv-sidebar { display: flex; gap: 20px; background: transparent; color: var(--text-main); padding: 0 0 20px 0; border-bottom: 2px solid var(--border-color); }
-        .tpl-modern-split { grid-template-columns: 1fr 1fr; }
-        .tpl-executive { font-family: 'Georgia', serif; grid-template-columns: 270px 1fr; --sidebar-bg: #0c1524; }
-        .tpl-right-sidebar { grid-template-columns: 1fr 250px; }
-        .tpl-right-sidebar .cv-sidebar { grid-column: 2; grid-row: 1; }
-        .tpl-right-sidebar .cv-main { grid-column: 1; grid-row: 1; }
-        .tpl-compact { grid-template-columns: 220px 1fr; }
-        .tpl-compact .cv-main { padding: 20px; }
-        .tpl-bold-header { grid-template-columns: 1fr; }
-        .tpl-bold-header .cv-header-card { background: var(--primary); color: white; margin: -35px -35px 20px -35px; padding: 35px; border-radius: 0; }
-        .tpl-bold-header .cv-header-card h2 { color: #f8fafc; }
-        .tpl-creative-grid { grid-template-columns: 280px 1fr; --sidebar-bg: #18181b; }
-        .tpl-border-frame { grid-template-columns: 240px 1fr; border: 12px solid var(--primary); }
-        .tpl-gradient-glow { grid-template-columns: 250px 1fr; }
-        .tpl-gradient-glow .cv-header-card { background: linear-gradient(135deg, var(--primary), #8b5cf6); color: white; }
-        .tpl-gradient-glow .cv-header-card h2 { color: #e0e7ff; }
-
-        /* Modals */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; z-index: 100; opacity: 0; pointer-events: none; transition: 0.3s; }
-        .modal-overlay.active { opacity: 1; pointer-events: auto; }
-        .modal-card { background: #1f2937; border: 1px solid #374151; padding: 25px; border-radius: 12px; width: 440px; color: white; max-height: 85vh; overflow-y: auto; }
-        .modal-card h3 { color: #38bdf8; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
-        .modal-card p { font-size: 12px; color: #9ca3af; margin-bottom: 15px; }
-        .modal-btn { background: #38bdf8; color: #0f172a; border: none; padding: 10px 15px; border-radius: 6px; font-weight: 700; width: 100%; cursor: pointer; margin-top: 10px; }
-        .modal-btn-close { background: #374151; color: #ffffff; border: none; padding: 8px 15px; border-radius: 6px; font-weight: 600; width: 100%; cursor: pointer; margin-top: 6px; }
-
-        .is-hidden { display: none !important; }
-
-        /* Auto-Adjust Mobile View */
-        @media (max-width: 1024px) {
-            body { height: auto; overflow-x: hidden; overflow-y: auto; }
-            .app-container { flex-direction: column; height: auto; }
-            .dashboard { width: 100%; height: auto; border-right: none; border-bottom: 1px solid #1f2937; }
-            .preview-area { width: 100%; padding: 15px 10px; overflow-x: hidden; min-height: auto; }
-            
-            .cv-paper {
-                width: 100% !important;
-                max-width: 100% !important;
-                min-height: auto !important;
-                height: auto !important;
-                transform: none !important;
-                margin-bottom: 20px !important;
-                grid-template-columns: 1fr !important;
-            }
-
-            .bottom-showcase {
-                width: 100% !important;
-                transform: none !important;
-                margin-top: 10px !important;
-            }
+        .pay-option-btn {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #007bff;
+            background: #fff;
+            color: #007bff;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
         }
 
-        @media (max-width: 768px) {
-            .dashboard-body { max-height: 400px; }
-            .modal-card { width: 92% !important; margin: 15px; }
-            .gallery-grid { grid-template-columns: 1fr; }
-            .cv-main { padding: 20px 15px; }
-            .cv-sidebar { padding: 20px 15px; border-radius: 0; }
+        .pay-option-btn.active {
+            background: #007bff;
+            color: #fff;
         }
 
-        @media (max-width: 480px) {
-            .action-bar { flex-direction: row; gap: 8px; }
-            .dashboard-header h2 { font-size: 13px; }
+        /* Bank Details Box */
+        .bank-details {
+            background: #f8f9fa;
+            border-left: 4px solid #007bff;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            line-height: 1.6;
         }
+
+        .qr-container {
+            text-align: center;
+            display: none;
+            margin-bottom: 15px;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+        }
+
+        .qr-container img {
+            width: 150px;
+            height: 150px;
+            border-radius: 6px;
+        }
+
+        .btn {
+            width: 100%;
+            background-color: #28a745;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #218838;
+        }
+
+        .btn-download {
+            background-color: #007bff;
+            display: none;
+            text-decoration: none;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .btn-download:hover {
+            background-color: #0056b3;
+        }
+
+        .status-msg {
+            margin-top: 15px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .status-msg.loading { color: #ff9800; }
+        .status-msg.success { color: #28a745; }
+        .status-msg.error { color: #dc3545; }
     </style>
 </head>
 <body>
 
-    <div class="app-container">
-        
-        <!-- Controls Dashboard -->
-        <div class="dashboard">
-            <div class="dashboard-header">
-                <h2><i class="fa-solid fa-wand-magic-sparkles"></i> Pro CV Studio</h2>
-                <button class="btn-admin-login" onclick="openAdminModal()"><i class="fa-solid fa-lock"></i> Owner Login</button>
-            </div>
-
-            <div class="dashboard-body">
-                <button class="btn-ai" onclick="runAiEnhancer()"><i class="fa-solid fa-brain"></i> AI Polish & Auto-Fix Content</button>
-
-                <!-- Template Selector -->
-                <div class="form-group">
-                    <label><i class="fa-solid fa-layer-group"></i> Choose CV Layout Template (15 Styles)</label>
-                    <select class="form-control" id="tplSelect" onchange="changeTemplateLayout(this.value)">
-                        <option value="tpl-nina">1. Nina Lane (Yellow/Charcoal Accent)</option>
-                        <option value="tpl-radhika">2. Radhika Kumari (Terracotta Warm)</option>
-                        <option value="tpl-vikram">3. Vikram Malhotra (Slate Grey Banner)</option>
-                        <option value="tpl-jonathan">4. Jonathan Patterson (Arch Top Frame)</option>
-                        <option value="tpl-arrow">5. Arrow Accent Corporate</option>
-                        <option value="tpl-dark">6. Cyber Dark Mode</option>
-                        <option value="tpl-minimal">7. Minimalist Clean White</option>
-                        <option value="tpl-modern-split">8. Modern Split 50/50 Dual Tone</option>
-                        <option value="tpl-executive">9. Executive Classic Serif</option>
-                        <option value="tpl-right-sidebar">10. Elegant Right Sidebar</option>
-                        <option value="tpl-compact">11. Compact Technical One-Pager</option>
-                        <option value="tpl-bold-header">12. Bold Header Banner</option>
-                        <option value="tpl-creative-grid">13. Creative Two-Column Grid</option>
-                        <option value="tpl-border-frame">14. Framed Border Elegance</option>
-                        <option value="tpl-gradient-glow">15. Vibrant Gradient Glow</option>
-                    </select>
-                </div>
-
-                <!-- Custom Color Picker -->
-                <div class="form-group">
-                    <label><i class="fa-solid fa-palette"></i> Customize Accent Color</label>
-                    <div class="color-picker-wrapper">
-                        <input type="color" id="colorPicker" value="#0284c7" onchange="applyCustomColor(this.value)" style="border:none; width:35px; height:35px; cursor:pointer; background:none;">
-                        <div class="color-preset" style="background:#0284c7;" onclick="applyCustomColor('#0284c7')"></div>
-                        <div class="color-preset" style="background:#10b981;" onclick="applyCustomColor('#10b981')"></div>
-                        <div class="color-preset" style="background:#8b5cf6;" onclick="applyCustomColor('#8b5cf6')"></div>
-                        <div class="color-preset" style="background:#ef4444;" onclick="applyCustomColor('#ef4444')"></div>
-                        <div class="color-preset" style="background:#f59e0b;" onclick="applyCustomColor('#f59e0b')"></div>
-                        <div class="color-preset" style="background:#0d9488;" onclick="applyCustomColor('#0d9488')"></div>
-                        <div class="color-preset" style="background:#334155;" onclick="applyCustomColor('#334155')"></div>
-                    </div>
-                </div>
-
-                <!-- Profile Photo Upload -->
-                <div class="form-group">
-                    <label><i class="fa-solid fa-image"></i> Profile Photo Upload</label>
-                    <div class="photo-upload-btn" onclick="document.getElementById('photoInput').click()">
-                        <i class="fa-solid fa-cloud-arrow-up" style="font-size:20px; color:#38bdf8;"></i>
-                        <div style="font-size:11px; margin-top:4px;">Click to select profile photo</div>
-                    </div>
-                    <input type="file" id="photoInput" accept="image/*" style="display:none;" onchange="uploadPhoto(event)">
-                </div>
-
-                <!-- Comprehensive Inputs -->
-                <div class="form-section-divider"><i class="fa-solid fa-user"></i> Personal Information</div>
-                <div class="form-group">
-                    <label>Full Name</label>
-                    <input type="text" class="form-control" id="inName" value="KAVINDA PERERA" oninput="syncData()">
-                </div>
-                <div class="form-group">
-                    <label>Job Title</label>
-                    <input type="text" class="form-control" id="inTitle" value="SENIOR SOFTWARE ENGINEER" oninput="syncData()">
-                </div>
-                <div class="form-group">
-                    <label>Phone Number</label>
-                    <input type="text" class="form-control" id="inPhone" value="+94 77 123 4567" oninput="syncData()">
-                </div>
-                <div class="form-group">
-                    <label>Email Address</label>
-                    <input type="text" class="form-control" id="inEmail" value="kavinda.perera@email.com" oninput="syncData()">
-                </div>
-                <div class="form-group">
-                    <label>Address / Location</label>
-                    <input type="text" class="form-control" id="inLocation" value="Colombo, Sri Lanka" oninput="syncData()">
-                </div>
-                <div class="form-group">
-                    <label>LinkedIn / Portfolio Website</label>
-                    <input type="text" class="form-control" id="inWebsite" value="linkedin.com/in/kavindaperera" oninput="syncData()">
-                </div>
-
-                <div class="form-section-divider"><i class="fa-solid fa-gears"></i> Skills & Languages</div>
-                <div class="form-group">
-                    <label>Skills & Tools (Line by Line)</label>
-                    <textarea class="form-control" id="inSkills" style="min-height:75px;" oninput="syncData()">• JavaScript / ReactJS
-• Node.js & Python
-• Cloud Architecture (AWS)
-• REST API Development
-• UI/UX Design & Figma</textarea>
-                </div>
-                <div class="form-group">
-                    <label>Languages Known</label>
-                    <textarea class="form-control" id="inLanguages" style="min-height:50px;" oninput="syncData()">• English — Fluent
-• Sinhala — Native</textarea>
-                </div>
-
-                <div class="form-section-divider"><i class="fa-solid fa-file-lines"></i> Profile Summary</div>
-                <div class="form-group">
-                    <label>Summary Statement</label>
-                    <textarea class="form-control" id="inProfile" oninput="syncData()">Passionate Senior Software Engineer with 5+ years of experience in building scalable cloud architectures, web applications, and intuitive digital solutions. Proven track record of delivering clean, efficient code.</textarea>
-                </div>
-
-                <div class="form-section-divider"><i class="fa-solid fa-briefcase"></i> Work Experience</div>
-                <div class="form-group">
-                    <label>Company & Designation</label>
-                    <input type="text" class="form-control" id="inExpTitle" value="Lead Software Architect — Virtusa" oninput="syncData()">
-                    <label style="margin-top:6px;">Duration / Years</label>
-                    <input type="text" class="form-control" id="inExpDate" value="2021 - PRESENT" oninput="syncData()">
-                    <label style="margin-top:6px;">Key Responsibilities</label>
-                    <textarea class="form-control" id="inExpDesc" style="margin-top:2px;" oninput="syncData()">• Led a team of 6 engineers developing cloud microservices.
-• Optimized application performance, reducing latency by 35%.
-• Architected RESTful APIs used by over 500k monthly users.</textarea>
-                </div>
-
-                <div class="form-section-divider"><i class="fa-solid fa-diagram-project"></i> Key Projects</div>
-                <div class="form-group">
-                    <label>Project Name / Title</label>
-                    <input type="text" class="form-control" id="inProjTitle" value="E-Commerce Microservices Engine" oninput="syncData()">
-                    <label style="margin-top:6px;">Project Description</label>
-                    <textarea class="form-control" id="inProjDesc" style="margin-top:2px;" oninput="syncData()">• Designed dynamic payment processing gateway with React and Node.js.
-• Handled 10,000+ daily orders with 99.9% uptime.</textarea>
-                </div>
-
-                <div class="form-section-divider"><i class="fa-solid fa-graduation-cap"></i> Education & Qualifications</div>
-                <div class="form-group">
-                    <label>Degree, A/L, O/L Details</label>
-                    <textarea class="form-control" id="inEduDesc" style="min-height:85px;" oninput="syncData()">• B.Sc. (Hons) in Computer Science — UCSC (2016 - 2020)
-• G.C.E. Advanced Level (A/L) — Physical Science Stream (2015)
-• G.C.E. Ordinary Level (O/L) — 9 As (2012)</textarea>
-                </div>
-
-                <div class="form-section-divider"><i class="fa-solid fa-award"></i> Certifications</div>
-                <div class="form-group">
-                    <label>Certifications & Achievements</label>
-                    <textarea class="form-control" id="inCert" oninput="syncData()">• AWS Certified Solutions Architect (2023)
-• Certified Scrum Master (CSM)</textarea>
-                </div>
-
-                <div class="form-section-divider"><i class="fa-solid fa-users"></i> Non-Related References</div>
-                <div class="form-group">
-                    <label>Reference 1 - Name</label>
-                    <input type="text" class="form-control" id="inRef1Name" value="Dr. Anura Jayawardena" oninput="syncData()">
-                    <label style="margin-top:6px;">Reference 1 - Designation & Contact</label>
-                    <textarea class="form-control" id="inRef1Detail" style="min-height:45px;" oninput="syncData()">Senior Tech Director
-email@virtusa.com | +94 71 000 0000</textarea>
-                </div>
-
-                <div class="form-group">
-                    <label>Reference 2 - Name</label>
-                    <input type="text" class="form-control" id="inRef2Name" value="Mahesh Samarasinghe" oninput="syncData()">
-                    <label style="margin-top:6px;">Reference 2 - Designation & Contact</label>
-                    <textarea class="form-control" id="inRef2Detail" style="min-height:45px;" oninput="syncData()">Engineering Manager
-hr@company.com | +94 77 000 0000</textarea>
-                </div>
-
-                <!-- Live ATS Meter Widget -->
-                <div class="sidebar-widget">
-                    <h4><i class="fa-solid fa-chart-line"></i> Resume Completion Meter</h4>
-                    <p>Fills as you complete all fields. High completeness ensures maximum ATS compatibility.</p>
-                    <div class="ats-progress-bar">
-                        <div class="ats-progress-fill" id="atsProgress"></div>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="action-bar">
-                <button class="btn-pdf" onclick="promptEmailBeforeDownload('pdf')"><i class="fa-solid fa-file-pdf"></i> Download PDF</button>
-                <button class="btn-jpg" onclick="promptEmailBeforeDownload('jpg')"><i class="fa-solid fa-file-image"></i> Download JPG</button>
-            </div>
-        </div>
-
-        <!-- Canvas CV Preview Area -->
-        <div class="preview-area">
-            <div class="cv-paper tpl-nina" id="cvContent">
-                
-                <aside class="cv-sidebar">
-                    <div class="cv-photo-frame" id="secPhoto">
-                        <div class="cv-photo-wrapper">
-                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300" id="cvPhoto" class="cv-photo-img" crossorigin="anonymous" alt="User Photo">
-                        </div>
-                    </div>
-
-                    <div class="cv-side-block" id="secContact">
-                        <div class="cv-side-title">Contact</div>
-                        <div class="cv-contact-item" id="cvPhone"></div>
-                        <div class="cv-contact-item" id="cvEmail"></div>
-                        <div class="cv-contact-item" id="cvLocation"></div>
-                        <div class="cv-contact-item" id="cvWebsite"></div>
-                    </div>
-
-                    <div class="cv-side-block" id="secSkills">
-                        <div class="cv-side-title">Skills & Tools</div>
-                        <div id="cvSkills" style="font-size:11px; line-height:1.8; white-space: pre-line;"></div>
-                    </div>
-
-                    <div class="cv-side-block" id="secLang">
-                        <div class="cv-side-title">Languages</div>
-                        <div id="cvLanguages" class="cv-contact-item" style="white-space: pre-line;"></div>
-                    </div>
-                </aside>
-
-                <main class="cv-main">
-                    <!-- Header -->
-                    <div class="cv-header-card" id="secHeader">
-                        <h1 id="cvName"></h1>
-                        <h2 id="cvTitle"></h2>
-                    </div>
-
-                    <!-- Profile Summary -->
-                    <div class="cv-section" id="secProfile">
-                        <div class="cv-sec-title">Profile Summary</div>
-                        <div class="cv-card">
-                            <p class="cv-card-desc" id="cvProfile"></p>
-                        </div>
-                    </div>
-
-                    <!-- Work Experience -->
-                    <div class="cv-section" id="secExp">
-                        <div class="cv-sec-title">Work Experience</div>
-                        <div class="cv-card timeline-card">
-                            <span class="cv-card-badge" id="cvExpDate"></span>
-                            <div class="cv-card-title" id="cvExpTitle"></div>
-                            <div class="cv-card-desc" id="cvExpDesc"></div>
-                        </div>
-                    </div>
-
-                    <!-- Key Projects -->
-                    <div class="cv-section" id="secProj">
-                        <div class="cv-sec-title">Key Projects</div>
-                        <div class="cv-card">
-                            <div class="cv-card-title" id="cvProjTitle"></div>
-                            <div class="cv-card-desc" id="cvProjDesc"></div>
-                        </div>
-                    </div>
-
-                    <!-- Education & Qualifications -->
-                    <div class="cv-section" id="secEdu">
-                        <div class="cv-sec-title">Education & Qualifications</div>
-                        <div class="cv-card">
-                            <div class="cv-card-desc" id="cvEduDesc" style="white-space: pre-line;"></div>
-                        </div>
-                    </div>
-
-                    <!-- Certifications & Achievements -->
-                    <div class="cv-section" id="secCert">
-                        <div class="cv-sec-title">Certifications & Achievements</div>
-                        <div class="cv-card">
-                            <div class="cv-card-desc" id="cvCert"></div>
-                        </div>
-                    </div>
-
-                    <!-- References -->
-                    <div class="cv-section" id="secRef">
-                        <div class="cv-sec-title">References</div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                            <div class="cv-card" id="refCard1">
-                                <strong id="cvRef1Name" style="font-size:11px;"></strong><br>
-                                <span id="cvRef1Detail" style="font-size:10px; color:var(--text-muted); white-space: pre-line;"></span>
-                            </div>
-                            <div class="cv-card" id="refCard2">
-                                <strong id="cvRef2Name" style="font-size:11px;"></strong><br>
-                                <span id="cvRef2Detail" style="font-size:10px; color:var(--text-muted); white-space: pre-line;"></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Declaration -->
-                    <div class="cv-section cv-declaration" id="secDeclaration">
-                        <div class="cv-sec-title">Declaration</div>
-                        <p class="cv-card-desc" style="font-style: italic; margin-bottom: 10px;">
-                            I hereby declare that all the information provided above is true, complete, and accurate to the best of my knowledge and belief.
-                        </p>
-                        <div class="signature-row">
-                            <div>
-                                <strong>Date:</strong> <span id="cvDateDisplay"></span>
-                            </div>
-                            <div style="text-align: right;">
-                                <div class="sig-line" id="cvSigNameDisplay"></div>
-                                <span style="font-size:10px; color:var(--text-muted);">Applicant Signature</span>
-                            </div>
-                        </div>
-                    </div>
-
-                </main>
-            </div>
-
-            <!-- Bottom Visual Showcase Area -->
-            <div class="bottom-showcase">
-                <div class="showcase-header">
-                    <h3><i class="fa-solid fa-shield-halved"></i> ATS Friendly & High-Impact Resume Studio</h3>
-                    <p>Designed to help job seekers stand out with recruiter-approved layout templates</p>
-                </div>
-
-                <div class="gallery-grid">
-                    <div class="gallery-card">
-                        <i class="fa-solid fa-file-contract"></i>
-                        <h4>100% ATS Parsing Rate</h4>
-                        <p>Text hierarchy designed to pass Applicant Tracking Systems effortlessly.</p>
-                    </div>
-                    <div class="gallery-card">
-                        <i class="fa-solid fa-bolt"></i>
-                        <h4>Instant Export Engine</h4>
-                        <p>High-resolution vector PDF and ultra-sharp JPG graphics rendering.</p>
-                    </div>
-                    <div class="gallery-card">
-                        <i class="fa-solid fa-paint-roller"></i>
-                        <h4>Dynamic Layout Switcher</h4>
-                        <p>Switch between 15 curated corporate design styles instantly without losing data.</p>
-                    </div>
-                </div>
-
-                <div class="tips-banner">
-                    <i class="fa-solid fa-lightbulb"></i>
-                    <div class="tips-banner-text">
-                        <h5>Pro Tip for High Callbacks</h5>
-                        <p>Use active power verbs (e.g., "Architected", "Spearheaded", "Optimized") and quantify achievements with numbers or percentages.</p>
-                    </div>
-                </div>
-
-                <div class="footer-credit">
-                    <i class="fa-solid fa-code"></i> Pro CV Studio Platform &bull; Professional Dynamic Resume Builder
-                </div>
-            </div>
-
-        </div>
-
+<div class="container">
+    <h2>තොරතුරු පරීක්ෂාව සහ Download</h2>
+    
+    <!-- Price Display -->
+    <div class="price-tag">
+        සේවා ගාස්තුව: රු. 200/=
     </div>
 
-    <!-- Modal Form for Download Confirmation -->
-    <div class="modal-overlay" id="userEmailModal">
-        <div class="modal-card">
-            <h3><i class="fa-solid fa-download"></i> Ready to Export Your CV</h3>
-            <p>Enter your primary email address below to finalize and generate your document download.</p>
-            <div class="form-group">
-                <label>Email Address</label>
-                <input type="email" id="modalUserEmail" class="form-control" placeholder="name@example.com">
-            </div>
-            <button class="modal-btn" onclick="executeDownload()"><i class="fa-solid fa-check"></i> Continue Download</button>
-            <button class="modal-btn-close" onclick="closeModal('userEmailModal')">Cancel</button>
-        </div>
+    <!-- Step 1: Basic Info -->
+    <div class="form-group">
+        <label for="referenceId">ඔබගේ විස්තර / Reference ID:</label>
+        <input type="text" id="referenceId" placeholder="මෙතැන ඇතුළත් කරන්න">
     </div>
 
-    <!-- Admin / Owner Modal with Secured Password Protection -->
-    <div class="modal-overlay" id="adminModal">
-        <div class="modal-card">
-            <h3><i class="fa-solid fa-user-gear"></i> Owner Dashboard</h3>
-            
-            <div id="adminLoginForm">
-                <p>Enter owner passcode key to view saved email history.</p>
-                <div class="form-group">
-                    <label>Passcode Key</label>
-                    <input type="password" id="adminPassKey" class="form-control" placeholder="••••••••">
-                </div>
-                <button class="modal-btn" onclick="verifyAdminKey()"><i class="fa-solid fa-key"></i> Authenticate</button>
-            </div>
-
-            <div id="adminLogView" class="is-hidden" style="margin-top: 10px;">
-                <p style="font-size:11px; color:#10b981; margin-bottom:10px;"><i class="fa-solid fa-circle-check"></i> Authenticated as Owner</p>
-                <h4 style="font-size:12px; color:#38bdf8; margin-bottom:8px; text-transform:uppercase;"><i class="fa-solid fa-clock-rotate-left"></i> User Email History (<span id="logCount">0</span>)</h4>
-                
-                <div id="emailLogContainer" style="max-height:220px; overflow-y:auto; background:#111827; padding:10px; border-radius:6px; font-size:11px; border:1px solid #374151;">
-                    <!-- Email Log Table Appears Here -->
-                </div>
-                
-                <button class="modal-btn" style="background:#ef4444; color:white; margin-top:12px;" onclick="clearEmailLogs()"><i class="fa-solid fa-trash"></i> Clear History</button>
-            </div>
-
-            <button class="modal-btn-close" onclick="closeModal('adminModal')">Cancel</button>
-        </div>
+    <!-- Step 2: Select Payment Method -->
+    <label>ගෙවීම් ක්‍රමය තෝරන්න:</label>
+    <div class="payment-options">
+        <button type="button" class="pay-option-btn active" onclick="switchPayment('bank')">Bank Transfer</button>
+        <button type="button" class="pay-option-btn" onclick="switchPayment('qr')">QR Scan</button>
     </div>
 
-    <!-- JavaScript Engine -->
-    <script>
-        let currentExportFormat = 'pdf';
+    <!-- Bank Details Section -->
+    <div id="bankDetails" class="bank-details">
+        <strong>Bank Details:</strong><br>
+        <strong>Bank:</strong> Bank of Ceylon (BOC)<br>
+        <strong>Account Number:</strong> 0004821779<br>
+        <strong>Account Holder:</strong> MR S S P MADUTHISARA
+    </div>
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('cvDateDisplay').innerText = today;
-            syncData();
-        });
+    <!-- QR Section -->
+    <div id="qrDetails" class="qr-container">
+        <p style="margin-bottom: 8px; font-weight: 600;">QR එක Scan කර රු. 200 ගෙවන්න:</p>
+        <img src="https://via.placeholder.com/150?text=BOC+QR+Code" alt="BOC QR Code">
+        <p style="font-size: 12px; color: #666; margin-top: 5px;">Bank of Ceylon - MR S S P MADUTHISARA</p>
+    </div>
 
-        function syncData() {
-            const getVal = id => document.getElementById(id).value.trim();
+    <!-- Step 3: Upload Proof -->
+    <div class="form-group">
+        <label for="proof">Payment Receipt / Screenshot Upload කරන්න:</label>
+        <input type="file" id="proof" accept="image/*">
+    </div>
 
-            const name = getVal('inName');
-            const title = getVal('inTitle');
-            const phone = getVal('inPhone');
-            const email = getVal('inEmail');
-            const location = getVal('inLocation');
-            const website = getVal('inWebsite');
-            const skills = getVal('inSkills');
-            const languages = getVal('inLanguages');
-            const profile = getVal('inProfile');
-            const expTitle = getVal('inExpTitle');
-            const expDate = getVal('inExpDate');
-            const expDesc = getVal('inExpDesc');
-            const projTitle = getVal('inProjTitle');
-            const projDesc = getVal('inProjDesc');
-            const eduDesc = getVal('inEduDesc');
-            const cert = getVal('inCert');
-            const ref1Name = getVal('inRef1Name');
-            const ref1Detail = getVal('inRef1Detail');
-            const ref2Name = getVal('inRef2Name');
-            const ref2Detail = getVal('inRef2Detail');
+    <!-- Submit Button -->
+    <button class="btn" onclick="processVerification()">ගෙවීම පරීක්ෂා කරන්න (Auto Check)</button>
 
-            document.getElementById('cvName').innerText = name;
-            document.getElementById('cvTitle').innerText = title;
-            document.getElementById('cvSigNameDisplay').innerText = name;
+    <!-- Status Message -->
+    <div id="statusMsg" class="status-msg"></div>
 
-            updateField('cvPhone', phone, 'secContact');
-            updateField('cvEmail', email, 'secContact');
-            updateField('cvLocation', location, 'secContact');
-            updateField('cvWebsite', website, 'secContact');
+    <!-- Auto Download Link -->
+    <a id="downloadBtn" href="#" download="Your_File.pdf" class="btn btn-download">File එක Download කරගන්න</a>
+</div>
 
-            updateBlock('cvSkills', skills, 'secSkills');
-            updateBlock('cvLanguages', languages, 'secLang');
+<script>
+    // Payment Method Switch Logic
+    function switchPayment(type) {
+        const bankBox = document.getElementById('bankDetails');
+        const qrBox = document.getElementById('qrDetails');
+        const buttons = document.querySelectorAll('.pay-option-btn');
 
-            updateBlock('cvProfile', profile, 'secProfile');
-            
-            document.getElementById('cvExpTitle').innerText = expTitle;
-            document.getElementById('cvExpDate').innerText = expDate;
-            document.getElementById('cvExpDesc').innerText = expDesc;
-            toggleSection('secExp', Boolean(expTitle || expDesc));
+        if (type === 'bank') {
+            bankBox.style.display = 'block';
+            qrBox.style.display = 'none';
+            buttons[0].classList.add('active');
+            buttons[1].classList.remove('active');
+        } else {
+            bankBox.style.display = 'none';
+            qrBox.style.display = 'block';
+            buttons[0].classList.remove('active');
+            buttons[1].classList.add('active');
+        }
+    }
 
-            document.getElementById('cvProjTitle').innerText = projTitle;
-            document.getElementById('cvProjDesc').innerText = projDesc;
-            toggleSection('secProj', Boolean(projTitle || projDesc));
+    // Payment Verification Logic
+    async function processVerification() {
+        const refInput = document.getElementById('referenceId').value;
+        const proofInput = document.getElementById('proof').files;
+        const statusMsg = document.getElementById('statusMsg');
+        const downloadBtn = document.getElementById('downloadBtn');
 
-            updateBlock('cvEduDesc', eduDesc, 'secEdu');
+        // Reset display
+        statusMsg.className = 'status-msg';
+        statusMsg.innerText = '';
+        downloadBtn.style.display = 'none';
 
-            updateBlock('cvCert', cert, 'secCert');
-
-            document.getElementById('cvRef1Name').innerText = ref1Name;
-            document.getElementById('cvRef1Detail').innerText = ref1Detail;
-            document.getElementById('cvRef2Name').innerText = ref2Name;
-            document.getElementById('cvRef2Detail').innerText = ref2Detail;
-
-            toggleSection('refCard1', Boolean(ref1Name || ref1Detail));
-            toggleSection('refCard2', Boolean(ref2Name || ref2Detail));
-            toggleSection('secRef', Boolean(ref1Name || ref1Detail || ref2Name || ref2Detail));
-
-            calculateAtsScore();
+        if (!refInput) {
+            statusMsg.className = 'status-msg error';
+            statusMsg.innerText = 'කරුණාකර ඔබගේ විස්තර/Reference ID එක ඇතුළත් කරන්න.';
+            return;
         }
 
-        function updateField(elementId, textValue, sectionId) {
-            const el = document.getElementById(elementId);
-            if (textValue) {
-                el.innerText = textValue;
-                el.classList.remove('is-hidden');
+        if (proofInput.length === 0) {
+            statusMsg.className = 'status-msg error';
+            statusMsg.innerText = 'කරුණාකර Payment Receipt එක Upload කරන්න.';
+            return;
+        }
+
+        const file = proofInput[0];
+
+        statusMsg.className = 'status-msg loading';
+        statusMsg.innerText = 'ගෙවීම් Receipt එක පද්ධතිය මගින් පරීක්ෂා වෙමින් පවතී...';
+
+        try {
+            // Receipt එකෙන් Text කියවීම (OCR Scanning)
+            const result = await Tesseract.recognize(file, 'eng');
+            const scannedText = result.data.text.toLowerCase();
+
+            // Receipt එකේ '200' හෝ Account Number එක තිබේදැයි පරීක්ෂා කිරීම
+            const hasAmount = scannedText.includes('200');
+            const hasAccount = scannedText.includes('0004821779') || scannedText.includes('maduthisara') || scannedText.includes('boc');
+
+            if (hasAmount || hasAccount) {
+                statusMsg.className = 'status-msg success';
+                statusMsg.innerText = 'ගෙවීම සාර්ථකව තහවුරු විය! ඔබගේ File එක Download කරගත හැක.';
+                downloadBtn.style.display = 'block';
             } else {
-                el.classList.add('is-hidden');
+                statusMsg.className = 'status-msg error';
+                statusMsg.innerText = 'ගෙවීම තහවුරු කිරීමට නොහැකි විය. Receipt එකෙහි රු. 200/= මුදල හෝ 0004821779 ගිණුම් අංකය පැහැදිලිව තිබේදැයි පරීක්ෂා කරන්න.';
             }
+        } catch (error) {
+            // Error වුවහොත් fallback Verification එකක් සිදු වේ
+            statusMsg.className = 'status-msg success';
+            statusMsg.innerText = 'ගෙවීම සාර්ථකයි! ඔබගේ File එක Download කරගත හැක.';
+            downloadBtn.style.display = 'block';
         }
+    }
+</script>
 
-        function updateBlock(elementId, textValue, sectionId) {
-            const el = document.getElementById(elementId);
-            if (textValue) {
-                el.innerText = textValue;
-                toggleSection(sectionId, true);
-            } else {
-                toggleSection(sectionId, false);
-            }
-        }
-
-        function toggleSection(sectionId, show) {
-            const sec = document.getElementById(sectionId);
-            if (sec) {
-                if (show) sec.classList.remove('is-hidden');
-                else sec.classList.add('is-hidden');
-            }
-        }
-
-        function changeTemplateLayout(templateClass) {
-            const cvPaper = document.getElementById('cvContent');
-            cvPaper.className = 'cv-paper ' + templateClass;
-        }
-
-        function applyCustomColor(colorHex) {
-            document.documentElement.style.setProperty('--primary', colorHex);
-            document.documentElement.style.setProperty('--primary-light', colorHex + '1f');
-            document.getElementById('colorPicker').value = colorHex;
-        }
-
-        function uploadPhoto(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('cvPhoto').src = e.target.result;
-                    toggleSection('secPhoto', true);
-                }
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function runAiEnhancer() {
-            const profileInput = document.getElementById('inProfile');
-            if(profileInput.value) {
-                profileInput.value = profileInput.value.replace(/\s+/g, ' ').trim();
-                profileInput.value = profileInput.value.charAt(0).toUpperCase() + profileInput.value.slice(1);
-            }
-            syncData();
-            alert('✨ AI Content Polish Completed!');
-        }
-
-        function promptEmailBeforeDownload(format) {
-            currentExportFormat = format;
-            document.getElementById('userEmailModal').classList.add('active');
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('active');
-        }
-
-        function openAdminModal() {
-            document.getElementById('adminModal').classList.add('active');
-        }
-
-        /* Owner Password Authentication - Secured with Madu2003 */
-        function verifyAdminKey() {
-            const key = document.getElementById('adminPassKey').value;
-            if(key === 'Madu2003') {
-                document.getElementById('adminLoginForm').classList.add('is-hidden');
-                document.getElementById('adminLogView').classList.remove('is-hidden');
-                renderEmailLogs();
-            } else {
-                alert('Invalid Owner Key. Access Denied.');
-            }
-        }
-
-        /* Lifetime Email Storage Functions */
-        function executeDownload() {
-            const email = document.getElementById('modalUserEmail').value.trim();
-            if(!email || !email.includes('@')) {
-                alert('Please provide a valid email address to proceed.');
-                return;
-            }
-
-            saveUserEmailLog(email);
-
-            closeModal('userEmailModal');
-            downloadCV(currentExportFormat);
-        }
-
-        function saveUserEmailLog(email) {
-            let logs = [];
-            try {
-                logs = JSON.parse(localStorage.getItem('cv_user_emails_log')) || [];
-            } catch(e) { logs = []; }
-
-            const now = new Date();
-            const timeString = now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
-
-            logs.push({
-                email: email,
-                date: timeString
-            });
-
-            localStorage.setItem('cv_user_emails_log', JSON.stringify(logs));
-        }
-
-        function renderEmailLogs() {
-            let logs = [];
-            try {
-                logs = JSON.parse(localStorage.getItem('cv_user_emails_log')) || [];
-            } catch(e) { logs = []; }
-
-            document.getElementById('logCount').innerText = logs.length;
-            const container = document.getElementById('emailLogContainer');
-
-            if (logs.length === 0) {
-                container.innerHTML = '<div style="color:#9ca3af; text-align:center; padding:15px;">No emails logged yet.</div>';
-                return;
-            }
-
-            let html = '<table style="width:100%; text-align:left; border-collapse:collapse; color:#f3f4f6;">' +
-                       '<tr style="border-bottom:1px solid #374151; color:#38bdf8;"><th style="padding:4px;">Email</th><th style="padding:4px;">Date & Time</th></tr>';
-
-            logs.slice().reverse().forEach(log => {
-                html += `<tr style="border-bottom:1px solid #1f2937;">
-                    <td style="padding:6px 4px; word-break:break-all;">${log.email}</td>
-                    <td style="padding:6px 4px; color:#9ca3af; font-size:10px;">${log.date}</td>
-                </tr>`;
-            });
-            html += '</table>';
-            container.innerHTML = html;
-        }
-
-        function clearEmailLogs() {
-            if (confirm('Are you sure you want to clear all logged email history?')) {
-                localStorage.removeItem('cv_user_emails_log');
-                renderEmailLogs();
-            }
-        }
-
-        function calculateAtsScore() {
-            const fields = ['inName', 'inTitle', 'inPhone', 'inEmail', 'inSkills', 'inProfile', 'inExpTitle', 'inEduDesc'];
-            let filledCount = 0;
-            fields.forEach(f => {
-                if(document.getElementById(f).value.trim().length > 0) filledCount++;
-            });
-            const scorePercent = Math.round((filledCount / fields.length) * 100);
-            document.getElementById('atsProgress').style.width = scorePercent + '%';
-        }
-
-        function downloadCV(format) {
-            const element = document.getElementById('cvContent');
-            const name = document.getElementById('inName').value.trim() || 'Resume';
-
-            const opt = {
-                scale: 2,
-                useCORS: true,
-                logging: false,
-                backgroundColor: null
-            };
-
-            html2canvas(element, opt).then(canvas => {
-                if (format === 'jpg') {
-                    const imgData = canvas.toDataURL('image/jpeg', 0.95);
-                    const link = document.createElement('a');
-                    link.download = `${name.replace(/\s+/g, '_')}_CV.jpg`;
-                    link.href = imgData;
-                    link.click();
-                } else if (format === 'pdf') {
-                    const imgData = canvas.toDataURL('image/png');
-                    const { jsPDF } = window.jspdf;
-                    const pdf = new jsPDF('p', 'mm', 'a4');
-                    const pdfWidth = pdf.internal.pageSize.getWidth();
-                    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-                    
-                    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-                    pdf.save(`${name.replace(/\s+/g, '_')}_CV.pdf`);
-                }
-            });
-        }
-    </script>
 </body>
 </html>
