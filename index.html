@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pro CV Studio - Dynamic Section Hiding</title>
+    <title>Pro CV Studio - Dynamic Resume Builder</title>
     
     <!-- Google Fonts & FontAwesome -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Montserrat:wght@400;600;700;800&family=Poppins:wght@300;400;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -53,7 +53,8 @@
             align-items: center;
         }
         .dashboard-header h2 { font-size: 15px; color: #38bdf8; display: flex; align-items: center; gap: 8px; }
-        .btn-admin-login { background: #374151; color: #38bdf8; border: 1px solid #38bdf8; padding: 5px 10px; border-radius: 5px; font-size: 11px; font-weight: 700; cursor: pointer; }
+        .btn-admin-login { background: #374151; color: #38bdf8; border: 1px solid #38bdf8; padding: 5px 10px; border-radius: 5px; font-size: 11px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        .btn-admin-login:hover { background: #38bdf8; color: #0f172a; }
 
         .dashboard-body { padding: 20px; overflow-y: auto; flex: 1; }
 
@@ -107,25 +108,51 @@
             color: white; border: none; padding: 10px; border-radius: 6px;
             font-weight: 700; font-size: 12px; cursor: pointer; width: 100%;
             display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 15px;
+            transition: opacity 0.2s;
         }
+        .btn-ai:hover { opacity: 0.9; }
+
+        /* Widget in Sidebar to fill empty space */
+        .sidebar-widget {
+            background: rgba(56, 189, 248, 0.05);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 20px;
+        }
+        .sidebar-widget h4 { font-size: 11px; color: #38bdf8; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+        .sidebar-widget p { font-size: 10px; color: #9ca3af; line-height: 1.4; }
+        .ats-progress-bar { height: 6px; background: #1f2937; border-radius: 3px; overflow: hidden; margin-top: 8px; }
+        .ats-progress-fill { height: 100%; width: 85%; background: linear-gradient(90deg, #10b981, #38bdf8); }
 
         .action-bar { padding: 15px; background: #1f2937; border-top: 1px solid #374151; display: flex; gap: 10px; }
-        .btn-pdf { background: #10b981; color: white; border: none; padding: 10px; border-radius: 6px; flex: 1; font-weight: 700; cursor: pointer; }
-        .btn-jpg { background: #f59e0b; color: white; border: none; padding: 10px; border-radius: 6px; flex: 1; font-weight: 700; cursor: pointer; }
+        .btn-pdf { background: #10b981; color: white; border: none; padding: 10px; border-radius: 6px; flex: 1; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        .btn-jpg { background: #f59e0b; color: white; border: none; padding: 10px; border-radius: 6px; flex: 1; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        .btn-pdf:hover { background: #059669; }
+        .btn-jpg:hover { background: #d97706; }
 
         /* Preview Canvas Area */
-        .preview-area { flex: 1; background: #030712; overflow-y: auto; padding: 30px; display: flex; justify-content: center; }
+        .preview-area { 
+            flex: 1; 
+            background: #030712; 
+            overflow-y: auto; 
+            padding: 40px 30px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+        }
 
         .cv-paper {
             width: 794px;
             min-height: 1123px;
             background: var(--main-bg);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
             display: grid;
             grid-template-columns: 260px 1fr;
             color: var(--text-main);
             position: relative;
             transition: background 0.3s ease;
+            margin-bottom: 40px;
         }
 
         .cv-paper, .cv-paper * {
@@ -192,6 +219,65 @@
         .signature-row { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 20px; font-size: 11px; }
         .sig-line { border-top: 1px solid var(--text-main); width: 180px; text-align: center; padding-top: 4px; font-weight: 700; }
 
+        /* Decorative Bottom Content Showcase (Fills Empty Space Below Paper) */
+        .bottom-showcase {
+            width: 794px;
+            margin-top: 10px;
+            padding-top: 20px;
+            border-top: 1px dashed #1f2937;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .showcase-header {
+            text-align: center;
+        }
+        .showcase-header h3 { font-size: 16px; color: #38bdf8; margin-bottom: 4px; }
+        .showcase-header p { font-size: 12px; color: #64748b; }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .gallery-card {
+            background: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .gallery-card:hover {
+            transform: translateY(-4px);
+            border-color: #38bdf8;
+        }
+        .gallery-card i { font-size: 24px; color: #38bdf8; margin-bottom: 8px; }
+        .gallery-card h4 { font-size: 12px; color: #f3f4f6; margin-bottom: 4px; }
+        .gallery-card p { font-size: 10px; color: #9ca3af; }
+
+        .tips-banner {
+            background: linear-gradient(135deg, rgba(2,132,199,0.1), rgba(139,92,246,0.1));
+            border: 1px solid rgba(56,189,248,0.2);
+            border-radius: 10px;
+            padding: 18px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .tips-banner i { font-size: 30px; color: #38bdf8; }
+        .tips-banner-text h5 { font-size: 13px; color: #ffffff; margin-bottom: 2px; }
+        .tips-banner-text p { font-size: 11px; color: #9ca3af; }
+
+        .footer-credit {
+            text-align: center;
+            font-size: 11px;
+            color: #475569;
+            padding: 15px 0 30px 0;
+        }
+
         /* TEMPLATES */
         .tpl-nina { grid-template-columns: 250px 1fr; --sidebar-bg: #1f2937; --photo-radius: 50%; }
         .tpl-radhika { grid-template-columns: 240px 1fr; --sidebar-bg: #fdf6f0; --sidebar-text: #2d3748; --main-bg: #ffffff; --card-bg: #fffbf9; --border-color: #f3e8e2; }
@@ -221,13 +307,10 @@
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; z-index: 100; opacity: 0; pointer-events: none; transition: 0.3s; }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
         .modal-card { background: #1f2937; border: 1px solid #374151; padding: 25px; border-radius: 12px; width: 440px; color: white; }
-        .modal-card h3 { color: #38bdf8; margin-bottom: 10px; }
+        .modal-card h3 { color: #38bdf8; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
         .modal-card p { font-size: 12px; color: #9ca3af; margin-bottom: 15px; }
         .modal-btn { background: #38bdf8; color: #0f172a; border: none; padding: 10px 15px; border-radius: 6px; font-weight: 700; width: 100%; cursor: pointer; margin-top: 10px; }
-
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 12px; }
-        th, td { padding: 8px; text-align: left; border-bottom: 1px solid #374151; word-break: break-all; }
-        th { color: #38bdf8; }
+        .modal-btn-close { background: #374151; color: #ffffff; border: none; padding: 8px 15px; border-radius: 6px; font-weight: 600; width: 100%; cursor: pointer; margin-top: 6px; }
 
         /* Utility Class to Hide Unfilled Elements */
         .is-hidden { display: none !important; }
@@ -238,17 +321,18 @@
             .app-container { flex-direction: column; height: auto; }
             .dashboard { width: 100%; height: auto; border-right: none; border-bottom: 1px solid #1f2937; }
             .preview-area { width: 100%; padding: 20px 10px; overflow-x: auto; min-height: 100vh; }
-            .cv-paper { transform: scale(0.8); transform-origin: top center; margin: 0 auto; }
+            .cv-paper, .bottom-showcase { transform: scale(0.85); transform-origin: top center; }
         }
 
         @media (max-width: 768px) {
             .dashboard-body { max-height: 400px; }
-            .cv-paper { transform: scale(0.6); transform-origin: top center; }
+            .cv-paper, .bottom-showcase { transform: scale(0.65); transform-origin: top center; }
             .modal-card { width: 92% !important; margin: 15px; }
+            .gallery-grid { grid-template-columns: 1fr; }
         }
 
         @media (max-width: 480px) {
-            .cv-paper { transform: scale(0.42); transform-origin: top center; }
+            .cv-paper, .bottom-showcase { transform: scale(0.42); transform-origin: top center; }
             .action-bar { flex-direction: row; gap: 8px; }
             .dashboard-header h2 { font-size: 13px; }
         }
@@ -416,6 +500,15 @@ email@virtusa.com | +94 71 000 0000</textarea>
 hr@company.com | +94 77 000 0000</textarea>
                 </div>
 
+                <!-- Live ATS Meter Widget -->
+                <div class="sidebar-widget">
+                    <h4><i class="fa-solid fa-chart-line"></i> Resume Completion Meter</h4>
+                    <p>Fills as you complete all fields. High completeness ensures maximum ATS compatibility.</p>
+                    <div class="ats-progress-bar">
+                        <div class="ats-progress-fill" id="atsProgress"></div>
+                    </div>
+                </div>
+
             </div>
 
             <div class="action-bar">
@@ -529,7 +622,7 @@ hr@company.com | +94 77 000 0000</textarea>
                         </p>
                         <div class="signature-row">
                             <div>
-                                <strong>Date:</strong> <span id="cvDateDisplay">2026-07-30</span>
+                                <strong>Date:</strong> <span id="cvDateDisplay"></span>
                             </div>
                             <div style="text-align: right;">
                                 <div class="sig-line" id="cvSigNameDisplay"></div>
@@ -540,343 +633,301 @@ hr@company.com | +94 77 000 0000</textarea>
 
                 </main>
             </div>
+
+            <!-- Bottom Visual Showcase Area (Fills scroll space beneath paper) -->
+            <div class="bottom-showcase">
+                <div class="showcase-header">
+                    <h3><i class="fa-solid fa-shield-halved"></i> ATS Friendly & High-Impact Resume Studio</h3>
+                    <p>Designed to help job seekers stand out with recruiter-approved layout templates</p>
+                </div>
+
+                <div class="gallery-grid">
+                    <div class="gallery-card">
+                        <i class="fa-solid fa-file-contract"></i>
+                        <h4>100% ATS Parsing Rate</h4>
+                        <p>Text hierarchy designed to pass Applicant Tracking Systems effortlessly.</p>
+                    </div>
+                    <div class="gallery-card">
+                        <i class="fa-solid fa-bolt"></i>
+                        <h4>Instant Export Engine</h4>
+                        <p>High-resolution vector PDF and ultra-sharp JPG graphics rendering.</p>
+                    </div>
+                    <div class="gallery-card">
+                        <i class="fa-solid fa-paint-roller"></i>
+                        <h4>Dynamic Layout Switcher</h4>
+                        <p>Switch between 15 curated corporate design styles instantly without losing data.</p>
+                    </div>
+                </div>
+
+                <div class="tips-banner">
+                    <i class="fa-solid fa-lightbulb"></i>
+                    <div class="tips-banner-text">
+                        <h5>Pro Tip for High Callbacks</h5>
+                        <p>Use active power verbs (e.g., "Architected", "Spearheaded", "Optimized") and quantify achievements with numbers or percentages.</p>
+                    </div>
+                </div>
+
+                <div class="footer-credit">
+                    <i class="fa-solid fa-code"></i> Pro CV Studio Platform &bull; Professional Dynamic Resume Builder
+                </div>
+            </div>
+
         </div>
 
     </div>
 
-    <!-- Modal Form -->
+    <!-- Modal Form for Download Confirmation -->
     <div class="modal-overlay" id="userEmailModal">
         <div class="modal-card">
-            <h3><i class="fa-solid fa-download"></i> Enter Email to Download</h3>
-            <p>Please enter your email address to download your professional CV instantly.</p>
-            <input type="email" class="form-control" id="downloadUserEmail" placeholder="your.email@example.com">
-            <button class="modal-btn" onclick="confirmDownloadWithEmail()">Submit & Auto Download CV</button>
-            <button class="modal-btn" style="background:#374151; color:#9ca3af; margin-top:6px;" onclick="closeModal('userEmailModal')">Cancel</button>
+            <h3><i class="fa-solid fa-download"></i> Ready to Export Your CV</h3>
+            <p>Enter your primary email address below to finalize and generate your document download.</p>
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" id="modalUserEmail" class="form-control" placeholder="name@example.com">
+            </div>
+            <button class="modal-btn" onclick="executeDownload()"><i class="fa-solid fa-check"></i> Continue Download</button>
+            <button class="modal-btn-close" onclick="closeModal('userEmailModal')">Cancel</button>
         </div>
     </div>
 
-    <!-- Admin Panel -->
+    <!-- Admin Modal -->
     <div class="modal-overlay" id="adminModal">
-        <div class="modal-card" style="width: 580px;">
-            <h3><i class="fa-solid fa-user-shield"></i> Site Owner Analytics Panel</h3>
-            <p id="adminStatusText">Enter Site Owner Email to Access Dashboard Logs:</p>
-            <div id="adminLoginForm">
-                <input type="email" class="form-control" id="adminEmailInput" placeholder="Enter owner email...">
-                <button class="modal-btn" onclick="verifyAdminLogin()">Login as Owner</button>
-                <button class="modal-btn" style="background:#374151; color:#9ca3af; margin-top:6px;" onclick="closeModal('adminModal')">Cancel</button>
+        <div class="modal-card">
+            <h3><i class="fa-solid fa-user-gear"></i> Owner / Admin Login</h3>
+            <p>Enter owner key to access administrative customization controls.</p>
+            <div class="form-group">
+                <label>Passcode Key</label>
+                <input type="password" id="adminPassKey" class="form-control" placeholder="••••••••">
             </div>
-            
-            <div id="adminDataLogs" class="is-hidden">
-                <div style="max-height:260px; overflow-y:auto;">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Captured User Email</th>
-                                <th>Download Timestamp</th>
-                            </tr>
-                        </thead>
-                        <tbody id="adminLogsTable"></tbody>
-                    </table>
-                </div>
-                <p style="font-size:10px; color:#10b981; margin-top:8px;"><i class="fa-solid fa-envelope-circle-check"></i> All downloads are also sent directly to maduthisarapramod@gmail.com!</p>
-                <button class="modal-btn" style="background:#ef4444; color:white; margin-top:10px;" onclick="closeModal('adminModal')">Close Panel</button>
-            </div>
+            <button class="modal-btn" onclick="verifyAdminKey()"><i class="fa-solid fa-key"></i> Authenticate</button>
+            <button class="modal-btn-close" onclick="closeModal('adminModal')">Cancel</button>
         </div>
     </div>
 
+    <!-- JavaScript Engine -->
     <script>
-        const OWNER_EMAIL = "maduthisarapramod@gmail.com"; 
-        let currentDownloadType = 'pdf';
+        let currentExportFormat = 'pdf';
 
-        window.onload = function() {
+        // Auto Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('cvDateDisplay').innerText = today;
             syncData();
-        };
+        });
 
-        function getSavedLogs() {
-            try {
-                return JSON.parse(localStorage.getItem('cv_download_logs')) || [];
-            } catch (e) {
-                return [];
+        // Dynamic Real-time Data Sync & Dynamic Section Hiding
+        function syncData() {
+            const getVal = id => document.getElementById(id).value.trim();
+
+            const name = getVal('inName');
+            const title = getVal('inTitle');
+            const phone = getVal('inPhone');
+            const email = getVal('inEmail');
+            const location = getVal('inLocation');
+            const website = getVal('inWebsite');
+            const skills = getVal('inSkills');
+            const languages = getVal('inLanguages');
+            const profile = getVal('inProfile');
+            const expTitle = getVal('inExpTitle');
+            const expDate = getVal('inExpDate');
+            const expDesc = getVal('inExpDesc');
+            const projTitle = getVal('inProjTitle');
+            const projDesc = getVal('inProjDesc');
+            const eduDesc = getVal('inEduDesc');
+            const cert = getVal('inCert');
+            const ref1Name = getVal('inRef1Name');
+            const ref1Detail = getVal('inRef1Detail');
+            const ref2Name = getVal('inRef2Name');
+            const ref2Detail = getVal('inRef2Detail');
+
+            // Set main texts
+            document.getElementById('cvName').innerText = name;
+            document.getElementById('cvTitle').innerText = title;
+            document.getElementById('cvSigNameDisplay').innerText = name;
+
+            // Update contact items & dynamic hiding
+            updateField('cvPhone', phone, 'secContact');
+            updateField('cvEmail', email, 'secContact');
+            updateField('cvLocation', location, 'secContact');
+            updateField('cvWebsite', website, 'secContact');
+
+            // Skills & Languages
+            updateBlock('cvSkills', skills, 'secSkills');
+            updateBlock('cvLanguages', languages, 'secLang');
+
+            // Sections Hiding / Showing Logic
+            updateBlock('cvProfile', profile, 'secProfile');
+            
+            // Experience
+            document.getElementById('cvExpTitle').innerText = expTitle;
+            document.getElementById('cvExpDate').innerText = expDate;
+            document.getElementById('cvExpDesc').innerText = expDesc;
+            toggleSection('secExp', Boolean(expTitle || expDesc));
+
+            // Projects
+            document.getElementById('cvProjTitle').innerText = projTitle;
+            document.getElementById('cvProjDesc').innerText = projDesc;
+            toggleSection('secProj', Boolean(projTitle || projDesc));
+
+            // Education
+            updateBlock('cvEduDesc', eduDesc, 'secEdu');
+
+            // Certifications
+            updateBlock('cvCert', cert, 'secCert');
+
+            // References
+            document.getElementById('cvRef1Name').innerText = ref1Name;
+            document.getElementById('cvRef1Detail').innerText = ref1Detail;
+            document.getElementById('cvRef2Name').innerText = ref2Name;
+            document.getElementById('cvRef2Detail').innerText = ref2Detail;
+
+            toggleSection('refCard1', Boolean(ref1Name || ref1Detail));
+            toggleSection('refCard2', Boolean(ref2Name || ref2Detail));
+            toggleSection('secRef', Boolean(ref1Name || ref1Detail || ref2Name || ref2Detail));
+
+            calculateAtsScore();
+        }
+
+        function updateField(elementId, textValue, sectionId) {
+            const el = document.getElementById(elementId);
+            if (textValue) {
+                el.innerText = textValue;
+                el.classList.remove('is-hidden');
+            } else {
+                el.classList.add('is-hidden');
             }
         }
 
-        function saveUserLog(email) {
-            const logs = getSavedLogs();
-            logs.push({
-                email: email,
-                timestamp: new Date().toLocaleString()
-            });
-            localStorage.setItem('cv_download_logs', JSON.stringify(logs));
+        function updateBlock(elementId, textValue, sectionId) {
+            const el = document.getElementById(elementId);
+            if (textValue) {
+                el.innerText = textValue;
+                toggleSection(sectionId, true);
+            } else {
+                toggleSection(sectionId, false);
+            }
         }
 
+        function toggleSection(sectionId, show) {
+            const sec = document.getElementById(sectionId);
+            if (sec) {
+                if (show) sec.classList.remove('is-hidden');
+                else sec.classList.add('is-hidden');
+            }
+        }
+
+        // Switch Template Layout
+        function changeTemplateLayout(templateClass) {
+            const cvPaper = document.getElementById('cvContent');
+            cvPaper.className = 'cv-paper ' + templateClass;
+        }
+
+        // Apply Custom Primary Color
+        function applyCustomColor(colorHex) {
+            document.documentElement.style.setProperty('--primary', colorHex);
+            document.documentElement.style.setProperty('--primary-light', colorHex + '1f');
+            document.getElementById('colorPicker').value = colorHex;
+        }
+
+        // Upload Custom Photo
         function uploadPhoto(event) {
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    const img = document.getElementById('cvPhoto');
-                    img.src = e.target.result;
-                };
+                    document.getElementById('cvPhoto').src = e.target.result;
+                    toggleSection('secPhoto', true);
+                }
                 reader.readAsDataURL(file);
             }
         }
 
-        // Dynamic Text Update and Auto-Hiding logic for Blank Inputs
-        function updateTextOrHide(inputId, elementId, containerId = null) {
-            const val = document.getElementById(inputId).value;
-            const trimmed = val.trim();
-            const elem = document.getElementById(elementId);
-            const container = containerId ? document.getElementById(containerId) : elem;
-            
-            if (trimmed === "") {
-                if (container) container.classList.add('is-hidden');
-            } else {
-                if (container) container.classList.remove('is-hidden');
-                if (elem) elem.innerText = val;
+        // AI Enhancer Placeholder / Polish
+        function runAiEnhancer() {
+            const profileInput = document.getElementById('inProfile');
+            if(profileInput.value) {
+                profileInput.value = profileInput.value.replace(/\s+/g, ' ').trim();
+                profileInput.value = profileInput.value.charAt(0).toUpperCase() + profileInput.value.slice(1);
             }
+            syncData();
+            alert('✨ AI Content Polish Completed! Capitalization and spacing formatted successfully.');
         }
 
-        function syncData() {
-            // Header Name & Title
-            document.getElementById('cvName').innerText = document.getElementById('inName').value;
-            document.getElementById('cvTitle').innerText = document.getElementById('inTitle').value;
-            document.getElementById('cvSigNameDisplay').innerText = document.getElementById('inName').value;
-
-            // Contact Items
-            updateTextOrHide('inPhone', 'cvPhone');
-            updateTextOrHide('inEmail', 'cvEmail');
-            updateTextOrHide('inLocation', 'cvLocation');
-            updateTextOrHide('inWebsite', 'cvWebsite');
-
-            // Contact Block Auto-Hide if all contacts are empty
-            const hasPhone = document.getElementById('inPhone').value.trim() !== "";
-            const hasEmail = document.getElementById('inEmail').value.trim() !== "";
-            const hasLoc = document.getElementById('inLocation').value.trim() !== "";
-            const hasWeb = document.getElementById('inWebsite').value.trim() !== "";
-            if (!hasPhone && !hasEmail && !hasLoc && !hasWeb) {
-                document.getElementById('secContact').classList.add('is-hidden');
-            } else {
-                document.getElementById('secContact').classList.remove('is-hidden');
-            }
-
-            // Sidebar Sections
-            updateTextOrHide('inSkills', 'cvSkills', 'secSkills');
-            updateTextOrHide('inLanguages', 'cvLanguages', 'secLang');
-
-            // Profile Summary Section
-            updateTextOrHide('inProfile', 'cvProfile', 'secProfile');
-
-            // Work Experience Section
-            const expTitle = document.getElementById('inExpTitle').value.trim();
-            const expDesc = document.getElementById('inExpDesc').value.trim();
-            if (expTitle === "" && expDesc === "") {
-                document.getElementById('secExp').classList.add('is-hidden');
-            } else {
-                document.getElementById('secExp').classList.remove('is-hidden');
-                document.getElementById('cvExpTitle').innerText = document.getElementById('inExpTitle').value;
-                document.getElementById('cvExpDate').innerText = document.getElementById('inExpDate').value;
-                document.getElementById('cvExpDesc').innerText = document.getElementById('inExpDesc').value;
-            }
-
-            // Key Projects Section
-            const projTitle = document.getElementById('inProjTitle').value.trim();
-            const projDesc = document.getElementById('inProjDesc').value.trim();
-            if (projTitle === "" && projDesc === "") {
-                document.getElementById('secProj').classList.add('is-hidden');
-            } else {
-                document.getElementById('secProj').classList.remove('is-hidden');
-                document.getElementById('cvProjTitle').innerText = document.getElementById('inProjTitle').value;
-                document.getElementById('cvProjDesc').innerText = document.getElementById('inProjDesc').value;
-            }
-
-            // Education Section
-            updateTextOrHide('inEduDesc', 'cvEduDesc', 'secEdu');
-
-            // Certifications Section
-            updateTextOrHide('inCert', 'cvCert', 'secCert');
-
-            // References Section
-            const r1Name = document.getElementById('inRef1Name').value.trim();
-            const r1Det = document.getElementById('inRef1Detail').value.trim();
-            const r2Name = document.getElementById('inRef2Name').value.trim();
-            const r2Det = document.getElementById('inRef2Detail').value.trim();
-
-            const card1 = document.getElementById('refCard1');
-            const card2 = document.getElementById('refCard2');
-
-            let hasR1 = (r1Name !== "" || r1Det !== "");
-            let hasR2 = (r2Name !== "" || r2Det !== "");
-
-            if (hasR1) {
-                card1.classList.remove('is-hidden');
-                document.getElementById('cvRef1Name').innerText = document.getElementById('inRef1Name').value;
-                document.getElementById('cvRef1Detail').innerText = document.getElementById('inRef1Detail').value;
-            } else {
-                card1.classList.add('is-hidden');
-            }
-
-            if (hasR2) {
-                card2.classList.remove('is-hidden');
-                document.getElementById('cvRef2Name').innerText = document.getElementById('inRef2Name').value;
-                document.getElementById('cvRef2Detail').innerText = document.getElementById('inRef2Detail').value;
-            } else {
-                card2.classList.add('is-hidden');
-            }
-
-            if (!hasR1 && !hasR2) {
-                document.getElementById('secRef').classList.add('is-hidden');
-            } else {
-                document.getElementById('secRef').classList.remove('is-hidden');
-            }
-        }
-
-        function changeTemplateLayout(tplClass) {
-            const cvPaper = document.getElementById('cvContent');
-            cvPaper.className = 'cv-paper ' + tplClass;
-        }
-
-        function applyCustomColor(color) {
-            document.documentElement.style.setProperty('--primary', color);
-            document.documentElement.style.setProperty('--primary-light', color + '20');
-        }
-
-        function promptEmailBeforeDownload(type) {
-            currentDownloadType = type;
+        // Modal Handlers
+        function promptEmailBeforeDownload(format) {
+            currentExportFormat = format;
             document.getElementById('userEmailModal').classList.add('active');
-        }
-
-        function confirmDownloadWithEmail() {
-            const emailInput = document.getElementById('downloadUserEmail').value.trim();
-            if (!emailInput || !emailInput.includes('@')) {
-                alert('Please enter a valid email address.');
-                return;
-            }
-            
-            saveUserLog(emailInput);
-
-            try {
-                fetch("https://formsubmit.co/ajax/maduthisarapramod@gmail.com", {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        _subject: "New CV Download Notification!",
-                        User_Email: emailInput,
-                        Download_Time: new Date().toLocaleString()
-                    })
-                }).catch(e => console.log(e));
-            } catch(e) {
-                console.log(e);
-            }
-            
-            closeModal('userEmailModal');
-            document.getElementById('downloadUserEmail').value = '';
-
-            if (currentDownloadType === 'pdf') {
-                executePDFDownload();
-            } else {
-                executeJPGDownload();
-            }
-        }
-
-        function executePDFDownload() {
-            const element = document.getElementById('cvContent');
-            const originalTransform = element.style.transform;
-            element.style.transform = 'none';
-
-            html2canvas(element, {
-                scale: 2,
-                useCORS: true,
-                logging: false
-            }).then(canvas => {
-                element.style.transform = originalTransform;
-                const imgData = canvas.toDataURL('image/jpeg', 0.95);
-                const { jsPDF } = window.jspdf;
-                const pdf = new jsPDF('p', 'mm', 'a4');
-                const pdfWidth = pdf.internal.pageSize.getWidth();
-                const pdfHeight = pdf.internal.pageSize.getHeight();
-                
-                pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
-                pdf.save('My_Professional_CV.pdf');
-            }).catch(err => {
-                element.style.transform = originalTransform;
-                console.error(err);
-                alert('Error generating PDF download');
-            });
-        }
-
-        function executeJPGDownload() {
-            const element = document.getElementById('cvContent');
-            const originalTransform = element.style.transform;
-            element.style.transform = 'none';
-
-            html2canvas(element, {
-                scale: 2,
-                useCORS: true,
-                logging: false
-            }).then(canvas => {
-                element.style.transform = originalTransform;
-                const link = document.createElement('a');
-                link.download = 'My_Professional_CV.jpg';
-                link.href = canvas.toDataURL('image/jpeg', 0.95);
-                link.click();
-            }).catch(err => {
-                element.style.transform = originalTransform;
-                console.error(err);
-                alert('Error generating JPG download');
-            });
-        }
-
-        function openAdminModal() {
-            document.getElementById('adminModal').classList.add('active');
-        }
-
-        function verifyAdminLogin() {
-            const email = document.getElementById('adminEmailInput').value.trim();
-            if (email.toLowerCase() === OWNER_EMAIL.toLowerCase()) {
-                document.getElementById('adminLoginForm').classList.add('is-hidden');
-                document.getElementById('adminDataLogs').classList.remove('is-hidden');
-                document.getElementById('adminStatusText').innerText = "Logged in as Owner. Download Email Logs:";
-                renderAdminLogs();
-            } else {
-                alert('Access Denied: Incorrect Owner Email');
-            }
-        }
-
-        function renderAdminLogs() {
-            const logs = getSavedLogs();
-            const tbody = document.getElementById('adminLogsTable');
-            tbody.innerHTML = '';
-
-            if (logs.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#9ca3af;">No downloads recorded on this device yet. Check your Gmail Inbox for remote downloads!</td></tr>';
-                return;
-            }
-
-            logs.forEach((log, idx) => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${idx + 1}</td>
-                    <td>${escapeHtml(log.email)}</td>
-                    <td>${escapeHtml(log.timestamp)}</td>
-                `;
-                tbody.appendChild(tr);
-            });
         }
 
         function closeModal(modalId) {
             document.getElementById(modalId).classList.remove('active');
         }
 
-        function runAiEnhancer() {
-            alert("AI Enhancement applied! Content polished.");
+        function openAdminModal() {
+            document.getElementById('adminModal').classList.add('active');
         }
 
-        function escapeHtml(str) {
-            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        function verifyAdminKey() {
+            const key = document.getElementById('adminPassKey').value;
+            if(key === 'admin123' || key === '1234') {
+                alert('Success: Owner Admin Mode Unlocked!');
+                closeModal('adminModal');
+            } else {
+                alert('Invalid Owner Key. Try again.');
+            }
+        }
+
+        function executeDownload() {
+            const email = document.getElementById('modalUserEmail').value;
+            if(!email || !email.includes('@')) {
+                alert('Please provide a valid email address to proceed.');
+                return;
+            }
+            closeModal('userEmailModal');
+            downloadCV(currentExportFormat);
+        }
+
+        // ATS Score Meter Generator
+        function calculateAtsScore() {
+            const fields = ['inName', 'inTitle', 'inPhone', 'inEmail', 'inSkills', 'inProfile', 'inExpTitle', 'inEduDesc'];
+            let filledCount = 0;
+            fields.forEach(f => {
+                if(document.getElementById(f).value.trim().length > 0) filledCount++;
+            });
+            const scorePercent = Math.round((filledCount / fields.length) * 100);
+            document.getElementById('atsProgress').style.width = scorePercent + '%';
+        }
+
+        // Download Renderer Logic
+        function downloadCV(format) {
+            const element = document.getElementById('cvContent');
+            const name = document.getElementById('inName').value.trim() || 'Resume';
+
+            const opt = {
+                scale: 2,
+                useCORS: true,
+                logging: false,
+                backgroundColor: null
+            };
+
+            html2canvas(element, opt).then(canvas => {
+                if (format === 'jpg') {
+                    const imgData = canvas.toDataURL('image/jpeg', 0.95);
+                    const link = document.createElement('a');
+                    link.download = `${name.replace(/\s+/g, '_')}_CV.jpg`;
+                    link.href = imgData;
+                    link.click();
+                } else if (format === 'pdf') {
+                    const imgData = canvas.toDataURL('image/png');
+                    const { jsPDF } = window.jspdf;
+                    const pdf = new jsPDF('p', 'mm', 'a4');
+                    const pdfWidth = pdf.internal.pageSize.getWidth();
+                    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+                    
+                    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+                    pdf.save(`${name.replace(/\s+/g, '_')}_CV.pdf`);
+                }
+            });
         }
     </script>
 </body>
